@@ -225,15 +225,15 @@ Item {
                         label:      qsTr("Course Over Ground")
                         labelText:  _activeVehicle ? _activeVehicle.gps.courseOverGround.valueString : qsTr("--.--")
                     }
-
+                    
                     LabelledLabel {
                         label:      qsTr("Altitude")
-                        labelText:  _activeVehicle ? _activeVehicle.gps.altitude.toFixed(2) + " " + _activeVehicle.gps.altitude.units : qsTr("--.--")
+                        labelText:  _activeVehicle ? globals.activeVehicle.latitude.toFixed(5): qsTr("--.--")
                     }
 
                     LabelledLabel {
                         label:      qsTr("Longitude")
-                        labelText:  _activeVehicle ? _activeVehicle.gps.longitude.toFixed(2) + " " + _activeVehicle.gps.longitude.units : qsTr("--.--")
+                        labelText:  _activeVehicle ? globals.activeVehicle.longitude.toFixed(5) : qsTr("--.--")
                     }
 
                 }

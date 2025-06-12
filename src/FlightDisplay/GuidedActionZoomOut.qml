@@ -10,8 +10,8 @@
 import QGroundControl.FlightDisplay
 
 GuidedToolStripAction {
-    text:       _guidedController.planTitle
-    iconSource: "/res/plan.svg"
-    visible:    _guidedController.showPlan
-    actionID:   _guidedController.actionPlan
+    text:       _guidedController.zoomOutTitle
+    iconSource: "/res/zoom_out.svg"
+    visible:    true
+    actionID:   _guidedController.actionZoomOut
 }

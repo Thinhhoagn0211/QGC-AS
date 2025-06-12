@@ -40,6 +40,8 @@ Item {
     readonly property string mvDisarmTitle:                 qsTr("Disarm (MV)")
     readonly property string rtlTitle:                      qsTr("Return")
     readonly property string takeoffTitle:                  qsTr("Takeoff")
+    readonly property string zoomInTitle:                   qsTr("Zoom In")
+    readonly property string zoomOutTitle:                  qsTr("Zoom Out")
     readonly property string planTitle:                     qsTr("Plan")
     readonly property string settingsTitle:                 qsTr("Settings")
     readonly property string gripperTitle:                  qsTr("Gripper Function")
@@ -64,6 +66,7 @@ Item {
     readonly property string setEstimatorOriginTitle:       qsTr("Set Estimator origin")
     readonly property string setFlightMode:                 qsTr("Set Flight Mode")
     readonly property string changeHeadingTitle:            qsTr("Change Heading")
+    
 
     readonly property string armMessage:                        qsTr("Arm the vehicle.")
     readonly property string mvArmMessage:                      qsTr("Arm selected vehicles.")
@@ -132,6 +135,8 @@ Item {
     readonly property int actionChangeLoiterRadius:         33
     readonly property int actionPlan:            34
     readonly property int actionSettings:            35
+    readonly property int actionZoomIn:                     36
+    readonly property int actionZoomOut:                    37
 
 
 
@@ -155,7 +160,7 @@ Item {
     property bool showRTL:                  _guidedActionsEnabled && _vehicleArmed && _activeVehicle.guidedModeSupported && _vehicleFlying && !_vehicleInRTLMode
     property bool showTakeoff:              _guidedActionsEnabled && _activeVehicle.takeoffVehicleSupported && !_vehicleFlying && _canTakeoff
     property bool showSettings:              _guidedActionsEnabled && _activeVehicle && _activeVehicle.settingsSupported && !_vehicleFlying && !_vehicleArmed && !_useChecklist
-    property bool showPlan:                 _guidedActionsEnabled && _activeVehicle && _activeVehicle.planViewSupported && !_vehicleFlying && !_vehicleArmed && !_useChecklist
+    property bool showPlan:                 _guidedActionsEnabled && _activeVehicle
     property bool showLand:                 _guidedActionsEnabled && _activeVehicle.guidedModeSupported && _vehicleArmed && !_activeVehicle.fixedWing && !_vehicleInLandMode
     property bool showStartMission:         _guidedActionsEnabled && _missionAvailable && !_missionActive && !_vehicleFlying && _canStartMission
     property bool showContinueMission:      _guidedActionsEnabled && _missionAvailable && !_missionActive && _vehicleArmed && _vehicleFlying && (_currentMissionIndex < _missionItemCount - 1)
@@ -469,6 +474,10 @@ Item {
             confirmDialog.hideTrigger = Qt.binding(function() { return !showTakeoff })
             guidedValueSlider.visible = _activeVehicle.guidedTakeoffSupported
             break;
+        case actionZoomIn:
+            break;
+        case actionZoomOut:
+            break;
         case actionPlan:
             confirmDialog.title = planTitle
             confirmDialog.message = planMessage
@@ -638,6 +647,12 @@ Item {
             } else {
                 _activeVehicle.startTakeoff()
             }
+            break
+        case actionZoomIn:
+            mapControl.zoomLevel += 0.5
+            break
+        case actionZoomOut:
+            mapControl.zoomLevel -= 0.5
             break
         case actionPlan:
             // _activeVehicle.startPlan()

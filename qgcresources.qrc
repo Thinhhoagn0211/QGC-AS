@@ -58,7 +58,9 @@
         <file alias="XDelete.svg">resources/XDelete.svg</file>
         <file alias="XDeleteBlack.svg">resources/XDeleteBlack.svg</file>
         <file alias="waypoint.svg">resources/waypoint.svg</file>
-         <file alias="plan.svg">resources/plan.svg</file>
+        <file alias="plan.svg">resources/plan.svg</file>
+        <file alias="zoom_in.svg">resources/zoom_in.svg</file>
+        <file alias="zoom_out.svg">resources/zoom_out.svg</file>
         <file alias="Gripper.svg">resources/Gripper.svg</file>
         <file alias="GripperRelease.svg">resources/GripperRelease.svg</file>
         <file alias="GripperGrab.svg">resources/GripperGrab.svg</file>

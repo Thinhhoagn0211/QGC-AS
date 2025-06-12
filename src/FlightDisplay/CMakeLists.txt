@@ -43,6 +43,8 @@ qt_add_qml_module(FlightDisplayModule
         GuidedValueSlider.qml
         GuidedOpenSettings.qml
         GuidedActionPlan.qml
+        GuidedActionZoomIn.qml
+        GuidedActionZoomOut.qml
         MultiRotorChecklist.qml
         MultiVehicleList.qml
         ObstacleDistanceOverlay.qml

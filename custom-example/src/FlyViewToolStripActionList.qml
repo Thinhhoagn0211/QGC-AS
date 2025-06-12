@@ -32,6 +32,8 @@ ToolStripActionList {
             enabled:    true
             actionID:   _guidedController._customController.actionCustomButton
 },
+        GuidedActionZoomIn { },
+        GuidedActionZoomOut { },
         GuidedActionPlan { },
         GuidedOpenSettings {}
     ]

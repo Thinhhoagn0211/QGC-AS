@@ -198,31 +198,6 @@ Item {
         onClicked:          terrainButtonClicked()
     }
 
-    QGCButton {
-        id:                 zoomUpButton
-        anchors.top:        scaleText.top
-        anchors.bottom:     rightEnd.bottom
-        anchors.leftMargin: terrainButton.visible ? ScreenTools.defaultFontPixelWidth / 2 : 0
-        anchors.left:       terrainButton.visible ? terrainButton.right : terrainButton.left
-        text:               qsTr("+")
-        width:              height
-        opacity:            0.75
-        visible:            _zoomButtonsVisible
-        onClicked:          mapControl.zoomLevel += 0.5
-    }
-
-    QGCButton {
-        id:                 zoomDownButton
-        anchors.top:        scaleText.top
-        anchors.bottom:     rightEnd.bottom
-        anchors.leftMargin: ScreenTools.defaultFontPixelWidth / 2
-        anchors.left:       zoomUpButton.right
-        text:               qsTr("-")
-        width:              height
-        opacity:            0.75
-        visible:            _zoomButtonsVisible
-        onClicked:          mapControl.zoomLevel -= 0.5
-    }
 
     Component.onCompleted: {
         if (scale.visible) {

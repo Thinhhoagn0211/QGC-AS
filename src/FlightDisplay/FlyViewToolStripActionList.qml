@@ -51,6 +51,8 @@ ToolStripActionList {
         GuidedActionPause { },
         FlyViewAdditionalActionsButton { },
         GuidedActionGripper { },
+        GuidedActionZoomIn { },
+        GuidedActionZoomOut { },
         GuidedActionPlan { },
         GuidedOpenSettings {}
     ]

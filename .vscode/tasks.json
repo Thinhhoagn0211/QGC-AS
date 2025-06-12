@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Pre-build step",
+            "type": "shell",
+            "command": "/opt/homebrew/bin/cmake --build /Users/hoangbaothinh/Desktop/Working/QGC-AS/build --config Debug --target all --",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

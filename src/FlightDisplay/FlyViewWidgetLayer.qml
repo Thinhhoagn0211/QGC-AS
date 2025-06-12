@@ -110,134 +110,160 @@ Item {
 
                 QGCButton {
                     id: topRightPanelButton
-                    text: qsTr("Top Right Panel")
+                    text: qsTr("Chức năng")
                     visible: !topRightPanel.visible
                     onClicked: topRightPanel.visible = true
-                    Layout.alignment: Qt.AlignLeft
+                    anchors.left: buttonRow.left
+                    anchors.leftMargin: 20
                 }
 
                 Item { width: 1; Layout.fillWidth: true } // đẩy hai nút ra hai bên
 
                 QGCButton {
                     id: topRightPanelCloseButton
-                    text: qsTr("Left Right Panel")
+                    text: qsTr("Kế Hoạch Bay")
                     visible: !topRightPanel.visible
                     onClicked: topRightPanel.visible = false
-                    Layout.alignment: Qt.AlignRight
+                    anchors.right: buttonRow.right
+                    anchors.rightMargin: 20
                 }
-            }
-            Rectangle {
-                anchors.topMargin: 15
+
+                Rectangle {
                 anchors.top: buttonRow.bottom
+                anchors.topMargin: 50
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: 200
                 height: 1
                 color: "white"
             }
-
-            Repeater {
-                anchors.top: buttonRow.bottom
-                anchors.topMargin: 40
-                anchors.horizontalCenter: parent.horizontalCenter
-                model: _activeVehicle ? _activeVehicle.batteries : 0
-
-                SettingsGroupLayout {
-                    heading:        qsTr("Battery %1").arg(_activeVehicle.batteries.length === 1 ? qsTr("Status") : object.id.rawValue)
-                    contentSpacing: 0
-                    showDividers:   false
-
-                    property var batteryValuesAvailable: batteryValuesAvailableLoader.item
-
-                    Loader {
-                        id:                 batteryValuesAvailableLoader
-                        sourceComponent:    batteryValuesAvailableComponent
-
-                        property var battery: object
-                    }
-
-                    LabelledLabel {
-                        label:  qsTr("Charge State")
-                        labelText:  object.chargeState.enumStringValue
-                        visible:    batteryValuesAvailable.chargeStateAvailable
-                    }
-
-                    LabelledLabel {
-                        label:      qsTr("Remaining")
-                        labelText:  object.timeRemainingStr.value
-                        visible:    batteryValuesAvailable.timeRemainingAvailable
-                    }
-
-                    LabelledLabel {
-                        label:      qsTr("Remaining")
-                        labelText:  object.percentRemaining.valueString + " " + object.percentRemaining.units
-                        visible:    batteryValuesAvailable.percentRemainingAvailable
-                    }
-
-                    LabelledLabel {
-                        label:      qsTr("Voltage")
-                        labelText:  object.voltage.valueString + " " + object.voltage.units
-                    }
-
-                    LabelledLabel {
-                        label:      qsTr("Consumed")
-                        labelText:  object.mahConsumed.valueString + " " + object.mahConsumed.units
-                        visible:    batteryValuesAvailable.mahConsumedAvailable
-                    }
-
-                    LabelledLabel {
-                        label:      qsTr("Temperature")
-                        labelText:  object.temperature.valueString + " " + object.temperature.units
-                        visible:    batteryValuesAvailable.temperatureAvailable
-                    }
-
-                    LabelledLabel {
-                        label:      qsTr("Function")
-                        labelText:  object.function.enumStringValue
-                        visible:    batteryValuesAvailable.showFunction
-                    }
-                }
-
-                SettingsGroupLayout {
-                    heading: qsTr("Vehicle GPS Status")
-                    visible: _activeVehicle
-
-                    LabelledLabel {
-                        label:      qsTr("Satellites")
-                        labelText:  _activeVehicle ? _activeVehicle.gps.count.valueString : qsTr("N/A")
-                    }
-
-                    LabelledLabel {
-                        label:      qsTr("GPS Lock")
-                        labelText:  _activeVehicle ? _activeVehicle.gps.lock.enumStringValue : qsTr("N/A")
-                    }
-
-                    LabelledLabel {
-                        label:      qsTr("HDOP")
-                        labelText:  _activeVehicle ? _activeVehicle.gps.hdop.valueString : qsTr("--.--")
-                    }
-
-                    LabelledLabel {
-                        label:      qsTr("VDOP")
-                        labelText:  _activeVehicle ? _activeVehicle.gps.vdop.valueString : qsTr("--.--")
-                    }
-
-                    LabelledLabel {
-                        label:      qsTr("Course Over Ground")
-                        labelText:  _activeVehicle ? _activeVehicle.gps.courseOverGround.valueString : qsTr("--.--")
-                    }
-                    
-                    LabelledLabel {
-                        label:      qsTr("Altitude")
-                        labelText:  _activeVehicle ? globals.activeVehicle.latitude.toFixed(5): qsTr("--.--")
-                    }
-
-                    LabelledLabel {
-                        label:      qsTr("Longitude")
-                        labelText:  _activeVehicle ? globals.activeVehicle.longitude.toFixed(5) : qsTr("--.--")
-                    }
-
-                }
             }
+            Repeater {
+                model: _activeVehicle ? _activeVehicle.batteries : 0
+            Column {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: buttonRow.bottom
+                anchors.topMargin: 60
+                spacing: 8
+
+                MetricsRow { label: "Số lượng GPS"; value: _activeVehicle ? _activeVehicle.gps.count.valueString : qsTr("N/A") }
+                MetricsRow { label: "Latitude"; value: _activeVehicle ? globals.activeVehicle.latitude.toFixed(5): qsTr("--.--") }
+                MetricsRow { label: "Longitude"; value: _activeVehicle ? globals.activeVehicle.longitude.toFixed(5): qsTr("--.--") }
+                MetricsRow { label: "Tốc độ máy bay"; value: _activeVehicle ? globals.activeVehicle.airSpeed.rawValue.toFixed(1) + " m/s" : qsTr("--.--") }
+                MetricsRow { label: "Tốc độ mặt đất"; value: _activeVehicle ? globals.activeVehicle.groundSpeed.rawValue.toFixed(1) + " m/s" : qsTr("--.--") }
+                MetricsRow { label: "Tốc độ gió"; value: _activeVehicle ? windItems.get(index).rawValue.toFixed(1) + " m/s" : qsTr("--.--") }
+                MetricsRow { label: "Dung lượng pin"; value: object.percentRemaining.valueString + " " + object.percentRemaining.units }
+                MetricsRow { label: "Trạng thái"; value: object.chargeState.enumStringValue }
+                MetricsRow { label: "Thời gian còn lại"; value: object.timeRemainingStr.value }
+                MetricsRow { label: "Điện áp máy bay"; value: object.voltage.valueString + " " + object.voltage.units }
+                MetricsRow { label: "Dòng xả"; value: object.mahConsumed.valueString + " " + object.mahConsumed.units }
+                MetricsRow { label: "Nhiệt độ"; value: object.temperature.valueString + " " + object.temperature.units }
+            }
+
+            }
+
+            // Repeater {
+            //     anchors.top: buttonRow.bottom
+            //     anchors.topMargin: 40
+            //     anchors.horizontalCenter: parent.horizontalCenter
+            //     model: _activeVehicle ? _activeVehicle.batteries : 0
+
+            //     SettingsGroupLayout {
+            //         heading:        qsTr("Battery %1").arg(_activeVehicle.batteries.length === 1 ? qsTr("Status") : object.id.rawValue)
+            //         contentSpacing: 0
+            //         showDividers:   false
+
+            //         property var batteryValuesAvailable: batteryValuesAvailableLoader.item
+
+            //         Loader {
+            //             id:                 batteryValuesAvailableLoader
+            //             sourceComponent:    batteryValuesAvailableComponent
+
+            //             property var battery: object
+            //         }
+
+            //         LabelledLabel {
+            //             label:  qsTr("Charge State")
+            //             labelText:  object.chargeState.enumStringValue
+            //             visible:    batteryValuesAvailable.chargeStateAvailable
+            //         }
+
+            //         LabelledLabel {
+            //             label:      qsTr("Remaining")
+            //             labelText:  object.timeRemainingStr.value
+            //             visible:    batteryValuesAvailable.timeRemainingAvailable
+            //         }
+
+            //         LabelledLabel {
+            //             label:      qsTr("Remaining")
+            //             labelText:  object.percentRemaining.valueString + " " + object.percentRemaining.units
+            //             visible:    batteryValuesAvailable.percentRemainingAvailable
+            //         }
+
+            //         LabelledLabel {
+            //             label:      qsTr("Voltage")
+            //             labelText:  object.voltage.valueString + " " + object.voltage.units
+            //         }
+
+            //         LabelledLabel {
+            //             label:      qsTr("Consumed")
+            //             labelText:  object.mahConsumed.valueString + " " + object.mahConsumed.units
+            //             visible:    batteryValuesAvailable.mahConsumedAvailable
+            //         }
+
+            //         LabelledLabel {
+            //             label:      qsTr("Temperature")
+            //             labelText:  object.temperature.valueString + " " + object.temperature.units
+            //             visible:    batteryValuesAvailable.temperatureAvailable
+            //         }
+
+            //         LabelledLabel {
+            //             label:      qsTr("Function")
+            //             labelText:  object.function.enumStringValue
+            //             visible:    batteryValuesAvailable.showFunction
+            //         }
+            //     }
+
+            //     SettingsGroupLayout {
+            //         heading: qsTr("Vehicle GPS Status")
+            //         visible: _activeVehicle
+
+            //         LabelledLabel {
+            //             label:      qsTr("Satellites")
+            //             labelText:  _activeVehicle ? _activeVehicle.gps.count.valueString : qsTr("N/A")
+            //         }
+
+            //         LabelledLabel {
+            //             label:      qsTr("GPS Lock")
+            //             labelText:  _activeVehicle ? _activeVehicle.gps.lock.enumStringValue : qsTr("N/A")
+            //         }
+
+            //         LabelledLabel {
+            //             label:      qsTr("HDOP")
+            //             labelText:  _activeVehicle ? _activeVehicle.gps.hdop.valueString : qsTr("--.--")
+            //         }
+
+            //         LabelledLabel {
+            //             label:      qsTr("VDOP")
+            //             labelText:  _activeVehicle ? _activeVehicle.gps.vdop.valueString : qsTr("--.--")
+            //         }
+
+            //         LabelledLabel {
+            //             label:      qsTr("Course Over Ground")
+            //             labelText:  _activeVehicle ? _activeVehicle.gps.courseOverGround.valueString : qsTr("--.--")
+            //         }
+                    
+            //         LabelledLabel {
+            //             label:      qsTr("Altitude")
+            //             labelText:  _activeVehicle ? globals.activeVehicle.latitude.toFixed(5): qsTr("--.--")
+            //         }
+
+            //         LabelledLabel {
+            //             label:      qsTr("Longitude")
+            //             labelText:  _activeVehicle ? globals.activeVehicle.longitude.toFixed(5) : qsTr("--.--")
+            //         }
+
+            //     }
+            // }
 
         }
     }
@@ -336,7 +362,7 @@ Item {
         anchors.leftMargin:     _toolsMargin + parentToolInsets.leftEdgeCenterInset
         anchors.topMargin:      _toolsMargin + parentToolInsets.topEdgeLeftInset
         anchors.left:           parent.left
-        anchors.top:            parent.top
+        anchors.verticalCenter: parent.verticalCenter
         z:                      QGroundControl.zOrderWidgets
         maxHeight:              parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
         visible:                !QGroundControl.videoManager.fullScreen
@@ -351,7 +377,7 @@ Item {
         property real topEdgeLeftInset:     visible ? y + height : 0
         property real leftEdgeTopInset:     visible ? x + width : 0
         property real leftEdgeCenterInset:  leftEdgeTopInset
-    }
+    }  
 
     GripperMenu {
         id: gripperOptions

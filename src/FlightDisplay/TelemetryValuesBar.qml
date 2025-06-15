@@ -61,9 +61,11 @@ Item {
             }
         }
 
+
         HorizontalFactValueGrid {
             id: factValueGrid
         }
+
     }
 
     QGCMouseArea {

@@ -113,6 +113,7 @@ QGCApplication::QGCApplication(int &argc, char *argv[], bool unitTesting, bool s
     bool logging = false;               // Turn on logging
     QString loggingOptions;
 
+    // init command line options
     CmdLineOpt_t rgCmdLineOptions[] = {
         { "--clear-settings",   &fClearSettingsOptions, nullptr },
         { "--clear-cache",      &fClearCache,           nullptr },
@@ -265,6 +266,7 @@ QGCApplication::~QGCApplication()
 
 void QGCApplication::init()
 {
+    // manager initialization order is important
     SettingsManager::instance()->init();
 
     LinkManager::registerQmlTypes();
@@ -347,6 +349,7 @@ void QGCApplication::_initForNormalAppBoot()
     QGCCorePlugin::instance()->init();
     MAVLinkProtocol::instance()->init();
     MultiVehicleManager::instance()->init();
+    // create the QmlApplicationEngine
     _qmlAppEngine = QGCCorePlugin::instance()->createQmlApplicationEngine(this);
     QObject::connect(_qmlAppEngine, &QQmlApplicationEngine::objectCreationFailed, this, QCoreApplication::quit, Qt::QueuedConnection);
     QGCCorePlugin::instance()->createRootWindow(_qmlAppEngine);

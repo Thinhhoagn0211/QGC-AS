@@ -78,7 +78,7 @@ void MultiVehicleManager::init()
     }
 
     _offlineEditingVehicle = new Vehicle(Vehicle::MAV_AUTOPILOT_TRACK, Vehicle::MAV_TYPE_TRACK, this);
-
+    // wait heartbeat info to be received before sending GCS heartbeat
     (void) connect(MAVLinkProtocol::instance(), &MAVLinkProtocol::vehicleHeartbeatInfo, this, &MultiVehicleManager::_vehicleHeartbeatInfo);
 
     _gcsHeartbeatTimer->setInterval(kGCSHeartbeatRateMSecs);
@@ -121,11 +121,12 @@ void MultiVehicleManager::_vehicleHeartbeatInfo(LinkInterface* link, int vehicle
     default:
         break;
     }
-
+    // if number of vehicles is greater than 0 and multi vehicle mode is not enabled, do not add new vehicle
     if ((_vehicles->count() > 0) && !QGCCorePlugin::instance()->options()->multiVehicleEnabled()) {
         return;
     }
-
+    
+    // If the vehicle is already in the list, do not add it again
     if (_ignoreVehicleIds.contains(vehicleId) || getVehicleById(vehicleId) || (vehicleId == 0)) {
         return;
     }
@@ -137,15 +138,21 @@ void MultiVehicleManager::_vehicleHeartbeatInfo(LinkInterface* link, int vehicle
                                     << vehicleFirmwareType
                                     << vehicleType;
 
+    // If the vehicle is using the same system id as QGC, show a warning message
     if (vehicleId == MAVLinkProtocol::instance()->getSystemId()) {
         qgcApp()->showAppMessage(tr("Warning: A vehicle is using the same system id as %1: %2").arg(QCoreApplication::applicationName()).arg(vehicleId));
     }
 
+    // create a new vehicle instance
     Vehicle *const vehicle = new Vehicle(link, vehicleId, componentId, (MAV_AUTOPILOT)vehicleFirmwareType, (MAV_TYPE)vehicleType, this);
+    
+    // Trigger if QGC sends request for protocol version, it will request device to send its protocol version
     (void) connect(vehicle, &Vehicle::requestProtocolVersion, this, &MultiVehicleManager::_requestProtocolVersion);
+    // Trigger if QGC check if all links are removed, it will delete the vehicles
     (void) connect(vehicle->vehicleLinkManager(), &VehicleLinkManager::allLinksRemoved, this, &MultiVehicleManager::_deleteVehiclePhase1);
+    // Trigger if QGC check if vehicle parameters are ready, it will update the parameter ready vehicle available state
     (void) connect(vehicle->parameterManager(), &ParameterManager::parametersReadyChanged, this, &MultiVehicleManager::_vehicleParametersReadyChanged);
-
+    // append the vehicle to the vehicles list
     _vehicles->append(vehicle);
 
     // Send QGC heartbeat ASAP, this allows PX4 to start accepting commands
@@ -153,11 +160,13 @@ void MultiVehicleManager::_vehicleHeartbeatInfo(LinkInterface* link, int vehicle
 
     SettingsManager::instance()->firmwareUpgradeSettings()->defaultFirmwareType()->setRawValue(vehicleFirmwareType);
 
+    // emit signals to notify about the new vehicle
     emit vehicleAdded(vehicle);
 
     if (_vehicles->count() > 1) {
         qgcApp()->showAppMessage(tr("Connected to Vehicle %1").arg(vehicleId));
     } else {
+        // This is the first vehicle, so set it as the active vehicle
         setActiveVehicle(vehicle);
     }
 
@@ -175,11 +184,13 @@ void MultiVehicleManager::_vehicleHeartbeatInfo(LinkInterface* link, int vehicle
 
 void MultiVehicleManager::_requestProtocolVersion(unsigned version) const
 {
+    // check if len of vehicles is 0, if so, set the version of MAVLINK to the requested version
     if (_vehicles->count() == 0) {
         MAVLinkProtocol::instance()->setVersion(version);
         return;
     }
 
+    // loop through all vehicles and find the maximum protocol version of MAVLink
     unsigned maxversion = 0;
     for (int i = 0; i < _vehicles->count(); i++) {
         const Vehicle *const vehicle = qobject_cast<const Vehicle*>(_vehicles->get(i));
@@ -188,6 +199,7 @@ void MultiVehicleManager::_requestProtocolVersion(unsigned version) const
         }
     }
 
+    // if the maximum version is less than the requested version, set the version to the maximum version
     if (MAVLinkProtocol::instance()->getCurrentVersion() != maxversion) {
         MAVLinkProtocol::instance()->setVersion(maxversion);
     }
@@ -196,7 +208,7 @@ void MultiVehicleManager::_requestProtocolVersion(unsigned version) const
 void MultiVehicleManager::_deleteVehiclePhase1(Vehicle *vehicle)
 {
     qCDebug(MultiVehicleManagerLog) << Q_FUNC_INFO << vehicle;
-
+    // loop through the vehicles list and remove the vehicle from list
     bool found = false;
     for (int i = 0; i < _vehicles->count(); i++) {
         if (_vehicles->get(i) == vehicle) {
@@ -211,10 +223,13 @@ void MultiVehicleManager::_deleteVehiclePhase1(Vehicle *vehicle)
     }
 
     deselectVehicle(vehicle->id());
-
+    // If the vehicle being removed is the active vehicle, we need to clear it
     _setActiveVehicleAvailable(false);
+    // set parameter ready vehicle available to false
     _setParameterReadyVehicleAvailable(false);
+    // Emit the vehicleRemoved signal to notify Qml and other listeners
     emit vehicleRemoved(vehicle);
+    // Prepare the vehicle for deletion
     vehicle->prepareDelete();
 
 #if defined(Q_OS_ANDROID) || defined (Q_OS_IOS)
@@ -266,7 +281,7 @@ void MultiVehicleManager::_deleteVehiclePhase2(Vehicle *vehicle)
 void MultiVehicleManager::setActiveVehicle(Vehicle *vehicle)
 {
     qCDebug(MultiVehicleManagerLog) << Q_FUNC_INFO << vehicle;
-
+    // if vehicle is not active, set it as active vehicle
     if (vehicle != _activeVehicle) {
         if (_activeVehicle) {
             // The sequence of signals is very important in order to not leave Qml elements connected
@@ -277,7 +292,6 @@ void MultiVehicleManager::setActiveVehicle(Vehicle *vehicle)
             _setActiveVehicleAvailable(false);
             _setParameterReadyVehicleAvailable(false);
         }
-
         QTimer::singleShot(20, this, [this, vehicle]() {
             _setActiveVehiclePhase2(vehicle);
         });
@@ -287,12 +301,12 @@ void MultiVehicleManager::setActiveVehicle(Vehicle *vehicle)
 void MultiVehicleManager::_setActiveVehiclePhase2(Vehicle *vehicle)
 {
     qCDebug(MultiVehicleManagerLog) << Q_FUNC_INFO << vehicle;
-
+    // pick current vehicle as active vehicle
     _setActiveVehicle(vehicle);
-
+    // check if _activeVehicle is not null
     if (_activeVehicle) {
         _setActiveVehicleAvailable(true);
-
+        // If the active vehicle has parameters ready, set the parameter ready vehicle available to true
         if (_activeVehicle->parameterManager()->parametersReady()) {
             _setParameterReadyVehicleAvailable(true);
         }
@@ -301,11 +315,13 @@ void MultiVehicleManager::_setActiveVehiclePhase2(Vehicle *vehicle)
 
 void MultiVehicleManager::_vehicleParametersReadyChanged(bool parametersReady)
 {
+    // get signal from sender, and convert it to ParameterManager type
     ParameterManager *const paramMgr = qobject_cast<ParameterManager*>(sender());
+    // if the sender is not a ParameterManager, return
     if (!paramMgr) {
         return;
-    }
-
+    }   
+    // if the parameter manager is not for the active vehicle, do not set the parameter ready vehicle available
     if (paramMgr->vehicle() == _activeVehicle) {
         _setParameterReadyVehicleAvailable(parametersReady);
     }
@@ -349,7 +365,9 @@ void MultiVehicleManager::_sendGCSHeartbeat()
 
 void MultiVehicleManager::selectVehicle(int vehicleId)
 {
+    // Check if the vehicle is already selected
     if(!_vehicleSelected(vehicleId)) {
+        // If the vehicle is not selected, check if it exists
         Vehicle *const vehicle = getVehicleById(vehicleId);
         _selectedVehicles->append(vehicle);
         return;
@@ -358,6 +376,7 @@ void MultiVehicleManager::selectVehicle(int vehicleId)
 
 void MultiVehicleManager::deselectVehicle(int vehicleId)
 {
+    // Check if the vehicle is selected, if so, remove it from the selected vehicles list
     for (int i = 0; i < _selectedVehicles->count(); i++) {
         Vehicle *const vehicle = qobject_cast<Vehicle*>(_selectedVehicles->get(i));
         if (vehicle->id() == vehicleId) {
@@ -369,11 +388,13 @@ void MultiVehicleManager::deselectVehicle(int vehicleId)
 
 void MultiVehicleManager::deselectAllVehicles()
 {
+    // Clear the selected vehicles list
     _selectedVehicles->clear();
 }
 
 bool MultiVehicleManager::_vehicleSelected(int vehicleId)
 {
+    // Check if the vehicle is selected, if so, return true, otherwise return false
     for (int i = 0; i < _selectedVehicles->count(); i++) {
         Vehicle *const vehicle = qobject_cast<Vehicle*>(_selectedVehicles->get(i));
         if (vehicle->id() == vehicleId) {
@@ -385,6 +406,7 @@ bool MultiVehicleManager::_vehicleSelected(int vehicleId)
 
 Vehicle *MultiVehicleManager::getVehicleById(int vehicleId) const
 {
+    // get vehicle by id
     for (int i = 0; i < _vehicles->count(); i++) {
         Vehicle *const vehicle = qobject_cast<Vehicle*>(_vehicles->get(i));
         if (vehicle->id() == vehicleId) {
@@ -397,6 +419,7 @@ Vehicle *MultiVehicleManager::getVehicleById(int vehicleId) const
 
 void MultiVehicleManager::_setActiveVehicle(Vehicle *vehicle)
 {
+    // set the active vehicle to the given vehicle
     if (vehicle != _activeVehicle) {
         _activeVehicle = vehicle;
         emit activeVehicleChanged(vehicle);

@@ -103,6 +103,7 @@ int main(int argc, char *argv[])
     // not be able to run at the same time
     const QString runguardString = QStringLiteral("%1 RunGuardKey").arg(QGC_APP_NAME);
 
+    // run RunGuard to prevent multiple instances of QGC
     RunGuard guard(runguardString);
     if (!bypassRunGuard && !guard.tryToRun()) {
         QApplication errorApp(argc, argv);
@@ -132,7 +133,7 @@ int main(int argc, char *argv[])
         qputenv("QT_LOGGING_TO_CONSOLE", "1");
     }
 #endif
-
+    // Install the QGC logging handler
     QGCLogging::installHandler();
 
 #ifdef Q_OS_MACOS
@@ -180,7 +181,7 @@ int main(int argc, char *argv[])
     }
 #endif // Q_OS_WIN
 #endif // QT_DEBUG
-
+    // Construct the application object
     QGCApplication app(argc, argv, runUnitTests, simpleBootTest);
 
 #ifdef Q_OS_LINUX

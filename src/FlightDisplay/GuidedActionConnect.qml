@@ -7,15 +7,11 @@
  *
  ****************************************************************************/
 
-import QtQuick
-import QtQuick.Layouts
+import QGroundControl.FlightDisplay
 
-import QGroundControl
-import QGroundControl.Controls
-import QGroundControl.MultiVehicleManager
-import QGroundControl.ScreenTools
-import QGroundControl.Palette
-
-GPSIndicator {
-    property bool showIndicator: false
+GuidedToolStripAction {
+    text:       _guidedController.connectTitle
+    iconSource: "/res/connect.svg"
+    visible:    true
+    actionID:   _guidedController.actionConnect
 }

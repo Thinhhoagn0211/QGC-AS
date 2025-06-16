@@ -14,6 +14,7 @@
         <file alias="buttonLeft.svg">resources/buttonLeft.svg</file>
         <file alias="buttonRight.svg">resources/buttonRight.svg</file>
         <file alias="setting.svg">resources/setting.svg</file>
+        <file alias="connect.svg">resources/connect.svg</file>
         <file alias="cancel.svg">resources/cancel.svg</file>
         <file alias="clockwise-arrow.svg">resources/clockwise-arrow.svg</file>
         <file alias="counter-clockwise-arrow.svg">resources/counter-clockwise-arrow.svg</file>
@@ -64,7 +65,7 @@
         <file alias="Gripper.svg">resources/Gripper.svg</file>
         <file alias="GripperRelease.svg">resources/GripperRelease.svg</file>
         <file alias="GripperGrab.svg">resources/GripperGrab.svg</file>
-        <file alias="qgroundcontrol.ico">resources/icons/qgroundcontrol.ico</file>
+        <file alias="skyranger.ico">resources/icons/skyranger.ico</file>
     </qresource>
     <qresource prefix="/res/firmware">
         <file alias="3drradio.png">resources/firmware/3drradio.png</file>

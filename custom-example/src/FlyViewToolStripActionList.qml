@@ -20,6 +20,7 @@ ToolStripActionList {
 
     model: [
         PreFlightCheckListShowAction { onTriggered: displayPreFlightChecklist() },
+        GuidedActionConnect { },
         GuidedActionTakeoff { },
         GuidedActionLand { },
         GuidedActionRTL { },

@@ -95,7 +95,7 @@ Item {
         Rectangle {
             id: backgroundRect
             width: 300
-            height: 350
+            height: 500
             color: Qt.rgba(0, 0, 0, 0.5)
             radius: 0
 

@@ -170,7 +170,7 @@ Rectangle {
     //         }
 
     Rectangle {
-        height: slider.height * 0.75
+        height: parent.height * 0.75
         width:  height
         radius: height / 2
         color:  qgcPal.primaryButton

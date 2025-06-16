@@ -40,6 +40,7 @@ Item {
     readonly property string mvDisarmTitle:                 qsTr("Disarm (MV)")
     readonly property string rtlTitle:                      qsTr("Return")
     readonly property string takeoffTitle:                  qsTr("Takeoff")
+    readonly property string connectTitle:                   qsTr("Connect")
     readonly property string zoomInTitle:                   qsTr("Zoom In")
     readonly property string zoomOutTitle:                  qsTr("Zoom Out")
     readonly property string planTitle:                     qsTr("Plan")
@@ -137,6 +138,7 @@ Item {
     readonly property int actionSettings:            35
     readonly property int actionZoomIn:                     36
     readonly property int actionZoomOut:                    37
+    readonly property int actionConnect:             38
 
 
 
@@ -474,6 +476,15 @@ Item {
             confirmDialog.hideTrigger = Qt.binding(function() { return !showTakeoff })
             guidedValueSlider.visible = _activeVehicle.guidedTakeoffSupported
             break;
+        case actionConnect:
+            confirmDialog.title = connectTitle
+            confirmDialog.hideTrigger = true
+            // This is a special case where we want to show the dialog immediately
+            if (showImmediate) {
+                confirmDialog.visible = true
+            }
+            break;
+
         case actionZoomIn:
             break;
         case actionZoomOut:
@@ -654,6 +665,10 @@ Item {
         case actionZoomOut:
             mapControl.zoomLevel -= 0.5
             break
+        case actionConnect:
+            // let overallStatusComponent = overallStatusOfflineIndicatorPage
+            mainWindow.showIndicatorDrawer(overallStatusOfflineIndicatorPage, control)
+            break;
         case actionPlan:
             // _activeVehicle.startPlan()
             if (mainWindow.allowViewSwitch()) {

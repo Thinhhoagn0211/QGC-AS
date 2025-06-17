@@ -17,5 +17,5 @@ import QGroundControl.ScreenTools
 import QGroundControl.Palette
 
 GPSIndicator {
-    property bool showIndicator: false
+    property bool showIndicator: true
 }

@@ -12,7 +12,7 @@ import QGroundControl.Controls
 ToolStripAction {
     property int    actionID
     property string message
-
+    property string actionData
     property var _guidedController: globals.guidedControllerFlyView
 
 

@@ -128,7 +128,12 @@ Item {
                     anchors.rightMargin: 20
                 }
 
-                Rectangle {
+                
+            
+            }
+
+            Rectangle {
+                id: divider
                 anchors.top: buttonRow.bottom
                 anchors.topMargin: 50
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -136,13 +141,62 @@ Item {
                 height: 1
                 color: "white"
             }
+
+            RowLayout {
+                id: quickActionsRow
+                anchors.top: divider.bottom
+                anchors.topMargin: 20
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 10
+
+                QGCButton {
+                    id: returnToHomeButton
+                    text: qsTr("Trở về nhà")
+                    visible: true
+                    backgroundColor: "darkblue"
+                    onClicked: {
+                        _guidedController.closeAll()
+                        _guidedController.confirmAction(_guidedController.actionRTL)
+                    }
+                }
+
+                QGCButton {
+                    id: emergencyLandingButton
+                    text: qsTr("Hạ cánh khẩn cấp")
+                    visible: true
+                    backgroundColor: "red"
+                    onClicked: {
+                        _guidedController.closeAll()
+                        _guidedController.confirmAction(_guidedController.actionLand)
+                    }
+                }
             }
+
+            QGCButton {
+                id: preCheckFlightConditionsButton
+                text: qsTr("Kiểm tra trước chuyến bay")
+                visible: true
+                backgroundColor: "darkblue"
+                // onClicked: topRightPanel.visible = false
+                anchors.top: quickActionsRow.bottom
+                anchors.topMargin: 20
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                onClicked: {
+                    topRightPanel.visible = false
+                    if (!preFlightChecklistLoader.active) {
+                        preFlightChecklistLoader.active = true
+                    }
+                    preFlightChecklistLoader.item.open()
+                }
+            }
+
             Repeater {
                 model: _activeVehicle ? _activeVehicle.batteries : 0
             Column {
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: buttonRow.bottom
-                anchors.topMargin: 60
+                anchors.top: preCheckFlightConditionsButton.bottom
+                anchors.topMargin: 20
                 spacing: 8
 
                 MetricsRow { label: "Số lượng GPS"; value: _activeVehicle ? _activeVehicle.gps.count.valueString : qsTr("N/A") }
@@ -163,127 +217,11 @@ Item {
 
             }
 
-            // Repeater {
-            //     anchors.top: buttonRow.bottom
-            //     anchors.topMargin: 40
-            //     anchors.horizontalCenter: parent.horizontalCenter
-            //     model: _activeVehicle ? _activeVehicle.batteries : 0
-
-            //     SettingsGroupLayout {
-            //         heading:        qsTr("Battery %1").arg(_activeVehicle.batteries.length === 1 ? qsTr("Status") : object.id.rawValue)
-            //         contentSpacing: 0
-            //         showDividers:   false
-
-            //         property var batteryValuesAvailable: batteryValuesAvailableLoader.item
-
-            //         Loader {
-            //             id:                 batteryValuesAvailableLoader
-            //             sourceComponent:    batteryValuesAvailableComponent
-
-            //             property var battery: object
-            //         }
-
-            //         LabelledLabel {
-            //             label:  qsTr("Charge State")
-            //             labelText:  object.chargeState.enumStringValue
-            //             visible:    batteryValuesAvailable.chargeStateAvailable
-            //         }
-
-            //         LabelledLabel {
-            //             label:      qsTr("Remaining")
-            //             labelText:  object.timeRemainingStr.value
-            //             visible:    batteryValuesAvailable.timeRemainingAvailable
-            //         }
-
-            //         LabelledLabel {
-            //             label:      qsTr("Remaining")
-            //             labelText:  object.percentRemaining.valueString + " " + object.percentRemaining.units
-            //             visible:    batteryValuesAvailable.percentRemainingAvailable
-            //         }
-
-            //         LabelledLabel {
-            //             label:      qsTr("Voltage")
-            //             labelText:  object.voltage.valueString + " " + object.voltage.units
-            //         }
-
-            //         LabelledLabel {
-            //             label:      qsTr("Consumed")
-            //             labelText:  object.mahConsumed.valueString + " " + object.mahConsumed.units
-            //             visible:    batteryValuesAvailable.mahConsumedAvailable
-            //         }
-
-            //         LabelledLabel {
-            //             label:      qsTr("Temperature")
-            //             labelText:  object.temperature.valueString + " " + object.temperature.units
-            //             visible:    batteryValuesAvailable.temperatureAvailable
-            //         }
-
-            //         LabelledLabel {
-            //             label:      qsTr("Function")
-            //             labelText:  object.function.enumStringValue
-            //             visible:    batteryValuesAvailable.showFunction
-            //         }
-            //     }
-
-            //     SettingsGroupLayout {
-            //         heading: qsTr("Vehicle GPS Status")
-            //         visible: _activeVehicle
-
-            //         LabelledLabel {
-            //             label:      qsTr("Satellites")
-            //             labelText:  _activeVehicle ? _activeVehicle.gps.count.valueString : qsTr("N/A")
-            //         }
-
-            //         LabelledLabel {
-            //             label:      qsTr("GPS Lock")
-            //             labelText:  _activeVehicle ? _activeVehicle.gps.lock.enumStringValue : qsTr("N/A")
-            //         }
-
-            //         LabelledLabel {
-            //             label:      qsTr("HDOP")
-            //             labelText:  _activeVehicle ? _activeVehicle.gps.hdop.valueString : qsTr("--.--")
-            //         }
-
-            //         LabelledLabel {
-            //             label:      qsTr("VDOP")
-            //             labelText:  _activeVehicle ? _activeVehicle.gps.vdop.valueString : qsTr("--.--")
-            //         }
-
-            //         LabelledLabel {
-            //             label:      qsTr("Course Over Ground")
-            //             labelText:  _activeVehicle ? _activeVehicle.gps.courseOverGround.valueString : qsTr("--.--")
-            //         }
-                    
-            //         LabelledLabel {
-            //             label:      qsTr("Altitude")
-            //             labelText:  _activeVehicle ? globals.activeVehicle.latitude.toFixed(5): qsTr("--.--")
-            //         }
-
-            //         LabelledLabel {
-            //             label:      qsTr("Longitude")
-            //             labelText:  _activeVehicle ? globals.activeVehicle.longitude.toFixed(5) : qsTr("--.--")
-            //         }
-
-            //     }
-            // }
 
         }
     }
 
 
-    // FlyViewTopRightColumnLayout {
-    //     id:                 topRightColumnLayout
-    //     anchors.margins:    _layoutMargin
-    //     anchors.top:        parent.top
-    //     anchors.bottom:     bottomRightRowLayout.top
-    //     anchors.right:      parent.right
-    //     spacing:            _layoutSpacing
-    //     visible:           !topRightPanel.visible
-
-    //     property real topEdgeRightInset:    childrenRect.height + _layoutMargin
-    //     property real rightEdgeTopInset:    width + _layoutMargin
-    //     property real rightEdgeCenterInset: rightEdgeTopInset
-    // }
 
     FlyViewBottomRightRowLayout {
         id:                 bottomRightRowLayout
@@ -411,6 +349,9 @@ Item {
     Component {
         id: preFlightChecklistPopup
         FlyViewPreFlightChecklistPopup {
+            width: 600
+            height: 400
+            anchors.centerIn: parent
         }
     }
 }

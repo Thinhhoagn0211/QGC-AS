@@ -379,6 +379,12 @@ Item {
         function onResumeMissionUploadFail() { confirmAction(actionResumeMissionUploadFail) }
     }
 
+    Component {
+        id: overallStatusOfflineIndicatorPage
+
+        MainStatusIndicatorOfflinePage { }
+    }
+
     Connections {
         target:                             mainWindow
         function onArmVehicleRequest() { armVehicleRequest() }
@@ -667,7 +673,7 @@ Item {
             break
         case actionConnect:
             // let overallStatusComponent = overallStatusOfflineIndicatorPage
-            mainWindow.showIndicatorDrawer(overallStatusOfflineIndicatorPage, control)
+            mainWindow.showIndicatorDrawer(overallStatusOfflineIndicatorPage, actionData)
             break;
         case actionPlan:
             // _activeVehicle.startPlan()

@@ -95,12 +95,12 @@ Item {
         Rectangle {
             id: backgroundRect
             width: 300
-            height: 500
+            height: 600
             color: Qt.rgba(0, 0, 0, 0.5)
             radius: 0
 
             // Container cho 2 button đặt ngang
-            Row {
+            RowLayout {
                 id: buttonRow
                 anchors.top: parent.top
                 anchors.left: parent.left
@@ -217,8 +217,20 @@ Item {
 
             }
 
-
         }
+
+        Rectangle {
+            id: vehicleMessageRect
+            anchors.topMargin: 20
+            width: 300
+            height: 200
+            color: Qt.rgba(0, 0, 0, 0.5)
+            radius: 0
+
+            VehicleMessageList { 
+                id: vehicleMessageList
+            }
+            }
     }
 
 

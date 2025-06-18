@@ -123,7 +123,7 @@ ApplicationWindow {
     function showPlanView() {
         flyView.visible = false
         planView.visible = true
-        viewer3DWindow.close()
+        // viewer3DWindow.close()
     }
 
     function showFlyView() {

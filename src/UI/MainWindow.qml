@@ -12,6 +12,7 @@ import QtQuick.Controls
 import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Window
+import QtLocation
 
 import QGroundControl
 import QGroundControl.Palette

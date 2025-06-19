@@ -32,6 +32,7 @@ import QGroundControl.Vehicle
 Item {
     id: _root
 
+    property int selectedButton: 1
     property var    parentToolInsets
     property var    totalToolInsets:        _totalToolInsets
     property var    mapControl
@@ -91,7 +92,7 @@ Item {
         anchors.right:      parent.right
         spacing:            _layoutSpacing
         visible:            !topRightPanel.visible
-
+        
         Rectangle {
             id: backgroundRect
             width: 300
@@ -108,114 +109,62 @@ Item {
                 anchors.margins: _layoutMargin
                 spacing: 10
 
+                
                 QGCButton {
                     id: topRightPanelButton
                     text: qsTr("Chức năng")
+                    backgroundColor:  selectedButton === 1 ? "#a2a200" : "gray"
+                    textColor: "white"
+                    primary: {
+                        selectedButton === 1 ? true : false
+                    }
                     visible: !topRightPanel.visible
-                    onClicked: topRightPanel.visible = true
+                    onClicked: {
+                        selectedButton = 1
+                        pageLoader.sourceComponent = pageShowTelemetryUAV
+                    }
                     anchors.left: buttonRow.left
                     anchors.leftMargin: 20
                 }
 
-                Item { width: 1; Layout.fillWidth: true } // đẩy hai nút ra hai bên
+                Item { width: 1; Layout.fillWidth: true }
 
                 QGCButton {
                     id: topRightPanelCloseButton
                     text: qsTr("Kế Hoạch Bay")
+                    backgroundColor:  selectedButton === 2 ? "#a2a200" : "gray"
+                    textColor: "white"
+                    primary: {
+                        selectedButton === 2 ? true : false
+                    }
                     visible: !topRightPanel.visible
-                    onClicked: topRightPanel.visible = false
+                    onClicked: {
+                        selectedButton = 2
+                        pageLoader.sourceComponent = pageShowPlanFlightUAV
+                    }
                     anchors.right: buttonRow.right
                     anchors.rightMargin: 20
                 }
-
-                
             
             }
 
             Rectangle {
                 id: divider
                 anchors.top: buttonRow.bottom
-                anchors.topMargin: 50
+                anchors.topMargin: 20
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: 200
                 height: 1
                 color: "white"
             }
 
-            RowLayout {
-                id: quickActionsRow
-                anchors.top: divider.bottom
-                anchors.topMargin: 20
-                anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 10
+            Loader {
+            id: pageLoader
+            anchors.fill: parent
+            anchors.topMargin: 60
+            sourceComponent: pageShowTelemetryUAV 
+        }
 
-                QGCButton {
-                    id: returnToHomeButton
-                    text: qsTr("Trở về nhà")
-                    visible: true
-                    backgroundColor: "darkblue"
-                    onClicked: {
-                        _guidedController.closeAll()
-                        _guidedController.confirmAction(_guidedController.actionRTL)
-                    }
-                }
-
-                QGCButton {
-                    id: emergencyLandingButton
-                    text: qsTr("Hạ cánh khẩn cấp")
-                    visible: true
-                    backgroundColor: "red"
-                    onClicked: {
-                        _guidedController.closeAll()
-                        _guidedController.confirmAction(_guidedController.actionLand)
-                    }
-                }
-            }
-
-            QGCButton {
-                id: preCheckFlightConditionsButton
-                text: qsTr("Kiểm tra trước chuyến bay")
-                visible: true
-                backgroundColor: "darkblue"
-                // onClicked: topRightPanel.visible = false
-                anchors.top: quickActionsRow.bottom
-                anchors.topMargin: 20
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                onClicked: {
-                    topRightPanel.visible = false
-                    if (!preFlightChecklistLoader.active) {
-                        preFlightChecklistLoader.active = true
-                    }
-                    preFlightChecklistLoader.item.open()
-                }
-            }
-
-            Repeater {
-                model: _activeVehicle ? _activeVehicle.batteries : 0
-            Column {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: preCheckFlightConditionsButton.bottom
-                anchors.topMargin: 20
-                spacing: 8
-
-                MetricsRow { label: "Số lượng GPS"; value: _activeVehicle ? _activeVehicle.gps.count.valueString : qsTr("N/A") }
-                MetricsRow { label: "Latitude"; value: _activeVehicle ? globals.activeVehicle.latitude.toFixed(5): qsTr("--.--") }
-                MetricsRow { label: "Longitude"; value: _activeVehicle ? globals.activeVehicle.longitude.toFixed(5): qsTr("--.--") }
-                MetricsRow { label: "Tốc độ máy bay"; value: _activeVehicle ? globals.activeVehicle.airSpeed.rawValue.toFixed(1) + " m/s" : qsTr("--.--") }
-                MetricsRow { label: "Tốc độ mặt đất"; value: _activeVehicle ? globals.activeVehicle.groundSpeed.rawValue.toFixed(1) + " m/s" : qsTr("--.--") }
-                MetricsRow { label: "Tốc độ gió"; value: _activeVehicle ? globals.activeVehicle.airSpeed.value + " m/s" : qsTr("--.--") }
-                MetricsRow { label: "Khoảng cách về nhà"; value: _activeVehicle ? _activeVehicle.distanceToHome.rawValue.toFixed(1) : qsTr("--.--") }
-                MetricsRow { label: "Độ cao tương đối"; value: _activeVehicle ? _activeVehicle.altitudeRelative.value.toFixed(1) + "m" : qsTr("--.--") }
-                MetricsRow { label: "Dung lượng pin"; value: object.percentRemaining.valueString + " " + object.percentRemaining.units }
-                MetricsRow { label: "Trạng thái"; value: object.chargeState.enumStringValue }
-                MetricsRow { label: "Thời gian còn lại"; value: object.timeRemainingStr.value }
-                MetricsRow { label: "Điện áp máy bay"; value: object.voltage.valueString + " " + object.voltage.units }
-                MetricsRow { label: "Dòng xả"; value: object.mahConsumed.valueString + " " + object.mahConsumed.units }
-                MetricsRow { label: "Nhiệt độ"; value: object.temperature.valueString + " " + object.temperature.units }
-            }
-
-            }
 
         }
 
@@ -231,6 +180,25 @@ Item {
                 id: vehicleMessageList
             }
             }
+    }
+
+    
+    Component {
+        id: pageShowTelemetryUAV
+        PageShowTelemetryUAV {
+            color: "transparent"
+            anchors.topMargin: 60
+            anchors.fill: parent
+        }
+    }
+
+    Component {
+        id: pageShowPlanFlightUAV
+        PageShowPlanFlightUAV {
+            color: "transparent"
+            anchors.topMargin: 60
+            anchors.fill: parent
+        }
     }
 
 

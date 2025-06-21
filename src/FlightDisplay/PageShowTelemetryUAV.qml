@@ -63,11 +63,11 @@ Rectangle {
         spacing: 8
 
         MetricsRow { label: "Số lượng GPS"; value: _activeVehicle ? _activeVehicle.gps.count.valueString : qsTr("N/A") }
-        MetricsRow { label: "Latitude"; value: _activeVehicle ? globals.activeVehicle.latitude.toFixed(5): qsTr("--.--") }
-        MetricsRow { label: "Longitude"; value: _activeVehicle ? globals.activeVehicle.longitude.toFixed(5): qsTr("--.--") }
-        MetricsRow { label: "Tốc độ máy bay"; value: _activeVehicle ? globals.activeVehicle.airSpeed.rawValue.toFixed(1) + " m/s" : qsTr("--.--") }
-        MetricsRow { label: "Tốc độ mặt đất"; value: _activeVehicle ? globals.activeVehicle.groundSpeed.rawValue.toFixed(1) + " m/s" : qsTr("--.--") }
-        MetricsRow { label: "Tốc độ gió"; value: _activeVehicle ? globals.activeVehicle.airSpeed.value + " m/s" : qsTr("--.--") }
+        MetricsRow { label: "Latitude"; value: _activeVehicle ? _activeVehicle.latitude.toFixed(5): qsTr("--.--") }
+        MetricsRow { label: "Longitude"; value: _activeVehicle ? _activeVehicle.longitude.toFixed(5): qsTr("--.--") }
+        MetricsRow { label: "Tốc độ máy bay"; value: _activeVehicle ? _activeVehicle.airSpeed.rawValue.toFixed(1) + " m/s" : qsTr("--.--") }
+        MetricsRow { label: "Tốc độ mặt đất"; value: _activeVehicle ? _activeVehicle.groundSpeed.rawValue.toFixed(1) + " m/s" : qsTr("--.--") }
+        MetricsRow { label: "Tốc độ gió"; value: _activeVehicle ? _activeVehicle.airSpeed.value + " m/s" : qsTr("--.--") }
         MetricsRow { label: "Khoảng cách về nhà"; value: _activeVehicle ? _activeVehicle.distanceToHome.rawValue.toFixed(1) : qsTr("--.--") }
         MetricsRow { label: "Độ cao tương đối"; value: _activeVehicle ? _activeVehicle.altitudeRelative.value.toFixed(1) + "m" : qsTr("--.--") }
         MetricsRow { label: "Dung lượng pin"; value: object.percentRemaining.valueString + " " + object.percentRemaining.units }

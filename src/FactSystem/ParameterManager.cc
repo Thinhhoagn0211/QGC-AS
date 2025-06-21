@@ -1,12 +1,3 @@
-/****************************************************************************
- *
- * (c) 2009-2024 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
- ****************************************************************************/
-
 #include "ParameterManager.h"
 #include "AutoPilotPlugin.h"
 #include "CompInfoParam.h"
@@ -131,7 +122,7 @@ void ParameterManager::_updateProgressBar()
     }
 }
 
-
+// Handle incoming MAVLink messages related to parameters
 void ParameterManager::mavlinkMessageReceived(const mavlink_message_t &message)
 {
     if (_tryftp && (message.compid == MAV_COMP_ID_AUTOPILOT1) && !_initialLoadComplete)

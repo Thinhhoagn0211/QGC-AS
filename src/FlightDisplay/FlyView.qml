@@ -43,7 +43,10 @@ Item {
     PlanMasterController {
         id:                     _planController
         flyView:                true
-        Component.onCompleted:  start()
+        Component.onCompleted: {
+            _planController.start()
+            _planController.setCurrentPlanView(true)
+        }
     }
 
     property bool   _mainWindowIsMap:       mapControl.pipState.state === mapControl.pipState.fullState

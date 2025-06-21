@@ -31,13 +31,13 @@ import QGroundControl.Vehicle
 // This is the ui overlay layer for the widgets/tools for Fly View
 Item {
     id: _root
-
+    
     property int selectedButton: 1
     property var    parentToolInsets
     property var    totalToolInsets:        _totalToolInsets
-    property var    mapControl
     property bool   isViewer3DOpen:         false
 
+    property var mapControl
     property var    _activeVehicle:         QGroundControl.multiVehicleManager.activeVehicle
     property var    _planMasterController:  globals.planMasterControllerFlyView
     property var    _missionController:     _planMasterController.missionController
@@ -120,6 +120,7 @@ Item {
                     }
                     visible: !topRightPanel.visible
                     onClicked: {
+                        globals.selectedView = 0
                         selectedButton = 1
                         pageLoader.sourceComponent = pageShowTelemetryUAV
                     }
@@ -139,6 +140,7 @@ Item {
                     }
                     visible: !topRightPanel.visible
                     onClicked: {
+                        globals.selectedView = 1
                         selectedButton = 2
                         pageLoader.sourceComponent = pageShowPlanFlightUAV
                     }
@@ -195,6 +197,7 @@ Item {
     Component {
         id: pageShowPlanFlightUAV
         PageShowPlanFlightUAV {
+            mapControl:         _root.mapControl
             color: "transparent"
             anchors.topMargin: 60
             anchors.fill: parent
@@ -313,7 +316,7 @@ Item {
         anchors.margins:    _toolsMargin
         anchors.left:       toolStrip.right
         anchors.top:        parent.top
-        mapControl:         _mapControl
+        mapControl:         _root.mapControl
         buttonsOnLeft:      true
         visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && !isViewer3DOpen && mapControl.pipState.state === mapControl.pipState.fullState
 

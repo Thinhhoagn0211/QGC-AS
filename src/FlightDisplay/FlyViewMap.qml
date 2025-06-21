@@ -22,6 +22,7 @@ import QGroundControl.FlightMap
 import QGroundControl.Palette
 import QGroundControl.ScreenTools
 import QGroundControl.Vehicle
+import QGroundControl.UTMSP
 
 FlightMap {
     id:                         _root
@@ -31,6 +32,16 @@ FlightMap {
     zoomLevel:                  QGroundControl.flightMapZoom
     center:                     QGroundControl.flightMapPosition
 
+
+    readonly property int   _decimalPlaces:             8
+    readonly property real  _margin:                    ScreenTools.defaultFontPixelHeight * 0.5
+    // readonly property real  _toolsMargin:               ScreenTools.defaultFontPixelWidth * 0.75
+    readonly property real  _radius:                    ScreenTools.defaultFontPixelWidth  * 0.5
+    readonly property real  _rightPanelWidth:           Math.min(width / 3, ScreenTools.defaultFontPixelWidth * 30)
+    readonly property var   _defaultVehicleCoordinate:  QtPositioning.coordinate(37.803784, -122.462276)
+    readonly property bool  _waypointsOnlyMode:         QGroundControl.corePlugin.options.missionWaypointsOnly
+
+
     property Item   pipView
     property Item   pipState:                   _pipState
     property var    rightPanelWidth
@@ -38,8 +49,11 @@ FlightMap {
     property bool   pipMode:                    false   // true: map is shown in a small pip mode
     property var    toolInsets                          // Insets for the center viewport area
 
+    property bool   _utmspEnabled:                      QGroundControl.utmspSupported
+    property int    _editingLayer:              _layerMission
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property var    _planMasterController:      planMasterController
+    property var    _missionController:                 _planMasterController.missionController
     property var    _geoFenceController:        planMasterController.geoFenceController
     property var    _rallyPointController:      planMasterController.rallyPointController
     property var    _activeVehicleCoordinate:   _activeVehicle ? _activeVehicle.coordinate : QtPositioning.coordinate()
@@ -51,6 +65,77 @@ FlightMap {
     property bool   _disableVehicleTracking:    false
     property bool   _keepVehicleCentered:       pipMode ? true : false
     property bool   _saveZoomLevelSetting:      true
+
+    property var    _visualItems:                       _missionController.visualItems
+    property bool   _lightWidgetBorders:                editorMap.isSatelliteMap
+    property bool   _addROIOnClick:                     false
+    property bool   _singleComplexItem:                 _missionController.complexMissionItemNames.length === 1
+    property int    _toolStripBottom:                   toolStrip.height + toolStrip.y
+    property var    _appSettings:                       QGroundControl.settingsManager.appSettings
+    property var    _planViewSettings:                  QGroundControl.settingsManager.planViewSettings
+    property bool   _promptForPlanUsageShowing:         false
+    property bool   _resetGeofencePolygon:              false   //Reset the Geofence Polygon
+    property var    _vehicleID
+    property bool   _triggerSubmit
+    property bool   _resetRegisterFlightPlan
+
+    
+    property real _nonInteractiveOpacity:  0.5
+
+    readonly property var       _layers:                    [_layerMission, _layerGeoFence, _layerRallyPoints]
+    readonly property var       _layersUTMSP:               [_layerMission, _layerRallyPoints, _layerUTMSP] //Adds additional UTMSP layer
+
+    readonly property int       _layerMission:              1
+    readonly property int       _layerGeoFence:             2
+    readonly property int       _layerRallyPoints:          3
+    readonly property int       _layerUTMSP:                4 // Additional Tab button when UTMSP is enabled
+    readonly property string    _armedVehicleUploadPrompt:  qsTr("Vehicle is currently armed. Do you want to upload the mission to the vehicle?")
+
+
+    function mapCenter() {
+        var coordinate = _root.center
+        coordinate.latitude  = coordinate.latitude.toFixed(_decimalPlaces)
+        coordinate.longitude = coordinate.longitude.toFixed(_decimalPlaces)
+        coordinate.altitude  = coordinate.altitude.toFixed(_decimalPlaces)
+        return coordinate
+    }
+
+    property bool _firstMissionLoadComplete:    false
+    property bool _firstFenceLoadComplete:      false
+    property bool _firstRallyLoadComplete:      false
+    property bool _firstLoadComplete:           false
+
+
+    function insertSimpleItemAfterCurrent(coordinate) {
+        var nextIndex = _missionController.currentPlanViewVIIndex + 1
+        _missionController.insertSimpleMissionItem(coordinate, nextIndex, true /* makeCurrentItem */)
+    }
+
+    function insertROIAfterCurrent(coordinate) {
+        var nextIndex = _missionController.currentPlanViewVIIndex + 1
+        _missionController.insertROIMissionItem(coordinate, nextIndex, true /* makeCurrentItem */)
+    }
+
+    function insertCancelROIAfterCurrent() {
+        var nextIndex = _missionController.currentPlanViewVIIndex + 1
+        _missionController.insertCancelROIMissionItem(nextIndex, true /* makeCurrentItem */)
+    }
+
+    function insertComplexItemAfterCurrent(complexItemName) {
+        var nextIndex = _missionController.currentPlanViewVIIndex + 1
+        _missionController.insertComplexMissionItem(complexItemName, mapCenter(), nextIndex, true /* makeCurrentItem */)
+    }
+
+    function insertTakeItemAfterCurrent() {
+        var nextIndex = _missionController.currentPlanViewVIIndex + 1
+        _missionController.insertTakeoffItem(mapCenter(), nextIndex, true /* makeCurrentItem */)
+    }
+
+    function insertLandItemAfterCurrent() {
+        var nextIndex = _missionController.currentPlanViewVIIndex + 1
+        _missionController.insertLandItem(mapCenter(), nextIndex, true /* makeCurrentItem */)
+    }
+
 
     function _adjustMapZoomForPipMode() {
         _saveZoomLevelSetting = false
@@ -67,9 +152,76 @@ FlightMap {
     onPipModeChanged: _adjustMapZoomForPipMode()
 
     onVisibleChanged: {
-        if (visible) {
-            // Synchronize center position with Plan View
-            center = QGroundControl.flightMapPosition
+        if (globals.selectedView === 1) {
+            editorMap.zoomLevel = QGroundControl.flightMapZoom
+            editorMap.center    = QGroundControl.flightMapPosition
+            if (!_planMasterController.containsItems) {
+                toolStrip.simulateClick(toolStrip.fileButtonIndex)
+            }
+        } else {
+            if (visible) {
+                // Synchronize center position with Plan View
+                center = QGroundControl.flightMapPosition
+            }
+        }
+    }
+
+    Connections {
+        target: _appSettings ? _appSettings.defaultMissionItemAltitude : null
+        function onRawValueChanged() {
+            if (_visualItems.count > 1) {
+                mainWindow.showMessageDialog(qsTr("Apply new altitude"),
+                                             qsTr("You have changed the default altitude for mission items. Would you like to apply that altitude to all the items in the current mission?"),
+                                             Dialog.Yes | Dialog.No,
+                                             function() { _missionController.applyDefaultMissionAltitude() })
+            }
+        }
+    }
+
+
+    Component {
+        id: promptForPlanUsageOnVehicleChangePopupComponent
+        QGCPopupDialog {
+            title:      _planMasterController.managerVehicle.isOfflineEditingVehicle ? qsTr("Plan View - Vehicle Disconnected") : qsTr("Plan View - Vehicle Changed")
+            buttons:    Dialog.NoButton
+
+            ColumnLayout {
+                QGCLabel {
+                    Layout.maximumWidth:    parent.width
+                    wrapMode:               QGCLabel.WordWrap
+                    text:                   _planMasterController.managerVehicle.isOfflineEditingVehicle ?
+                                                qsTr("The vehicle associated with the plan in the Plan View is no longer available. What would you like to do with that plan?") :
+                                                qsTr("The plan being worked on in the Plan View is not from the current vehicle. What would you like to do with that plan?")
+                }
+
+                QGCButton {
+                    Layout.fillWidth:   true
+                    text:               _planMasterController.dirty ?
+                                            (_planMasterController.managerVehicle.isOfflineEditingVehicle ?
+                                                 qsTr("Discard Unsaved Changes") :
+                                                 qsTr("Discard Unsaved Changes, Load New Plan From Vehicle")) :
+                                            qsTr("Load New Plan From Vehicle")
+                    onClicked: {
+                        _planMasterController.showPlanFromManagerVehicle()
+                        _promptForPlanUsageShowing = false
+                        close();
+                    }
+                }
+
+                QGCButton {
+                    Layout.fillWidth:   true
+                    text:               _planMasterController.managerVehicle.isOfflineEditingVehicle ?
+                                            qsTr("Keep Current Plan") :
+                                            qsTr("Keep Current Plan, Don't Update From Vehicle")
+                    onClicked: {
+                        if (!_planMasterController.managerVehicle.isOfflineEditingVehicle) {
+                            _planMasterController.dirty = true
+                        }
+                        _promptForPlanUsageShowing = false
+                        close()
+                    }
+                }
+            }
         }
     }
 
@@ -199,6 +351,27 @@ FlightMap {
         }
     }
 
+    // TerrainStatus {
+    //     id:                 terrainStatus
+    //     anchors.margins:    _toolsMargin
+    //     anchors.leftMargin: 0
+    //     anchors.left:       mapScale.left
+    //     anchors.right:      rightPanel.left
+    //     anchors.bottom:     parent.bottom
+    //     height:             ScreenTools.defaultFontPixelHeight * 7
+    //     missionController:  _missionController
+    //     visible:            _internalVisible && _editingLayer === _layerMission && QGroundControl.corePlugin.options.showMissionStatus
+
+    //     onSetCurrentSeqNum: _missionController.setCurrentPlanViewSeqNum(seqNum, true)
+
+    //     property bool _internalVisible: _planViewSettings.showMissionItemStatus.rawValue
+
+    //     function toggleVisible() {
+    //         _internalVisible = !_internalVisible
+    //         _planViewSettings.showMissionItemStatus.rawValue = _internalVisible
+    //     }
+    // }
+    
     PipState {
         id:         _pipState
         pipView:    _root.pipView
@@ -757,17 +930,196 @@ FlightMap {
     }
 
     onMapClicked: (position) => {
-        if (!globals.guidedControllerFlyView.guidedUIVisible &&
-            (globals.guidedControllerFlyView.showGotoLocation || globals.guidedControllerFlyView.showOrbit ||
-             globals.guidedControllerFlyView.showROI || globals.guidedControllerFlyView.showSetHome ||
-             globals.guidedControllerFlyView.showSetEstimatorOrigin)) {
+        if (globals.selectedView === 1) {
+            // Take focus to close any previous editing
+            _root.focus = true
+            if (!mainWindow.allowViewSwitch()) {
+                return
+            }
+            var coordinate = _root.toCoordinate(Qt.point(position.x, position.y), false /* clipToViewPort */)
+            coordinate.latitude = coordinate.latitude.toFixed(_decimalPlaces)
+            coordinate.longitude = coordinate.longitude.toFixed(_decimalPlaces)
+            coordinate.altitude = coordinate.altitude.toFixed(_decimalPlaces)
+            if(_utmspEnabled){
+                QGroundControl.utmspManager.utmspVehicle.updateLastCoordinates(coordinate.latitude, coordinate.longitude)
+            }
+            
+            switch (_editingLayer) {
+            case _layerMission:
+                // if (addWaypointRallyPointAction.checked) {
+                insertSimpleItemAfterCurrent(coordinate)
+                // } else if (_addROIOnClick) {
+                //     insertROIAfterCurrent(coordinate)
+                //     _addROIOnClick = false
+                // }
+                break
+            case _layerRallyPoints:
+                // if (_rallyPointController.supported && addWaypointRallyPointAction.checked) {
+                //     _rallyPointController.addPoint(coordinate)
+                // }
+                break
 
-            position = Qt.point(position.x, position.y)
-            var clickCoord = _root.toCoordinate(position, false /* clipToViewPort */)
-            // For some strange reason using mainWindow in mapToItem doesn't work, so we use globals.parent instead which also gets us mainWindow
-            position = _root.mapToItem(globals.parent, position)
-            var dropPanel = mapClickDropPanelComponent.createObject(mainWindow, { mapClickCoord: clickCoord, clickRect: Qt.rect(position.x, position.y, 0, 0) })
-            dropPanel.open()
+            case _layerUTMSP:
+                // if (addWaypointRallyPointAction.checked) {
+                //     insertSimpleItemAfterCurrent(coordinate)
+                // } else if (_addROIOnClick) {
+                //     insertROIAfterCurrent(coordinate)
+                //     _addROIOnClick = false
+                // }
+                break
+            }
+        } else {
+            if (!globals.guidedControllerFlyView.guidedUIVisible &&
+                (globals.guidedControllerFlyView.showGotoLocation || globals.guidedControllerFlyView.showOrbit ||
+                globals.guidedControllerFlyView.showROI || globals.guidedControllerFlyView.showSetHome ||
+                globals.guidedControllerFlyView.showSetEstimatorOrigin)) {
+
+                position = Qt.point(position.x, position.y)
+                var clickCoord = _root.toCoordinate(position, false /* clipToViewPort */)
+                // For some strange reason using mainWindow in mapToItem doesn't work, so we use globals.parent instead which also gets us mainWindow
+                position = _root.mapToItem(globals.parent, position)
+                var dropPanel = mapClickDropPanelComponent.createObject(mainWindow, { mapClickCoord: clickCoord, clickRect: Qt.rect(position.x, position.y, 0, 0) })
+                dropPanel.open()
+            }
+        }
+    }
+
+
+    // Add the mission item visuals to the map
+    Repeater {
+        model: _missionController.visualItems
+        delegate: MissionItemMapVisual {
+            map:         _root
+            opacity:     _editingLayer == _layerMission || _editingLayer == _layerUTMSP ? 1 : _root._nonInteractiveOpacity
+            interactive: _editingLayer == _layerMission || _editingLayer == _layerUTMSP
+            vehicle:     _planMasterController.controllerVehicle
+            onClicked:   (sequenceNumber) => { _missionController.setCurrentPlanViewSeqNum(sequenceNumber, false) }
+        }
+    }
+
+    // Add lines between waypoints
+    MissionLineView {
+        showSpecialVisual:  _missionController.isROIBeginCurrentItem
+        model:              _missionController.simpleFlightPathSegments
+        opacity:            _editingLayer == _layerMission ||  _editingLayer == _layerUTMSP  ? 1 : _root._nonInteractiveOpacity
+    }
+    
+    // Direction arrows in waypoint lines
+    MapItemView {
+        model: _editingLayer == _layerMission ||_editingLayer == _layerUTMSP ? _missionController.directionArrows : undefined
+
+        delegate: MapLineArrow {
+            fromCoord:      object ? object.coordinate1 : undefined
+            toCoord:        object ? object.coordinate2 : undefined
+            arrowPosition:  3
+            z:              QGroundControl.zOrderWaypointLines + 1
+        }
+    }
+
+    // Incomplete segment lines
+    MapItemView {
+        model: _missionController.incompleteComplexItemLines
+
+        delegate: MapPolyline {
+            path:       [ object.coordinate1, object.coordinate2 ]
+            line.width: 1
+            line.color: "red"
+            z:          QGroundControl.zOrderWaypointLines
+            opacity:    _editingLayer == _layerMission ? 1 : _root._nonInteractiveOpacity
+        }
+    }
+
+    // UI for splitting the current segment
+    MapQuickItem {
+        id:             splitSegmentItem
+        anchorPoint.x:  sourceItem.width / 2
+        anchorPoint.y:  sourceItem.height / 2
+        z:              QGroundControl.zOrderWaypointLines + 1
+        visible:        _editingLayer == _layerMission ||  _editingLayer == _layerUTMSP
+
+        sourceItem: SplitIndicator {
+            onClicked:  _missionController.insertSimpleMissionItem(splitSegmentItem.coordinate,
+                                                                    _missionController.currentPlanViewVIIndex,
+                                                                    true /* makeCurrentItem */)
+        }
+
+        function _updateSplitCoord() {
+            if (_missionController.splitSegment) {
+                var distance = _missionController.splitSegment.coordinate1.distanceTo(_missionController.splitSegment.coordinate2)
+                var azimuth = _missionController.splitSegment.coordinate1.azimuthTo(_missionController.splitSegment.coordinate2)
+                splitSegmentItem.coordinate = _missionController.splitSegment.coordinate1.atDistanceAndAzimuth(distance / 2, azimuth)
+            } else {
+                coordinate = QtPositioning.coordinate()
+            }
+        }
+
+        Connections {
+            target:                 _missionController
+            function onSplitSegmentChanged()  { splitSegmentItem._updateSplitCoord() }
+        }
+
+        Connections {
+            target:                 _missionController.splitSegment
+            function onCoordinate1Changed()   { splitSegmentItem._updateSplitCoord() }
+            function onCoordinate2Changed()   { splitSegmentItem._updateSplitCoord() }
+        }
+    }
+
+    // Add the vehicles to the map
+    MapItemView {
+        model: QGroundControl.multiVehicleManager.vehicles
+        delegate: VehicleMapItem {
+            vehicle:        object
+            coordinate:     object.coordinate
+            map:            _root
+            size:           ScreenTools.defaultFontPixelHeight * 3
+            z:              QGroundControl.zOrderMapItems - 1
+        }
+    }
+
+    GeoFenceMapVisuals {
+        map:                    _root
+        myGeoFenceController:   _geoFenceController
+        interactive:            _editingLayer == _layerGeoFence
+        homePosition:           _missionController.plannedHomePosition
+        planView:               true
+        opacity:                _editingLayer != _layerGeoFence ? _root._nonInteractiveOpacity : 1
+    }
+
+    RallyPointMapVisuals {
+        map:                    _root
+        myRallyPointController: _rallyPointController
+        interactive:            _editingLayer == _layerRallyPoints
+        planView:               true
+        opacity:                _editingLayer != _layerRallyPoints ? _root._nonInteractiveOpacity : 1
+    }
+
+    UTMSPMapVisuals {
+        id: utmspvisual
+        enabled:                _utmspEnabled
+        map:                    _root
+        currentMissionItems:    _visualItems
+        myGeoFenceController:   _geoFenceController
+        interactive:            _editingLayer == _layerUTMSP
+        homePosition:           _missionController.plannedHomePosition
+        planView:               true
+        opacity:                _editingLayer != _layerUTMSP ? _root._nonInteractiveOpacity : 1
+        resetCheck:             _resetGeofencePolygon
+    }
+
+    Connections {
+        target: utmspEditor
+        function onResetGeofencePolygonTriggered() {
+            resetTimer.start()
+        }
+    }
+    Timer {
+        id: resetTimer
+        interval: 2500
+        running: false
+        repeat: false
+        onTriggered: {
+            _resetGeofencePolygon = true
         }
     }
 

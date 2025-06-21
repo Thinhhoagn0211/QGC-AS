@@ -1,11 +1,15 @@
-/****************************************************************************
- *
- * (c) 2009-2024 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
- ****************************************************************************/
+/*
+ParameterEditorController.cc chịu trách nhiệm quản lý các tham số của phương tiện trong giao diện người dùng QML. Nó sử dụng mô hình bảng để hiển thị các tham số và cho phép người dùng tìm kiếm, lọc và chỉnh sửa các tham số này. Controller này cũng hỗ trợ việc lưu trữ và tải các tham số từ tệp, cũng như quản lý các thay đổi giữa các phương tiện khác nhau.
+Đây là backend logic quan trọng liên quan đến việc:
+
+Nạp tham số từ drone
+Hiển thị ra bảng QML
+Hỗ trợ tìm kiếm, chỉnh sửa
+So sánh với file cấu hình (diff)
+Gửi thay đổi trở lại drone
+
+
+*/
 
 #include "ParameterEditorController.h"
 #include "QGCApplication.h"
@@ -13,9 +17,10 @@
 #include "AppSettings.h"
 #include "Vehicle.h"
 #include "QGCLoggingCategory.h"
-
+// create a logging category for the parameter editor controller
 QGC_LOGGING_CATEGORY(ParameterEditorControllerLog, "qgc.qmlcontrols.parametereditorcontroller")
 
+// This is the model used to display the parameters in the table view
 ParameterTableModel::ParameterTableModel(QObject* parent)
     : QAbstractTableModel(parent)
 {
@@ -26,17 +31,17 @@ ParameterTableModel::~ParameterTableModel()
 {
     
 }
-
+// return the number of rows in the table
 int ParameterTableModel::rowCount(const QModelIndex& /*parent*/) const
 {
     return _tableData.count();
 }
-
+// return the number of columns in the table
 int ParameterTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
     return _tableViewColCount;
 }
-
+// return data of each cell in the table
 QVariant ParameterTableModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
@@ -49,7 +54,7 @@ QVariant ParameterTableModel::data(const QModelIndex &index, int role) const
     if (index.column() < 0 || index.column() >= _tableViewColCount) {
         return QVariant();
     }
-    
+    // if role is not display role or fact role, return empty QVariant, else return the data
     switch (role) {
         case Qt::DisplayRole:
             return QVariant::fromValue(_tableData[index.row()][index.column()]);
@@ -59,7 +64,7 @@ QVariant ParameterTableModel::data(const QModelIndex &index, int role) const
             return QVariant();
     }
 }
-
+// define role names for the model
 QHash<int, QByteArray> ParameterTableModel::roleNames() const
 {
     return { 
@@ -67,7 +72,7 @@ QHash<int, QByteArray> ParameterTableModel::roleNames() const
         {FactRole, "fact"}
     };
 }
-
+// clear the table data
 void ParameterTableModel::clear()
 {
     if (!_externalBeginResetModel) {
@@ -79,12 +84,12 @@ void ParameterTableModel::clear()
         emit rowCountChanged(0);
     }
 }
-
+// append a new fact to the table
 void ParameterTableModel::append(Fact* fact)
 {
     insert(rowCount(), fact);
 }
-
+// insert a fact at a specific row in the table
 void ParameterTableModel::insert(int row, Fact* fact)
 {
     if (row < 0 || row > rowCount()) {
@@ -103,7 +108,7 @@ void ParameterTableModel::insert(int row, Fact* fact)
 
     emit rowCountChanged(rowCount());
 }
-
+// beginResetModel is used to reset the model, it should be called before any changes to the model
 void ParameterTableModel::beginReset()
 {
     if (_externalBeginResetModel) {
@@ -112,7 +117,7 @@ void ParameterTableModel::beginReset()
     _externalBeginResetModel = true;
     beginResetModel();
 }
-
+// endResetModel is used to reset the model, it should be called after all changes to the model
 void ParameterTableModel::endReset()
 {
     if (!_externalBeginResetModel) {
@@ -121,7 +126,7 @@ void ParameterTableModel::endReset()
     _externalBeginResetModel = false;
     endResetModel();
 }
-
+// return the fact at a specific row in the table
 Fact* ParameterTableModel::factAt(int row) const
 {
     if (row < 0 || row >= _tableData.count()) {

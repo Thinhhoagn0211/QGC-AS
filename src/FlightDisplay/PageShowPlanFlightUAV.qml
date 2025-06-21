@@ -1,8 +1,11 @@
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Dialogs
-import QtQuick.Layouts
-import QtPositioning
 import QtLocation
+import QtPositioning
+import QtQuick.Layouts
+import QtQuick.Window
+
 import QGroundControl
 import QGroundControl.FlightMap
 import QGroundControl.ScreenTools
@@ -17,14 +20,33 @@ import QGroundControl.UTMSP
 
 Rectangle {
     id: _root
+    
 
-    property var    planMasterController
-    property var    _planMasterController:      planMasterController
+    property var mapControl
+    property var _mapControl:            mapControl
+    property var    _planMasterController:  planMasterController
+    property bool   _controllerValid:           _planMasterController !== undefined && _planMasterController !== null
     property var    _currentMissionItem:        _planMasterController.missionController.currentPlanViewItem
     property var    _controllerDirty:           _controllerValid ? _planMasterController.dirty : false
     property var    _controllerSyncInProgress:  _controllerValid ? _planMasterController.syncInProgress : false
     property bool   _utmspEnabled:                       QGroundControl.utmspSupported
     property string _overwriteText: qsTr("Plan overwrite")
+    property var    _missionController:                 _planMasterController.missionController
+    property bool   _controllerOffline:         _controllerValid ? _planMasterController.offline : true
+    property var    _appSettings:                       QGroundControl.settingsManager.appSettings
+
+
+
+    function selectNextNotReady() {
+        var foundCurrent = false
+        for (var i=0; i<_missionController.visualItems.count; i++) {
+            var vmi = _missionController.visualItems.get(i)
+            if (vmi.readyForSaveState === VisualMissionItem.NotReadyForSaveData) {
+                _missionController.setCurrentPlanViewSeqNum(vmi.sequenceNumber, true)
+                break
+            }
+        }
+    }
 
     function showLoadFromFileOverwritePrompt(title) {
         mainWindow.showMessageDialog(title,
@@ -32,6 +54,7 @@ Rectangle {
         Dialog.Yes | Dialog.Cancel,
         function() { _planMasterController.loadFromSelectedFile() } )
     }
+
 
     function downloadClicked(title) {
         if (_planMasterController.dirty) {
@@ -77,7 +100,8 @@ Rectangle {
             QGCButton {
                 id: uploadButton
                 text: qsTr("Tải lên")
-                visible: true
+                enabled:     _utmspEnabled ? !_controllerSyncInProgress && UTMSPStateStorage.enableMissionUploadButton : !_controllerSyncInProgress
+                visible:     !_controllerOffline && !_controllerSyncInProgress
                 implicitWidth: 50
                 implicitHeight: 25
                 backgroundColor: "lightgreen"
@@ -168,10 +192,10 @@ Rectangle {
             GridLayout {
                 id: gridSetAltitude
                 columns: 2
-                anchors.fill: parent
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 rowSpacing: 10
                 columnSpacing: 10
-                anchors.margins: 20
 
                 // Row 1
                 Text {
@@ -209,11 +233,50 @@ Rectangle {
                 id: landingCheckBox
                 text: qsTr("Tạo thêm điểm hạ cánh")
             }
+
+
+            Item {
+                id:                     missionItemEditor
+                anchors.left:           parent.left
+                anchors.right:          parent.right
+                anchors.top:            landingCheckBox.bottom
+                anchors.topMargin:      ScreenTools.defaultFontPixelHeight * 0.25
+                anchors.bottom:         parent.bottom
+                anchors.bottomMargin:   ScreenTools.defaultFontPixelHeight * 0.25
+                visible:                mapControl._editingLayer == mapControl._layerMission && !mapControl.planControlColapsed
+                QGCListView {
+                    id:                 missionItemEditorListView
+                    anchors.fill:       parent
+                    spacing:            ScreenTools.defaultFontPixelHeight / 4
+                    orientation:        ListView.Vertical
+                    model:              _missionController.visualItems
+                    cacheBuffer:        Math.max(height * 2, 0)
+                    clip:               true
+                    currentIndex:       _missionController.currentPlanViewSeqNum
+                    highlightMoveDuration: 250
+                    visible:            mapControl._editingLayer == mapControl._layerMission && !mapControl.planControlColapsed
+                    delegate: MissionItemEditor {
+                        map:            mapControl
+                        masterController:  _planMasterController
+                        missionItem:    object
+                        width:          missionItemEditorListView.width
+                        readOnly:       false
+                        onClicked: (sequenceNumber) => { _missionController.setCurrentPlanViewSeqNum(object.sequenceNumber, false) }
+                        onRemove: {
+                            var removeVIIndex = index
+                            _missionController.removeVisualItem(removeVIIndex)
+                            if (removeVIIndex >= _missionController.visualItems.count) {
+                                removeVIIndex--
+                            }
+                        }
+                        onSelectNextNotReadyItem:   selectNextNotReady()
+                    }
+                }
+            }
         }
         
     }
 
-    
     PlanMasterController {
         id:         planMasterController
         flyView:    false
@@ -306,7 +369,7 @@ Rectangle {
         }
     }
 
-    
+
     QGCFileDialog {
         id:             fileDialog
         folder:         _appSettings ? _appSettings.missionSavePath : ""
@@ -329,5 +392,4 @@ Rectangle {
             close()
         }
     }
-
 }

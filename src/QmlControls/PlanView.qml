@@ -166,7 +166,7 @@ Item {
             _planMasterController.start()
             _missionController.setCurrentPlanViewSeqNum(0, true)
         }
-
+        
         onPromptForPlanUsageOnVehicleChange: {
             if (!_promptForPlanUsageShowing) {
                 _promptForPlanUsageShowing = true

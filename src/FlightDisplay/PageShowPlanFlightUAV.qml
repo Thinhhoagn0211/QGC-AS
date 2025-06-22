@@ -44,7 +44,7 @@ Rectangle {
             QGCButton {
                 id: uploadButton
                 text: qsTr("Tải lên")
-                enabled:     planMasterController._utmspEnabled ? !planMasterController._controllerSyncInProgress && UTMSPStateStorage.enableMissionUploadButton : !planMasterController._controllerSyncInProgress
+                enabled:     _utmspEnabled ? !planMasterController._controllerSyncInProgress && UTMSPStateStorage.enableMissionUploadButton : !planMasterController._controllerSyncInProgress
                 visible:     !planMasterController._controllerOffline && !planMasterController._controllerSyncInProgress
                 implicitWidth: 50
                 implicitHeight: 25
@@ -81,7 +81,7 @@ Rectangle {
                     // dropPanel.hide()
                     if (planMasterController.dirty) {
                         console.log("Open file button clicked with unsaved changes")
-                        showLoadFromFileOverwritePrompt(planMasterController._overwriteText)
+                        showLoadFromFileOverwritePrompt(_overwriteText)
                     } else {
                         console.log("Open file button clicked without unsaved changes")
                         planMasterController.loadFromSelectedFile()
@@ -182,44 +182,44 @@ Rectangle {
             }
 
 
-            Item {
-                id:                     missionItemEditor
-                anchors.left:           parent.left
-                anchors.right:          parent.right
-                anchors.top:            landingCheckBox.bottom
-                anchors.topMargin:      ScreenTools.defaultFontPixelHeight * 0.25
-                anchors.bottom:         parent.bottom
-                anchors.bottomMargin:   ScreenTools.defaultFontPixelHeight * 0.25
-                visible:                mapControl._editingLayer == mapControl._layerMission && !mapControl.planControlColapsed
-                QGCListView {
-                    id:                 missionItemEditorListView
-                    anchors.fill:       parent
-                    spacing:            ScreenTools.defaultFontPixelHeight / 4
-                    orientation:        ListView.Vertical
-                    model:              _missionController.visualItems
-                    cacheBuffer:        Math.max(height * 2, 0)
-                    clip:               true
-                    currentIndex:       _missionController.currentPlanViewSeqNum
-                    highlightMoveDuration: 250
-                    visible:            mapControl._editingLayer == mapControl._layerMission && !mapControl.planControlColapsed
-                    delegate: MissionItemEditor {
-                        map:            mapControl
-                        masterController:  planMasterController
-                        missionItem:    object
-                        width:          missionItemEditorListView.width
-                        readOnly:       false
-                        onClicked: (sequenceNumber) => { _missionController.setCurrentPlanViewSeqNum(object.sequenceNumber, false) }
-                        onRemove: {
-                            var removeVIIndex = index
-                            _missionController.removeVisualItem(removeVIIndex)
-                            if (removeVIIndex >= _missionController.visualItems.count) {
-                                removeVIIndex--
-                            }
-                        }
-                        onSelectNextNotReadyItem:   selectNextNotReady()
-                    }
-                }
-            }
+            // Item {
+            //     id:                     missionItemEditor
+            //     anchors.left:           parent.left
+            //     anchors.right:          parent.right
+            //     anchors.top:            landingCheckBox.bottom
+            //     anchors.topMargin:      ScreenTools.defaultFontPixelHeight * 0.25
+            //     anchors.bottom:         parent.bottom
+            //     anchors.bottomMargin:   ScreenTools.defaultFontPixelHeight * 0.25
+            //     visible:                mapControl._editingLayer == mapControl._layerMission && !mapControl.planControlColapsed
+            //     QGCListView {
+            //         id:                 missionItemEditorListView
+            //         anchors.fill:       parent
+            //         spacing:            ScreenTools.defaultFontPixelHeight / 4
+            //         orientation:        ListView.Vertical
+            //         model:              _missionController.visualItems
+            //         cacheBuffer:        Math.max(height * 2, 0)
+            //         clip:               true
+            //         currentIndex:       _missionController.currentPlanViewSeqNum
+            //         highlightMoveDuration: 250
+            //         visible:            mapControl._editingLayer == mapControl._layerMission && !mapControl.planControlColapsed
+            //         delegate: MissionItemEditor {
+            //             map:            mapControl
+            //             masterController:  planMasterController
+            //             missionItem:    object
+            //             width:          missionItemEditorListView.width
+            //             readOnly:       false
+            //             onClicked: (sequenceNumber) => { _missionController.setCurrentPlanViewSeqNum(object.sequenceNumber, false) }
+            //             onRemove: {
+            //                 var removeVIIndex = index
+            //                 _missionController.removeVisualItem(removeVIIndex)
+            //                 if (removeVIIndex >= _missionController.visualItems.count) {
+            //                     removeVIIndex--
+            //                 }
+            //             }
+            //             onSelectNextNotReadyItem:   selectNextNotReady()
+            //         }
+            //     }
+            // }
         }
         
     }

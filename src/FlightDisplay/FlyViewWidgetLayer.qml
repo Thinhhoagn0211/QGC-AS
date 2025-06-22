@@ -141,6 +141,8 @@ Item {
                         pageLoader.sourceComponent = pageShowTelemetryUAV
                         planMasterController.flyView = true
                         mapControl.planView = false
+                        planMasterController.flyView = true
+                        mapControl.planView = false
                     }
                     anchors.left: buttonRow.left
                     anchors.leftMargin: 20
@@ -163,7 +165,8 @@ Item {
                         pageLoader.sourceComponent = pageShowPlanFlightUAV
                         planMasterController.flyView = false
                         mapControl.planView = true
-                        // insertTakeItemAfterCurrent()
+                        // planMasterController.planView = true
+                        insertTakeItemAfterCurrent()
                         // mapControl._triggerSubmit = true
                     }
                     anchors.right: buttonRow.right

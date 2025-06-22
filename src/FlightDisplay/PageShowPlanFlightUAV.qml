@@ -25,10 +25,6 @@ Rectangle {
     property var mapControl
     property var _mapControl:            mapControl
     property var planMasterController
-    // property var planMasterController:  planMasterController
-    
-
-
 
 
     ColumnLayout {
@@ -127,100 +123,100 @@ Rectangle {
 
         }
         
-        ColumnLayout {
-            spacing: 10
-            Text {
-                text: "Cài đặt chung"
-                font.bold: true
-                font.pointSize: ScreenTools.defaultFontPointSize * 1.2
-                color: "white"
-            }
+        // Column {
+        //     spacing: 10
+        //     Text {
+        //         text: "Cài đặt chung"
+        //         font.bold: true
+        //         font.pointSize: ScreenTools.defaultFontPointSize * 1.2
+        //         color: "white"
+        //     }
 
-            GridLayout {
-                id: gridSetAltitude
-                columns: 2
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                rowSpacing: 10
-                columnSpacing: 10
+        //     GridLayout {
+        //         id: gridSetAltitude
+        //         columns: 2
+        //         Layout.fillWidth: true
+        //         Layout.fillHeight: true
+        //         rowSpacing: 10
+        //         columnSpacing: 10
 
-                // Row 1
-                Text {
-                    text: "Label 1"
-                    font.pixelSize: 16
-                }
+        //         // Row 1
+        //         Text {
+        //             text: "Label 1"
+        //             font.pixelSize: 16
+        //         }
 
-                Rectangle {
-                    width: 100
-                    height: 30
-                    color: "lightblue"
-                }
+        //         Rectangle {
+        //             width: 100
+        //             height: 30
+        //             color: "lightblue"
+        //         }
 
-                // Row 2
-                Text {
-                    text: "Label 2"
-                    font.pixelSize: 16
-                }
+        //         // Row 2
+        //         Text {
+        //             text: "Label 2"
+        //             font.pixelSize: 16
+        //         }
 
-                Rectangle {
-                    width: 100
-                    height: 30
-                    color: "lightgreen"
-                }
+        //         Rectangle {
+        //             width: 100
+        //             height: 30
+        //             color: "lightgreen"
+        //         }
 
-            }
-
-
-            QGCCheckBox {
-                id: takeoffCheckBox
-                text: qsTr("Tạo thêm điểm cất cánh")
-            }
-
-            QGCCheckBox {
-                id: landingCheckBox
-                text: qsTr("Tạo thêm điểm hạ cánh")
-            }
+        //     }
 
 
-            Item {
-                id:                     missionItemEditor
-                anchors.left:           parent.left
-                anchors.right:          parent.right
-                anchors.top:            landingCheckBox.bottom
-                anchors.topMargin:      ScreenTools.defaultFontPixelHeight * 0.25
-                anchors.bottom:         parent.bottom
-                anchors.bottomMargin:   ScreenTools.defaultFontPixelHeight * 0.25
-                visible:                mapControl._editingLayer == mapControl._layerMission && !mapControl.planControlColapsed
-                QGCListView {
-                    id:                 missionItemEditorListView
-                    anchors.fill:       parent
-                    spacing:            ScreenTools.defaultFontPixelHeight / 4
-                    orientation:        ListView.Vertical
-                    model:              _missionController.visualItems
-                    cacheBuffer:        Math.max(height * 2, 0)
-                    clip:               true
-                    currentIndex:       _missionController.currentPlanViewSeqNum
-                    highlightMoveDuration: 250
-                    visible:            mapControl._editingLayer == mapControl._layerMission && !mapControl.planControlColapsed
-                    delegate: MissionItemEditor {
-                        map:            mapControl
-                        masterController:  planMasterController
-                        missionItem:    object
-                        width:          missionItemEditorListView.width
-                        readOnly:       false
-                        onClicked: (sequenceNumber) => { _missionController.setCurrentPlanViewSeqNum(object.sequenceNumber, false) }
-                        onRemove: {
-                            var removeVIIndex = index
-                            _missionController.removeVisualItem(removeVIIndex)
-                            if (removeVIIndex >= _missionController.visualItems.count) {
-                                removeVIIndex--
-                            }
-                        }
-                        onSelectNextNotReadyItem:   selectNextNotReady()
-                    }
-                }
-            }
-        }
+        //     QGCCheckBox {
+        //         id: takeoffCheckBox
+        //         text: qsTr("Tạo thêm điểm cất cánh")
+        //     }
+
+        //     QGCCheckBox {
+        //         id: landingCheckBox
+        //         text: qsTr("Tạo thêm điểm hạ cánh")
+        //     }
+
+
+        //     Item {
+        //         id:                     missionItemEditor
+        //         anchors.left:           parent.left
+        //         anchors.right:          parent.right
+        //         anchors.top:            landingCheckBox.bottom
+        //         anchors.topMargin:      ScreenTools.defaultFontPixelHeight * 0.25
+        //         anchors.bottom:         parent.bottom
+        //         anchors.bottomMargin:   ScreenTools.defaultFontPixelHeight * 0.25
+        //         visible:                _editingLayer == _layerMission && !planControlColapsed
+        //         QGCListView {
+        //             id:                 missionItemEditorListView
+        //             anchors.fill:       parent
+        //             spacing:            ScreenTools.defaultFontPixelHeight / 4
+        //             orientation:        ListView.Vertical
+        //             model:              _missionController.visualItems
+        //             cacheBuffer:        Math.max(height * 2, 0)
+        //             clip:               true
+        //             currentIndex:       _missionController.currentPlanViewSeqNum
+        //             highlightMoveDuration: 250
+        //             visible:            _editingLayer == _layerMission && !planControlColapsed
+        //             delegate: MissionItemEditor {
+        //                 map:            mapControl
+        //                 masterController:  planMasterController
+        //                 missionItem:    object
+        //                 width:          missionItemEditorListView.width
+        //                 readOnly:       false
+        //                 onClicked: (sequenceNumber) => { setCurrentPlanViewSeqNum(object.sequenceNumber, false) }
+        //                 onRemove: {
+        //                     var removeVIIndex = index
+        //                     removeVisualItem(removeVIIndex)
+        //                     if (removeVIIndex >= _missionController.visualItems.count) {
+        //                         removeVIIndex--
+        //                     }
+        //                 }
+        //                 onSelectNextNotReadyItem:   selectNextNotReady()
+        //             }
+        //         }
+        //     }
+        // }
         
     }
     

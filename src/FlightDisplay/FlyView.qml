@@ -63,11 +63,25 @@ Item {
     property var    _currentMissionItem:        _planController.missionController.currentPlanViewItem
     property var    _controllerDirty:           _controllerValid ? _planController.dirty : false
     property var    _controllerSyncInProgress:  _controllerValid ? _planController.syncInProgress : false
+    property real _nonInteractiveOpacity:  0.5
+    property bool   _resetGeofencePolygon:              false 
+    property int    _editingLayer:                     _layerMission // Default layer is mission
+    readonly property int   _decimalPlaces:             8
+    property bool planControlColapsed: false
+    
+    readonly property var       _layers:                    [_layerMission, _layerGeoFence, _layerRallyPoints]
+    readonly property var       _layersUTMSP:               [_layerMission, _layerRallyPoints, _layerUTMSP] //Adds additional UTMSP layer
+
+    readonly property int       _layerMission:              1
+    readonly property int       _layerGeoFence:             2
+    readonly property int       _layerRallyPoints:          3
+    readonly property int       _layerUTMSP:                4 // Additional Tab button when UTMSP is enabled
+    readonly property string    _armedVehicleUploadPrompt:  qsTr("Vehicle is currently armed. Do you want to upload the mission to the vehicle?")
 
 
     PlanMasterController {
         id:                     _planController
-        flyView:                false
+        flyView:                true
 
         Component.onCompleted: {
             _planController.start()
@@ -108,12 +122,15 @@ Item {
             }
             switch (_missionController.sendToVehiclePreCheck()) {
                 case MissionController.SendToVehiclePreCheckStateOk:
+                    console.log("PlanController: Uploading plan to vehicle")
                     sendToVehicle()
                     break
                 case MissionController.SendToVehiclePreCheckStateActiveMission:
+                    console.warn("PlanController: Uploading plan to vehicle with active mission")
                     mainWindow.showMessageDialog(qsTr("Send To Vehicle"), qsTr("Current mission must be paused prior to uploading a new Plan"))
                     break
                 case MissionController.SendToVehiclePreCheckStateFirwmareVehicleMismatch:
+                    console.warn("PlanController: Uploading plan to vehicle with firmware/vehicle type mismatch")
                     mainWindow.showMessageDialog(qsTr("Plan Upload"),
                                                  qsTr("This Plan was created for a different firmware or vehicle type than the firmware/vehicle type of vehicle you are uploading to. " +
                                                       "This can lead to errors or incorrect behavior. " +
@@ -157,6 +174,30 @@ Item {
         }
     }
 
+    function mapCenter() {
+        var coordinate = mapControl.center
+        console.log("Map center coordinate: " + coordinate.latitude + ", " + coordinate.longitude + ", " + coordinate.altitude)
+        coordinate.latitude  = coordinate.latitude.toFixed(_decimalPlaces)
+        coordinate.longitude = coordinate.longitude.toFixed(_decimalPlaces)
+        coordinate.altitude  = coordinate.altitude.toFixed(_decimalPlaces)
+        return coordinate
+    }
+
+    function insertSimpleItemAfterCurrent(coordinate) {
+        console.debug("Inserting simple item at: " + coordinate.latitude + ", " + coordinate.longitude + ", " + coordinate.altitude)
+        //console visual item 
+        console.debug("Current plan view VI index: " + _missionController.currentPlanViewVIIndex)
+        var nextIndex = _missionController.currentPlanViewVIIndex + 1
+        _missionController.insertSimpleMissionItem(coordinate, nextIndex, true /* makeCurrentItem */)
+    }
+
+    function insertTakeItemAfterCurrent() {
+        var nextIndex = _missionController.currentPlanViewVIIndex + 1
+        console.debug("Inserting takeoff item at: " + mapCenter().latitude + ", " + mapCenter().longitude + ", " + mapCenter().altitude, 
+                      " at index: " + nextIndex,
+                      " current plan view VI index: " + _missionController.currentPlanViewVIIndex)
+        _missionController.insertTakeoffItem(mapCenter(), nextIndex, true /* makeCurrentItem */)
+    }
 
     function selectNextNotReady() {
         var foundCurrent = false

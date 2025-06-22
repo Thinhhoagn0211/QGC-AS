@@ -56,19 +56,6 @@ Item {
 
     property bool utmspActTrigger
 
-    function mapCenter() {
-        var coordinate = mapControl.center
-        coordinate.latitude  = coordinate.latitude.toFixed(mapControl._decimalPlaces)
-        coordinate.longitude = coordinate.longitude.toFixed(mapControl._decimalPlaces)
-        coordinate.altitude  = coordinate.altitude.toFixed(mapControl._decimalPlaces)
-        return coordinate
-    }
-
-    function insertTakeItemAfterCurrent() {
-        console.log("insertTakeItemAfterCurrent: currentPlanViewVIIndex: " + _missionController.currentPlanViewVIIndex)
-        var nextIndex = _missionController.currentPlanViewVIIndex + 1
-        _missionController.insertTakeoffItem(mapCenter(), nextIndex, true /* makeCurrentItem */)
-    }
 
 
     QGCToolInsets {
@@ -159,7 +146,8 @@ Item {
                         globals.selectedView = 1
                         selectedButton = 2
                         pageLoader.sourceComponent = pageShowPlanFlightUAV
-
+                        // planMasterController.flyView = false
+                        // planMasterController.planView = true
                         // insertTakeItemAfterCurrent()
                         // mapControl._triggerSubmit = true
                     }

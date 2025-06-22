@@ -15,13 +15,15 @@ import QtQuick.Dialogs
 import QtQuick.Layouts
 
 import QGroundControl
-import QGroundControl.Controllers
-import QGroundControl.Controls
-import QGroundControl.FlightDisplay
 import QGroundControl.FlightMap
-import QGroundControl.Palette
 import QGroundControl.ScreenTools
-import QGroundControl.Vehicle
+import QGroundControl.Controls
+import QGroundControl.FactSystem
+import QGroundControl.FactControls
+import QGroundControl.Palette
+import QGroundControl.Controllers
+import QGroundControl.ShapeFileHelper
+import QGroundControl.FlightDisplay
 import QGroundControl.UTMSP
 
 FlightMap {
@@ -773,8 +775,6 @@ FlightMap {
 				if(_utmspEnabled){
                 	QGroundControl.utmspManager.utmspVehicle.updateLastCoordinates(coordinate.latitude, coordinate.longitude)
                 }
-                
-                console.log("Adding waypoint at: " + coordinate.latitude + ", " + coordinate.longitude)
                 insertSimpleItemAfterCurrent(coordinate)
         } else {
             if (!globals.guidedControllerFlyView.guidedUIVisible && 
@@ -797,10 +797,13 @@ FlightMap {
         model: _missionController.visualItems
         delegate: MissionItemMapVisual {
             map:         _root
-            opacity:     _editingLayer == _layerMission || _editingLayer == _layerUTMSP ? 1 : _root._nonInteractiveOpacity
+            opacity:     _editingLayer == _layerMission || _editingLayer == _layerUTMSP ? 1 : _nonInteractiveOpacity
             interactive: _editingLayer == _layerMission || _editingLayer == _layerUTMSP
             vehicle:     _planMasterController.controllerVehicle
-            onClicked:   (sequenceNumber) => { _missionController.setCurrentPlanViewSeqNum(sequenceNumber, false) }
+            onClicked:   (sequenceNumber) => { 
+                console.log("Mission item clicked: " + sequenceNumber)
+                _missionController.setCurrentPlanViewSeqNum(sequenceNumber, false) 
+                }
         }
     }
 
@@ -920,16 +923,49 @@ FlightMap {
     //     }
     // }
 
-    MapScale {
-        id:                 mapScale
+    TerrainStatus {
+        id:                 terrainStatus
         anchors.margins:    _toolsMargin
-        anchors.left:       parent.left
-        anchors.top:        parent.top
-        mapControl:         _root
-        buttonsOnLeft:      true
-        visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && mapControl.pipState.state === mapControl.pipState.windowState
+        anchors.leftMargin: 0
+        anchors.left:       mapScale.left
+        anchors.right:            mapScale.right
+        anchors.bottom:     parent.bottom
+        height:             ScreenTools.defaultFontPixelHeight * 7
+        missionController:  _missionController
+        visible:            _internalVisible && _editingLayer === _layerMission && QGroundControl.corePlugin.options.showMissionStatus
 
-        property real centerInset: visible ? parent.height - y : 0
+        onSetCurrentSeqNum: _missionController.setCurrentPlanViewSeqNum(seqNum, true)
+
+        property bool _internalVisible: _planViewSettings.showMissionItemStatus.rawValue
+
+        function toggleVisible() {
+            _internalVisible = !_internalVisible
+            _planViewSettings.showMissionItemStatus.rawValue = _internalVisible
+        }
+    }
+
+    // MapScale {
+    //     id:                 mapScale
+    //     anchors.margins:    _toolsMargin
+    //     anchors.left:       parent.left
+    //     anchors.top:        parent.top
+    //     mapControl:         _root
+    //     buttonsOnLeft:      true
+    //     visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && mapControl.pipState.state === mapControl.pipState.windowState
+
+    //     property real centerInset: visible ? parent.height - y : 0
+    // }
+
+    MapScale {
+        id:                     mapScale
+        anchors.margins:        _toolsMargin
+        anchors.bottom:         terrainStatus.visible ? terrainStatus.top : parent.bottom
+        anchors.left:           toolStrip.y + toolStrip.height + _toolsMargin > mapScale.y ? toolStrip.right: parent.left
+        mapControl:             editorMap
+        buttonsOnLeft:          true
+        terrainButtonVisible:   _editingLayer === _layerMission
+        terrainButtonChecked:   terrainStatus.visible
+        onTerrainButtonClicked: terrainStatus.toggleVisible()
     }
 
 }

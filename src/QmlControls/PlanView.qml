@@ -421,7 +421,10 @@ Item {
                     opacity:     _editingLayer == _layerMission || _editingLayer == _layerUTMSP ? 1 : editorMap._nonInteractiveOpacity
                     interactive: _editingLayer == _layerMission || _editingLayer == _layerUTMSP
                     vehicle:     _planMasterController.controllerVehicle
-                    onClicked:   (sequenceNumber) => { _missionController.setCurrentPlanViewSeqNum(sequenceNumber, false) }
+                    onClicked:   (sequenceNumber) => { 
+                        _missionController.setCurrentPlanViewSeqNum(sequenceNumber, false) 
+                        console.log("MissionItemMapVisual clicked: " + sequenceNumber)
+                        }
                 }
             }
 
@@ -687,8 +690,8 @@ Item {
             anchors.right:      parent.right
             anchors.rightMargin: _toolsMargin
         }
-        //-------------------------------------------------------
-        // Right Panel Controls
+        // //-------------------------------------------------------
+        // // Right Panel Controls
         Item {
             anchors.fill:           rightPanel
             anchors.topMargin:      _toolsMargin

@@ -9,11 +9,10 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Dialogs
 import QtLocation
 import QtPositioning
+import QtQuick.Dialogs
 import QtQuick.Layouts
-import QtQuick.Window
 
 import QGroundControl
 import QGroundControl.FlightMap
@@ -35,6 +34,7 @@ FlightMap {
     zoomLevel:                  QGroundControl.flightMapZoom
     center:                     QGroundControl.flightMapPosition
 
+    
     property Item   pipView
     property Item   pipState:                   _pipState
     property var    rightPanelWidth
@@ -55,12 +55,6 @@ FlightMap {
     property bool   _disableVehicleTracking:    false
     property bool   _keepVehicleCentered:       pipMode ? true : false
     property bool   _saveZoomLevelSetting:      true
-
-    // property rect centerViewport:   Qt.rect(_leftToolWidth + _margin,  _margin, _root.width - _leftToolWidth - _rightToolWidth - (_margin * 2), (terrainStatus.visible ? terrainStatus.y : height - _margin) - _margin)
-
-    // property real _leftToolWidth:       toolStrip.x + toolStrip.width
-    // property real _rightToolWidth:      rightPanel.width + rightPanel.anchors.rightMargin
-    property real _nonInteractiveOpacity:  0.5
 
     function _adjustMapZoomForPipMode() {
         _saveZoomLevelSetting = false
@@ -292,6 +286,8 @@ FlightMap {
             z:              QGroundControl.zOrderVehicles
         }
     }
+
+
     // Add distance sensor view
     MapItemView{
         model: QGroundControl.multiVehicleManager.vehicles
@@ -302,6 +298,7 @@ FlightMap {
             z:              QGroundControl.zOrderVehicles
         }
     }
+    
     // Add ADSB vehicles to the map
     MapItemView {
         model: QGroundControl.adsbVehicleManager.adsbVehicles
@@ -317,7 +314,7 @@ FlightMap {
         }
     }
 
-    // Add the items associated with each vehicles flight plan to the map
+    // // Add the items associated with each vehicles flight plan to the map
     Repeater {
         model: QGroundControl.multiVehicleManager.vehicles
 
@@ -767,8 +764,7 @@ FlightMap {
 
     onMapClicked: (position) => {
         if (globals.selectedView === 1) {
-            // Take focus to close any previous editing
-                _root.focus = true
+            _root.focus = true
                 if (!mainWindow.allowViewSwitch()) {
                     return
                 }
@@ -804,7 +800,10 @@ FlightMap {
             opacity:     _editingLayer == _layerMission || _editingLayer == _layerUTMSP ? 1 : _nonInteractiveOpacity
             interactive: _editingLayer == _layerMission || _editingLayer == _layerUTMSP
             vehicle:     _planMasterController.controllerVehicle
-            onClicked:   (sequenceNumber) => { _missionController.setCurrentPlanViewSeqNum(sequenceNumber, false) }
+            onClicked:   (sequenceNumber) => { 
+                console.log("Mission item clicked: " + sequenceNumber)
+                _missionController.setCurrentPlanViewSeqNum(sequenceNumber, false) 
+                }
         }
     }
 
@@ -812,7 +811,7 @@ FlightMap {
     MissionLineView {
         showSpecialVisual:  _missionController.isROIBeginCurrentItem
         model:              _missionController.simpleFlightPathSegments
-        opacity:            _editingLayer == _layerMission ||  _editingLayer == _layerUTMSP  ? 1 : _nonInteractiveOpacity
+        opacity:            _editingLayer == _layerMission ||  _editingLayer == _layerUTMSP  ? 1 : _root._nonInteractiveOpacity
     }
 
     // Direction arrows in waypoint lines
@@ -836,7 +835,7 @@ FlightMap {
             line.width: 1
             line.color: "red"
             z:          QGroundControl.zOrderWaypointLines
-            opacity:    _editingLayer == _layerMission ? 1 : _nonInteractiveOpacity
+            opacity:    _editingLayer == _layerMission ? 1 : _root._nonInteractiveOpacity
         }
     }
 
@@ -876,17 +875,7 @@ FlightMap {
         }
     }
 
-    // Add the vehicles to the map
-    MapItemView {
-        model: QGroundControl.multiVehicleManager.vehicles
-        delegate: VehicleMapItem {
-            vehicle:        object
-            coordinate:     object.coordinate
-            map:            _root
-            size:           ScreenTools.defaultFontPixelHeight * 3
-            z:              QGroundControl.zOrderMapItems - 1
-        }
-    }
+    
 
     GeoFenceMapVisuals {
         map:                    _root
@@ -894,7 +883,7 @@ FlightMap {
         interactive:            _editingLayer == _layerGeoFence
         homePosition:           _missionController.plannedHomePosition
         planView:               true
-        opacity:                _editingLayer != _layerGeoFence ? _root._nonInteractiveOpacity : 1
+        opacity:                _editingLayer != _layerGeoFence ? _nonInteractiveOpacity : 1
     }
 
     RallyPointMapVisuals {
@@ -902,19 +891,19 @@ FlightMap {
         myRallyPointController: _rallyPointController
         interactive:            _editingLayer == _layerRallyPoints
         planView:               true
-        opacity:                _editingLayer != _layerRallyPoints ? _root._nonInteractiveOpacity : 1
+        opacity:                _editingLayer != _layerRallyPoints ? _nonInteractiveOpacity : 1
     }
 
     UTMSPMapVisuals {
         id: utmspvisual
         enabled:                _utmspEnabled
         map:                    _root
-        currentMissionItems:    _visualItems
+        currentMissionItems:    _missionController._visualItems
         myGeoFenceController:   _geoFenceController
         interactive:            _editingLayer == _layerUTMSP
         homePosition:           _missionController.plannedHomePosition
         planView:               true
-        opacity:                _editingLayer != _layerUTMSP ? _root._nonInteractiveOpacity : 1
+        opacity:                _editingLayer != _layerUTMSP ? _nonInteractiveOpacity : 1
         resetCheck:             _resetGeofencePolygon
     }
 
@@ -934,16 +923,49 @@ FlightMap {
     //     }
     // }
 
-    MapScale {
-        id:                 mapScale
+    TerrainStatus {
+        id:                 terrainStatus
         anchors.margins:    _toolsMargin
-        anchors.left:       parent.left
-        anchors.top:        parent.top
-        mapControl:         _root
-        buttonsOnLeft:      true
-        visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && mapControl.pipState.state === mapControl.pipState.windowState
+        anchors.leftMargin: 0
+        anchors.left:       mapScale.left
+        anchors.right:            mapScale.right
+        anchors.bottom:     parent.bottom
+        height:             ScreenTools.defaultFontPixelHeight * 7
+        missionController:  _missionController
+        visible:            _internalVisible && _editingLayer === _layerMission && QGroundControl.corePlugin.options.showMissionStatus
 
-        property real centerInset: visible ? parent.height - y : 0
+        onSetCurrentSeqNum: _missionController.setCurrentPlanViewSeqNum(seqNum, true)
+
+        property bool _internalVisible: _planViewSettings.showMissionItemStatus.rawValue
+
+        function toggleVisible() {
+            _internalVisible = !_internalVisible
+            _planViewSettings.showMissionItemStatus.rawValue = _internalVisible
+        }
+    }
+
+    // MapScale {
+    //     id:                 mapScale
+    //     anchors.margins:    _toolsMargin
+    //     anchors.left:       parent.left
+    //     anchors.top:        parent.top
+    //     mapControl:         _root
+    //     buttonsOnLeft:      true
+    //     visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && mapControl.pipState.state === mapControl.pipState.windowState
+
+    //     property real centerInset: visible ? parent.height - y : 0
+    // }
+
+    MapScale {
+        id:                     mapScale
+        anchors.margins:        _toolsMargin
+        anchors.bottom:         terrainStatus.visible ? terrainStatus.top : parent.bottom
+        anchors.left:           toolStrip.y + toolStrip.height + _toolsMargin > mapScale.y ? toolStrip.right: parent.left
+        mapControl:             editorMap
+        buttonsOnLeft:          true
+        terrainButtonVisible:   _editingLayer === _layerMission
+        terrainButtonChecked:   terrainStatus.visible
+        onTerrainButtonClicked: terrainStatus.toggleVisible()
     }
 
 }

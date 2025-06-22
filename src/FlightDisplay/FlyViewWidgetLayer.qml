@@ -39,7 +39,8 @@ Item {
 
     property var mapControl
     property var    _activeVehicle:         QGroundControl.multiVehicleManager.activeVehicle
-    property var    _planMasterController:  globals.planMasterControllerFlyView
+    property var planMasterController
+    property var    _planMasterController:  planMasterController
     property var    _missionController:     _planMasterController.missionController
     property var    _geoFenceController:    _planMasterController.geoFenceController
     property var    _rallyPointController:  _planMasterController.rallyPointController
@@ -54,6 +55,21 @@ Item {
     property bool   _showSingleVehicleUI:   true
 
     property bool utmspActTrigger
+
+    function mapCenter() {
+        var coordinate = mapControl.center
+        coordinate.latitude  = coordinate.latitude.toFixed(mapControl._decimalPlaces)
+        coordinate.longitude = coordinate.longitude.toFixed(mapControl._decimalPlaces)
+        coordinate.altitude  = coordinate.altitude.toFixed(mapControl._decimalPlaces)
+        return coordinate
+    }
+
+    function insertTakeItemAfterCurrent() {
+        console.log("insertTakeItemAfterCurrent: currentPlanViewVIIndex: " + _missionController.currentPlanViewVIIndex)
+        var nextIndex = _missionController.currentPlanViewVIIndex + 1
+        _missionController.insertTakeoffItem(mapCenter(), nextIndex, true /* makeCurrentItem */)
+    }
+
 
     QGCToolInsets {
         id:                     _totalToolInsets
@@ -143,6 +159,9 @@ Item {
                         globals.selectedView = 1
                         selectedButton = 2
                         pageLoader.sourceComponent = pageShowPlanFlightUAV
+
+                        // insertTakeItemAfterCurrent()
+                        // mapControl._triggerSubmit = true
                     }
                     anchors.right: buttonRow.right
                     anchors.rightMargin: 20
@@ -198,6 +217,7 @@ Item {
         id: pageShowPlanFlightUAV
         PageShowPlanFlightUAV {
             mapControl:         _root.mapControl
+            planMasterController: _planMasterController
             color: "transparent"
             anchors.topMargin: 60
             anchors.fill: parent

@@ -41,7 +41,6 @@ FlightMap {
     readonly property var   _defaultVehicleCoordinate:  QtPositioning.coordinate(37.803784, -122.462276)
     readonly property bool  _waypointsOnlyMode:         QGroundControl.corePlugin.options.missionWaypointsOnly
 
-
     property Item   pipView
     property Item   pipState:                   _pipState
     property var    rightPanelWidth
@@ -67,10 +66,10 @@ FlightMap {
     property bool   _saveZoomLevelSetting:      true
 
     property var    _visualItems:                       _missionController.visualItems
-    property bool   _lightWidgetBorders:                editorMap.isSatelliteMap
+    property bool   _lightWidgetBorders:                mapControl.isSatelliteMap
     property bool   _addROIOnClick:                     false
     property bool   _singleComplexItem:                 _missionController.complexMissionItemNames.length === 1
-    property int    _toolStripBottom:                   toolStrip.height + toolStrip.y
+    // property int    _toolStripBottom:                   toolStrip.height + toolStrip.y
     property var    _appSettings:                       QGroundControl.settingsManager.appSettings
     property var    _planViewSettings:                  QGroundControl.settingsManager.planViewSettings
     property bool   _promptForPlanUsageShowing:         false
@@ -105,6 +104,8 @@ FlightMap {
     property bool _firstRallyLoadComplete:      false
     property bool _firstLoadComplete:           false
 
+
+    Component.onCompleted: _root.center = QGroundControl.flightMapPosition
 
     function insertSimpleItemAfterCurrent(coordinate) {
         var nextIndex = _missionController.currentPlanViewVIIndex + 1
@@ -153,8 +154,8 @@ FlightMap {
 
     onVisibleChanged: {
         if (globals.selectedView === 1) {
-            editorMap.zoomLevel = QGroundControl.flightMapZoom
-            editorMap.center    = QGroundControl.flightMapPosition
+            mapControl.zoomLevel = QGroundControl.flightMapZoom
+            mapControl.center    = QGroundControl.flightMapPosition
             if (!_planMasterController.containsItems) {
                 toolStrip.simulateClick(toolStrip.fileButtonIndex)
             }
@@ -1107,21 +1108,21 @@ FlightMap {
         resetCheck:             _resetGeofencePolygon
     }
 
-    Connections {
-        target: utmspEditor
-        function onResetGeofencePolygonTriggered() {
-            resetTimer.start()
-        }
-    }
-    Timer {
-        id: resetTimer
-        interval: 2500
-        running: false
-        repeat: false
-        onTriggered: {
-            _resetGeofencePolygon = true
-        }
-    }
+    // Connections {
+    //     target: utmspEditor
+    //     function onResetGeofencePolygonTriggered() {
+    //         resetTimer.start()
+    //     }
+    // }
+    // Timer {
+    //     id: resetTimer
+    //     interval: 2500
+    //     running: false
+    //     repeat: false
+    //     onTriggered: {
+    //         _resetGeofencePolygon = true
+    //     }
+    // }
 
     MapScale {
         id:                 mapScale
@@ -1135,4 +1136,120 @@ FlightMap {
         property real centerInset: visible ? parent.height - y : 0
     }
 
+
+    PlanMasterController {
+        id:         planMasterController
+        flyView:    false
+
+        Component.onCompleted: {
+            _planMasterController.start()
+            _missionController.setCurrentPlanViewSeqNum(0, true)
+        }
+
+        onPromptForPlanUsageOnVehicleChange: {
+            if (!_promptForPlanUsageShowing) {
+                _promptForPlanUsageShowing = true
+                promptForPlanUsageOnVehicleChangePopupComponent.createObject(mainWindow).open()
+            }
+        }
+
+        function waitingOnIncompleteDataMessage(save) {
+            var saveOrUpload = save ? qsTr("Save") : qsTr("Upload")
+            mainWindow.showMessageDialog(qsTr("Unable to %1").arg(saveOrUpload), qsTr("Plan has incomplete items. Complete all items and %1 again.").arg(saveOrUpload))
+        }
+
+        function waitingOnTerrainDataMessage(save) {
+            var saveOrUpload = save ? qsTr("Save") : qsTr("Upload")
+            mainWindow.showMessageDialog(qsTr("Unable to %1").arg(saveOrUpload), qsTr("Plan is waiting on terrain data from server for correct altitude values."))
+        }
+
+        function checkReadyForSaveUpload(save) {
+            if (readyForSaveState() == VisualMissionItem.NotReadyForSaveData) {
+                waitingOnIncompleteDataMessage(save)
+                return false
+            } else if (readyForSaveState() == VisualMissionItem.NotReadyForSaveTerrain) {
+                waitingOnTerrainDataMessage(save)
+                return false
+            }
+            return true
+        }
+
+        function upload() {
+            if (!checkReadyForSaveUpload(false /* save */)) {
+                return
+            }
+            switch (_missionController.sendToVehiclePreCheck()) {
+                case MissionController.SendToVehiclePreCheckStateOk:
+                    sendToVehicle()
+                    break
+                case MissionController.SendToVehiclePreCheckStateActiveMission:
+                    mainWindow.showMessageDialog(qsTr("Send To Vehicle"), qsTr("Current mission must be paused prior to uploading a new Plan"))
+                    break
+                case MissionController.SendToVehiclePreCheckStateFirwmareVehicleMismatch:
+                    mainWindow.showMessageDialog(qsTr("Plan Upload"),
+                                                 qsTr("This Plan was created for a different firmware or vehicle type than the firmware/vehicle type of vehicle you are uploading to. " +
+                                                      "This can lead to errors or incorrect behavior. " +
+                                                      "It is recommended to recreate the Plan for the correct firmware/vehicle type.\n\n" +
+                                                      "Click 'Ok' to upload the Plan anyway."),
+                                                 Dialog.Ok | Dialog.Cancel,
+                                                 function() { _planMasterController.sendToVehicle() })
+                    break
+            }
+        }
+
+        function loadFromSelectedFile() {
+            fileDialog.title =          qsTr("Select Plan File")
+            fileDialog.planFiles =      true
+            fileDialog.nameFilters =    _planMasterController.loadNameFilters
+            fileDialog.openForLoad()
+        }
+
+        function saveToSelectedFile() {
+            if (!checkReadyForSaveUpload(true /* save */)) {
+                return
+            }
+            fileDialog.title =          qsTr("Save Plan")
+            fileDialog.planFiles =      true
+            fileDialog.nameFilters =    _planMasterController.saveNameFilters
+            fileDialog.openForSave()
+        }
+
+        function fitViewportToItems() {
+            mapFitFunctions.fitMapViewportToMissionItems()
+        }
+
+        function saveKmlToSelectedFile() {
+            if (!checkReadyForSaveUpload(true /* save */)) {
+                return
+            }
+            fileDialog.title =          qsTr("Save KML")
+            fileDialog.planFiles =      false
+            fileDialog.nameFilters =    ShapeFileHelper.fileDialogKMLFilters
+            fileDialog.openForSave()
+        }
+    }
+
+
+    QGCFileDialog {
+        id:             fileDialog
+        folder:         _appSettings ? _appSettings.missionSavePath : ""
+
+        property bool planFiles: true    ///< true: working with plan files, false: working with kml file
+
+        onAcceptedForSave: (file) => {
+            if (planFiles) {
+                _planMasterController.saveToFile(file)
+            } else {
+                _planMasterController.saveToKml(file)
+            }
+            close()
+        }
+
+        onAcceptedForLoad: (file) => {
+            _planMasterController.loadFromFile(file)
+            _planMasterController.fitViewportToItems()
+            _missionController.setCurrentPlanViewSeqNum(0, true)
+            close()
+        }
+    }
 }

@@ -196,11 +196,14 @@ Item {
         }
 
         function upload() {
+            console.log("PlanView.upload()")
             if (!checkReadyForSaveUpload(false /* save */)) {
+                console.log("PlanView.upload() - not ready for upload")
                 return
             }
             switch (_missionController.sendToVehiclePreCheck()) {
                 case MissionController.SendToVehiclePreCheckStateOk:
+                    console.log("PlanView.upload() - precheck ok")
                     sendToVehicle()
                     break
                 case MissionController.SendToVehiclePreCheckStateActiveMission:
@@ -385,6 +388,7 @@ Item {
                 switch (_editingLayer) {
                 case _layerMission:
                     if (addWaypointRallyPointAction.checked) {
+                        console.log("Adding waypoint at: " + coordinate.latitude + ", " + coordinate.longitude)
                         insertSimpleItemAfterCurrent(coordinate)
                     } else if (_addROIOnClick) {
                         insertROIAfterCurrent(coordinate)

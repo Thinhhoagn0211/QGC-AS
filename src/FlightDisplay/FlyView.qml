@@ -1,12 +1,3 @@
-/****************************************************************************
- *
- * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
- ****************************************************************************/
-
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
@@ -40,7 +31,7 @@ Item {
     property var    _planViewSettings:                  QGroundControl.settingsManager.planViewSettings
     // // Properties of UTM adapter
     property bool utmspSendActTrigger: false
-
+    // readonly property real  _rightPanelWidth:           Math.min(width / 3, ScreenTools.defaultFontPixelWidth * 30)
     property bool   _utmspEnabled:                      QGroundControl.utmspSupported
     property bool   _mainWindowIsMap:       mapControl.pipState.state === mapControl.pipState.fullState
     property bool   _isFullWindowItemDark:  _mainWindowIsMap ? mapControl.isSatelliteMap : true
@@ -48,6 +39,7 @@ Item {
     property var    _missionController:     _planController.missionController
     property var    _geoFenceController:    _planController.geoFenceController
     property var    _rallyPointController:  _planController.rallyPointController
+    property var    _visualItems:                       _missionController.visualItems
     property real   _margins:               ScreenTools.defaultFontPixelWidth / 2
     property var    _guidedController:      guidedActionsController
     property var    _guidedValueSlider:     guidedValueSlider
@@ -80,24 +72,96 @@ Item {
     readonly property string    _armedVehicleUploadPrompt:  qsTr("Vehicle is currently armed. Do you want to upload the mission to the vehicle?")
 
     
+    function mapCenter() {
+        var coordinate = mapControl.center
+        console.log("Map center coordinate: " + coordinate.latitude + ", " + coordinate.longitude + ", " + coordinate.altitude)
+        coordinate.latitude  = coordinate.latitude.toFixed(_decimalPlaces)
+        coordinate.longitude = coordinate.longitude.toFixed(_decimalPlaces)
+        coordinate.altitude  = coordinate.altitude.toFixed(_decimalPlaces)
+        return coordinate
+    }
+
+    property bool _firstMissionLoadComplete:    false
+    property bool _firstFenceLoadComplete:      false
+    property bool _firstRallyLoadComplete:      false
+    property bool _firstLoadComplete:           false
+
+
     MapFitFunctions {
         id:                         mapFitFunctions 
         map:                        mapControl
         usePlannedHomePosition:     true
-        planMasterController:       _planMasterController
+        planMasterController:       _planController
     }
 
     onVisibleChanged: {
         if(visible) {
             mapControl.zoomLevel = QGroundControl.flightMapZoom
             mapControl.center    = QGroundControl.flightMapPosition
-            if (!_planMasterController.containsItems) {
+            if (!_planController.containsItems) {
                 toolStrip.simulateClick(toolStrip.fileButtonIndex)
             }
         }
     }
 
+    Connections {
+        target: _appSettings ? _appSettings.defaultMissionItemAltitude : null
+        function onRawValueChanged() {
+            if (_visualItems.count > 1) {
+                mainWindow.showMessageDialog(qsTr("Apply new altitude"),
+                                             qsTr("You have changed the default altitude for mission items. Would you like to apply that altitude to all the items in the current mission?"),
+                                             Dialog.Yes | Dialog.No,
+                                             function() { _missionController.applyDefaultMissionAltitude() })
+            }
+        }
+    }
 
+
+    Component {
+        id: promptForPlanUsageOnVehicleChangePopupComponent
+        QGCPopupDialog {
+            title:      _planController.managerVehicle.isOfflineEditingVehicle ? qsTr("Plan View - Vehicle Disconnected") : qsTr("Plan View - Vehicle Changed")
+            buttons:    Dialog.NoButton
+
+            ColumnLayout {
+                QGCLabel {
+                    Layout.maximumWidth:    parent.width
+                    wrapMode:               QGCLabel.WordWrap
+                    text:                   _planController.managerVehicle.isOfflineEditingVehicle ?
+                                                qsTr("The vehicle associated with the plan in the Plan View is no longer available. What would you like to do with that plan?") :
+                                                qsTr("The plan being worked on in the Plan View is not from the current vehicle. What would you like to do with that plan?")
+                }
+
+                QGCButton {
+                    Layout.fillWidth:   true
+                    text:               _planController.dirty ?
+                                            (_planController.managerVehicle.isOfflineEditingVehicle ?
+                                                 qsTr("Discard Unsaved Changes") :
+                                                 qsTr("Discard Unsaved Changes, Load New Plan From Vehicle")) :
+                                            qsTr("Load New Plan From Vehicle")
+                    onClicked: {
+                        _planController.showPlanFromManagerVehicle()
+                        _promptForPlanUsageShowing = false
+                        close();
+                    }
+                }
+
+                QGCButton {
+                    Layout.fillWidth:   true
+                    text:               _planController.managerVehicle.isOfflineEditingVehicle ?
+                                            qsTr("Keep Current Plan") :
+                                            qsTr("Keep Current Plan, Don't Update From Vehicle")
+                    onClicked: {
+                        if (!_planController.managerVehicle.isOfflineEditingVehicle) {
+                            _planController.dirty = true
+                        }
+                        _promptForPlanUsageShowing = false
+                        close()
+                    }
+                }
+            }
+        }
+    }
 
     PlanMasterController {
         id:                     _planController
@@ -142,7 +206,6 @@ Item {
             }
             switch (_missionController.sendToVehiclePreCheck()) {
                 case MissionController.SendToVehiclePreCheckStateOk:
-                    console.log("PlanController: Uploading plan to vehicle")
                     sendToVehicle()
                     break
                 case MissionController.SendToVehiclePreCheckStateActiveMission:
@@ -193,31 +256,43 @@ Item {
             fileDialog.openForSave()
         }
     }
-
-    function mapCenter() {
-        var coordinate = mapControl.center
-        console.log("Map center coordinate: " + coordinate.latitude + ", " + coordinate.longitude + ", " + coordinate.altitude)
-        coordinate.latitude  = coordinate.latitude.toFixed(_decimalPlaces)
-        coordinate.longitude = coordinate.longitude.toFixed(_decimalPlaces)
-        coordinate.altitude  = coordinate.altitude.toFixed(_decimalPlaces)
-        return coordinate
-    }
-
+    
     function insertSimpleItemAfterCurrent(coordinate) {
-        console.debug("Inserting simple item at: " + coordinate.latitude + ", " + coordinate.longitude + ", " + coordinate.altitude)
-        //console visual item 
-        console.debug("Current plan view VI index: " + _missionController.currentPlanViewVIIndex)
         var nextIndex = _missionController.currentPlanViewVIIndex + 1
         _missionController.insertSimpleMissionItem(coordinate, nextIndex, true /* makeCurrentItem */)
     }
 
+    function insertROIAfterCurrent(coordinate) {
+        var nextIndex = _missionController.currentPlanViewVIIndex + 1
+        _missionController.insertROIMissionItem(coordinate, nextIndex, true /* makeCurrentItem */)
+    }
+
+    function insertCancelROIAfterCurrent() {
+        var nextIndex = _missionController.currentPlanViewVIIndex + 1
+        _missionController.insertCancelROIMissionItem(nextIndex, true /* makeCurrentItem */)
+    }
+
+    function insertComplexItemAfterCurrent(complexItemName) {
+        var nextIndex = _missionController.currentPlanViewVIIndex + 1
+        _missionController.insertComplexMissionItem(complexItemName, mapCenter(), nextIndex, true /* makeCurrentItem */)
+    }
+
     function insertTakeItemAfterCurrent() {
         var nextIndex = _missionController.currentPlanViewVIIndex + 1
-        console.debug("Inserting takeoff item at: " + mapCenter().latitude + ", " + mapCenter().longitude + ", " + mapCenter().altitude, 
-                      " at index: " + nextIndex,
-                      " current plan view VI index: " + _missionController.currentPlanViewVIIndex)
         _missionController.insertTakeoffItem(mapCenter(), nextIndex, true /* makeCurrentItem */)
     }
+
+    function insertLandItemAfterCurrent() {
+        var nextIndex = _missionController.currentPlanViewVIIndex + 1
+        _missionController.insertLandItem(mapCenter(), nextIndex, true /* makeCurrentItem */)
+    }   
+
+    function removeAllItems() {
+        _planController.removeAllFromVehicle()
+        _missionController.setCurrentPlanViewSeqNum(0, true)
+    }
+
+
 
     function selectNextNotReady() {
         var foundCurrent = false
@@ -394,21 +469,19 @@ Item {
             anchors.bottomMargin:       ScreenTools.defaultFontPixelWidth * 0.5
             font.pointSize:             ScreenTools.smallFontPointSize
             text:                       qsTr("Powered by %1").arg(_licenseString)
-            z: QGroundControl.zOrderTopMost
         }
 
         TerrainStatus {
             id:                 terrainStatus
             anchors.margins:    _toolsMargin
             anchors.leftMargin: 0
-            anchors.left:       mapControl.left
-            // anchors.right:      rightPanel.left
-            anchors.bottom:     mapControl.bottom
+            anchors.left:       mapScale.left
+            anchors.right:      guidedValueSlider.left
+            anchors.bottom:     parent.bottom
             height:             ScreenTools.defaultFontPixelHeight * 7
             missionController:  _missionController
-            // visible:            _internalVisible && _editingLayer === _layerMission && QGroundControl.corePlugin.options.showMissionStatus
-            visible: true
-            z: QGroundControl.zOrderTopMost
+            visible:            _internalVisible && _editingLayer === _layerMission && QGroundControl.corePlugin.options.showMissionStatus
+
             onSetCurrentSeqNum: _missionController.setCurrentPlanViewSeqNum(seqNum, true)
 
             property bool _internalVisible: _planViewSettings.showMissionItemStatus.rawValue
@@ -418,18 +491,20 @@ Item {
                 _planViewSettings.showMissionItemStatus.rawValue = _internalVisible
             }
         }
-
+        
+        
         MapScale {
             id:                     mapScale
             anchors.margins:        _toolsMargin
             anchors.bottom:         terrainStatus.visible ? terrainStatus.top : parent.bottom
-            anchors.left:           mapControl.left
+            anchors.left:           parent.left
             mapControl:             mapControl
             buttonsOnLeft:          true
             terrainButtonVisible:   _editingLayer === _layerMission
             terrainButtonChecked:   terrainStatus.visible
             onTerrainButtonClicked: terrainStatus.toggleVisible()
         }
+
         Viewer3D{
             id:                     viewer3DWindow
             anchors.fill:           parent

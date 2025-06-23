@@ -128,6 +128,8 @@ Item {
                         pageLoader.sourceComponent = pageShowTelemetryUAV
                         planMasterController.flyView = true
                         mapControl.planView = false
+                        // removeAllItems()
+                        
                     }
                     anchors.left: buttonRow.left
                     anchors.leftMargin: 20
@@ -150,9 +152,7 @@ Item {
                         pageLoader.sourceComponent = pageShowPlanFlightUAV
                         planMasterController.flyView = false
                         mapControl.planView = true
-                        // planMasterController.planView = true
                         insertTakeItemAfterCurrent()
-                        // mapControl._triggerSubmit = true
                     }
                     anchors.right: buttonRow.right
                     anchors.rightMargin: 20
@@ -320,18 +320,6 @@ Item {
     VehicleWarnings {
         anchors.centerIn:   parent
         z:                  QGroundControl.zOrderTopMost
-    }
-
-    MapScale {
-        id:                 mapScale
-        anchors.margins:    _toolsMargin
-        anchors.left:       toolStrip.right
-        anchors.top:        parent.top
-        mapControl:         _root.mapControl
-        buttonsOnLeft:      true
-        visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && !isViewer3DOpen && mapControl.pipState.state === mapControl.pipState.fullState
-
-        property real topEdgeCenterInset: visible ? y + height : 0
     }
 
     Loader {

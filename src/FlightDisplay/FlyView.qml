@@ -37,7 +37,8 @@ Item {
     property var planController:    _planController
     property var guidedController:  _guidedController
     property var    _appSettings:                       QGroundControl.settingsManager.appSettings
-    // Properties of UTM adapter
+    property var    _planViewSettings:                  QGroundControl.settingsManager.planViewSettings
+    // // Properties of UTM adapter
     property bool utmspSendActTrigger: false
 
     property bool   _utmspEnabled:                      QGroundControl.utmspSupported
@@ -77,6 +78,25 @@ Item {
     readonly property int       _layerRallyPoints:          3
     readonly property int       _layerUTMSP:                4 // Additional Tab button when UTMSP is enabled
     readonly property string    _armedVehicleUploadPrompt:  qsTr("Vehicle is currently armed. Do you want to upload the mission to the vehicle?")
+
+    
+    MapFitFunctions {
+        id:                         mapFitFunctions 
+        map:                        mapControl
+        usePlannedHomePosition:     true
+        planMasterController:       _planMasterController
+    }
+
+    onVisibleChanged: {
+        if(visible) {
+            mapControl.zoomLevel = QGroundControl.flightMapZoom
+            mapControl.center    = QGroundControl.flightMapPosition
+            if (!_planMasterController.containsItems) {
+                toolStrip.simulateClick(toolStrip.fileButtonIndex)
+            }
+        }
+    }
+
 
 
     PlanMasterController {
@@ -270,6 +290,7 @@ Item {
         visible:    !QGroundControl.videoManager.fullScreen
     }
 
+    
     Item {
         id:                 mapHolder
         anchors.top:        toolbar.bottom
@@ -286,6 +307,7 @@ Item {
             toolInsets:             customOverlay.totalToolInsets
             mapName:                "FlightDisplayView"
             enabled:                !viewer3DWindow.isOpen
+            z: 0
         }
 
         FlyViewVideo {
@@ -361,6 +383,53 @@ Item {
             visible:            false
         }
 
+        QGCLabel {
+            // Elevation provider notice on top of terrain plot
+            readonly property string _licenseString: QGroundControl.elevationProviderNotice
+
+            id:                         licenseLabel
+            visible:                    terrainStatus.visible && _licenseString !== ""
+            anchors.bottom:             terrainStatus.top
+            anchors.horizontalCenter:   terrainStatus.horizontalCenter
+            anchors.bottomMargin:       ScreenTools.defaultFontPixelWidth * 0.5
+            font.pointSize:             ScreenTools.smallFontPointSize
+            text:                       qsTr("Powered by %1").arg(_licenseString)
+            z: QGroundControl.zOrderTopMost
+        }
+
+        TerrainStatus {
+            id:                 terrainStatus
+            anchors.margins:    _toolsMargin
+            anchors.leftMargin: 0
+            anchors.left:       mapControl.left
+            // anchors.right:      rightPanel.left
+            anchors.bottom:     mapControl.bottom
+            height:             ScreenTools.defaultFontPixelHeight * 7
+            missionController:  _missionController
+            // visible:            _internalVisible && _editingLayer === _layerMission && QGroundControl.corePlugin.options.showMissionStatus
+            visible: true
+            z: QGroundControl.zOrderTopMost
+            onSetCurrentSeqNum: _missionController.setCurrentPlanViewSeqNum(seqNum, true)
+
+            property bool _internalVisible: _planViewSettings.showMissionItemStatus.rawValue
+
+            function toggleVisible() {
+                _internalVisible = !_internalVisible
+                _planViewSettings.showMissionItemStatus.rawValue = _internalVisible
+            }
+        }
+
+        MapScale {
+            id:                     mapScale
+            anchors.margins:        _toolsMargin
+            anchors.bottom:         terrainStatus.visible ? terrainStatus.top : parent.bottom
+            anchors.left:           mapControl.left
+            mapControl:             mapControl
+            buttonsOnLeft:          true
+            terrainButtonVisible:   _editingLayer === _layerMission
+            terrainButtonChecked:   terrainStatus.visible
+            onTerrainButtonClicked: terrainStatus.toggleVisible()
+        }
         Viewer3D{
             id:                     viewer3DWindow
             anchors.fill:           parent
@@ -390,4 +459,7 @@ Item {
             close()
         }
     }
+
+    
+
 }

@@ -19,7 +19,7 @@ Rectangle {
             backgroundColor: "darkblue"
             onClicked: {
                 _guidedController.closeAll()
-                _guidedController.confirmAction(_guidedController.actionRTL)
+                _guidedController.confirmAction(_guidedController.actionSetFlightMode, "Safe Recovery")
             }
         }
 

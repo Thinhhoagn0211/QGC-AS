@@ -41,6 +41,7 @@ ColumnLayout {
 
         function valueText() {
             if (instrumentValueData.fact) {
+                // console.log("InstrumentValueValue.valueText: " + instrumentValueData.fact.name + ": " + instrumentValueData.fact.enumOrValueString)
                 return instrumentValueData.fact.enumOrValueString + (instrumentValueData.showUnits ? " " + instrumentValueData.fact.units : "")
             } else {
                 return qsTr("--.--")

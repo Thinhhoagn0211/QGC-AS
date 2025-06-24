@@ -115,6 +115,8 @@ Item {
         anchors.fill:   parent
     }
 
+
+
     Rectangle {
         anchors.fill:   parent
         color:          _qgcPal.window

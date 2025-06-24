@@ -652,7 +652,6 @@ Item {
         var selectedVehicles;
         switch (actionCode) {
         case actionRTL:
-            console.log("executeAction actionRTL", optionChecked)
             _activeVehicle.guidedModeRTL(optionChecked)
             break
         case actionLand:
@@ -741,7 +740,7 @@ Item {
             )
             break
         case actionGoto:
-            _activeVehicle.guidedModeGotoLocation(
+        _activeVehicle.guidedModeGotoLocation(
                 actionData,
                 _vehicleInFwdFlight /* forwardFlightLoiterRadius */
                     ? _flyViewSettings.forwardFlightGoToLocationLoiterRad.value

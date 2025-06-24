@@ -65,7 +65,7 @@ T.HorizontalFactValueGrid {
                                 instrumentValueData:    object
                             }
                         }
-
+                        // repeats for telemetry values
                         Repeater {
                             id:     valueRepeater
                             model:  object

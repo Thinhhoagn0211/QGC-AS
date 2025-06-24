@@ -71,6 +71,25 @@ Item {
     readonly property int       _layerUTMSP:                4 // Additional Tab button when UTMSP is enabled
     readonly property string    _armedVehicleUploadPrompt:  qsTr("Vehicle is currently armed. Do you want to upload the mission to the vehicle?")
 
+    function getFlightTimeText() {
+        if (!_activeVehicle) return "--"
+        let fact = _activeVehicle.getFact("flightTime")
+        if (!fact) return "--"
+        let val = fact.enumOrValueString || fact.value
+        return (val !== undefined && val !== null) ? val.toString() : "--"
+    }
+    property string flightTimeText: "--"
+
+    Timer {
+        interval: 1000
+        running: true
+        repeat: true
+        onTriggered: {
+            flightTimeText = getFlightTimeText()
+        }
+    }
+
+
     
     function mapCenter() {
         var coordinate = mapControl.center
@@ -455,6 +474,7 @@ Item {
             z:                  QGroundControl.zOrderTopMost
             visible:            false
         }
+
 
         QGCLabel {
             // Elevation provider notice on top of terrain plot

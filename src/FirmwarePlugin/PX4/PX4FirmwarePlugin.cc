@@ -148,7 +148,7 @@ bool PX4FirmwarePlugin::setFlightMode(const QString& flightMode, uint8_t* base_m
 
     // console _flightModeList
     for (auto &mode: _flightModeList){
-        qDebug() << " - " << mode.mode_name;
+        // qDebug() << " - " << mode.mode_name;
         if(flightMode.compare(mode.mode_name, Qt::CaseInsensitive) == 0){
             *base_mode = MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
             *custom_mode = mode.custom_mode;

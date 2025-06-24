@@ -240,6 +240,41 @@ FlightMap {
         }
     }
 
+    // property string previousFlightMode: ""
+
+    // function startOrbitAtLocation(coordinate) {
+    //     if (_activeVehicle) {
+    //         previousFlightMode = _activeVehicle.flightMode
+    //         guidedController.orbitAtLocation(coordinate)
+    //     }
+    // }
+
+    // Connections {
+    //     target: _activeVehicle
+
+    //     onFlightModeChanged: {
+    //         if (flightMode === "Hold" && previousFlightMode === "Mission") {
+    //             console.log("Vehicle has returned to Mission flight mode, starting mission")
+    //             guidedController.startMission()
+    //             previousFlightMode = ""
+    //         }
+    //     }
+    // }
+
+    Connections {
+        target: _activeVehicle
+
+        onFlightModeChanged: {
+            console.log("Flight mode changed to:", _activeVehicle.flightMode)
+        }
+
+        onMessageErrorReceived: {
+            console.warn("Error received:", message)
+        }
+    }
+
+
+
     MapFitFunctions {
         id:                         mapFitFunctions // The name for this id cannot be changed without breaking references outside of this code. Beware!
         map:                        _root
@@ -706,6 +741,7 @@ FlightMap {
                         text:               qsTr("Orbit at location")
                         visible:            globals.guidedControllerFlyView.showOrbit
                         onClicked: {
+                            // previousFlightMode = "Mission"
                             mapClickDropPanel.close()
                             orbitMapCircle.show(mapClickCoord)
                             globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionOrbit, mapClickCoord, orbitMapCircle)

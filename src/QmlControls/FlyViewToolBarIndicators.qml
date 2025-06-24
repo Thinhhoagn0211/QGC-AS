@@ -36,6 +36,7 @@ Row {
         }
     }
 
+    // show mode of vehicle, gps, and battery indicators
     Repeater {
         id:     toolIndicatorsRepeater
         model:  _activeVehicle ? _activeVehicle.toolIndicators : []

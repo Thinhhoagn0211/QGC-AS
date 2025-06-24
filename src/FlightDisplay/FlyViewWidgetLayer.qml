@@ -216,7 +216,45 @@ Item {
         }
     }
 
+    Column {
+        id:                 infoBadgeContainer
+        anchors.bottom: bottomRightRowLayout.top
+        anchors.bottomMargin: 10
+        anchors.right:      parent.right
+        spacing:            8
 
+        Row {
+            spacing: 8
+
+            InfoBadge {
+                color: "#f39c12"
+                // iconSource: "qrc:/icons/clock.png"
+                title: "Thời gian"
+                value: QGroundControl.multiVehicleManager.activeVehicle.flightTime.value
+            }
+
+            InfoBadge {
+                color: "#2980b9"
+                // iconSource: "qrc:/icons/home.png"
+                title: "Nhà"
+                value: "202 m"
+            }
+
+            InfoBadge {
+                color: "#27ae60"
+                // iconSource: "qrc:/icons/track.png"
+                title: "Tổng"
+                value: "221 m"
+            }
+
+            InfoBadge {
+                color: "#7f8c8d"
+                // iconSource: "qrc:/icons/waypoint.png"
+                title: "WP #3"
+                value: "153 m"
+            }
+        }
+    }
 
     FlyViewBottomRightRowLayout {
         id:                 bottomRightRowLayout

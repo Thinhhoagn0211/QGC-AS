@@ -74,7 +74,6 @@ Item {
     
     function mapCenter() {
         var coordinate = mapControl.center
-        console.log("Map center coordinate: " + coordinate.latitude + ", " + coordinate.longitude + ", " + coordinate.altitude)
         coordinate.latitude  = coordinate.latitude.toFixed(_decimalPlaces)
         coordinate.longitude = coordinate.longitude.toFixed(_decimalPlaces)
         coordinate.altitude  = coordinate.altitude.toFixed(_decimalPlaces)
@@ -94,15 +93,15 @@ Item {
         planMasterController:       _planController
     }
 
-    onVisibleChanged: {
-        if(visible) {
-            mapControl.zoomLevel = QGroundControl.flightMapZoom
-            mapControl.center    = QGroundControl.flightMapPosition
-            if (!_planController.containsItems) {
-                toolStrip.simulateClick(toolStrip.fileButtonIndex)
-            }
-        }
-    }
+    // onVisibleChanged: {
+    //     if(visible) {
+    //         mapControl.zoomLevel = QGroundControl.flightMapZoom
+    //         mapControl.center    = QGroundControl.flightMapPosition
+    //         if (!_planController.containsItems) {
+    //             toolStrip.simulateClick(toolStrip.fileButtonIndex)
+    //         }
+    //     }
+    // }
 
     Connections {
         target: _appSettings ? _appSettings.defaultMissionItemAltitude : null
@@ -323,7 +322,6 @@ Item {
             _planController.loadFromVehicle()
         }
     }
-
     
     function clearButtonClicked() {
         mainWindow.showMessageDialog(qsTr("Clear"),

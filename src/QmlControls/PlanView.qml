@@ -423,7 +423,6 @@ Item {
                     vehicle:     _planMasterController.controllerVehicle
                     onClicked:   (sequenceNumber) => { 
                         _missionController.setCurrentPlanViewSeqNum(sequenceNumber, false) 
-                        console.log("MissionItemMapVisual clicked: " + sequenceNumber)
                         }
                 }
             }

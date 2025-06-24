@@ -152,6 +152,7 @@ Item {
                         pageLoader.sourceComponent = pageShowPlanFlightUAV
                         planMasterController.flyView = false
                         mapControl.planView = true
+                        // removeAllItems()
                         insertTakeItemAfterCurrent()
                     }
                     anchors.right: buttonRow.right

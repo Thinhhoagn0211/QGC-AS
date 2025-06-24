@@ -42,7 +42,6 @@ Item {
         }
 
         onLoaded: {
-            console.log("MissionItemMapVisual: Loaded map visual component:", mapVisualLoader.item)
             if (!item) {
                 return
             }

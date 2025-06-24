@@ -20,7 +20,7 @@ Rectangle {
     radius:     ScreenTools.defaultFontPixelWidth * 0.5
     color:      qgcPal.window
     opacity:    0.80
-    clip:       false
+    clip:       true
 
     property var missionController
 

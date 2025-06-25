@@ -54,6 +54,8 @@ Rectangle {
         }
     }
 
+    
+
     Repeater {
         model: _activeVehicle ? _activeVehicle.batteries : 0
     Column {
@@ -72,7 +74,8 @@ Rectangle {
         MetricsRow { label: "Độ cao tương đối"; value: _activeVehicle ? _activeVehicle.altitudeRelative.value.toFixed(1) + "m" : qsTr("--.--") }
         MetricsRow { label: "Dung lượng pin"; value: object.percentRemaining.valueString + " " + object.percentRemaining.units }
         MetricsRow { label: "Trạng thái"; value: object.chargeState.enumStringValue }
-        MetricsRow { label: "Thời gian còn lại"; value: object.timeRemainingStr.value }
+        MetricsRow { label: "Thời gian bay"; value: _activeVehicle ? _activeVehicle.flightTime : qsTr("--:--") }
+        MetricsRow { label: "Thời gian còn lại"; value: _activeVehicle ? _activeVehicle.timeRemaining.valueString : qsTr("--:--") }
         MetricsRow { label: "Điện áp máy bay"; value: object.voltage.valueString + " " + object.voltage.units }
         MetricsRow { label: "Dòng xả"; value: object.mahConsumed.valueString + " " + object.mahConsumed.units }
         MetricsRow { label: "Nhiệt độ"; value: object.temperature.valueString + " " + object.temperature.units }

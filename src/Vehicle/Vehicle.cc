@@ -119,13 +119,16 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _terrainFactGroup             (this)
     , _terrainProtocolHandler       (new TerrainProtocolHandler(this, &_terrainFactGroup, this))
 {
+    // if joystick status is changed, we need to reload joystick settings
     connect(JoystickManager::instance(), &JoystickManager::activeJoystickChanged, this, &Vehicle::_loadJoystickSettings);
+    // if active vehicle changes, we need to update the joystick settings
     connect(MultiVehicleManager::instance(), &MultiVehicleManager::activeVehicleChanged, this, &Vehicle::_activeVehicleChanged);
 
     qCDebug(VehicleLog) << "Link started with Mavlink " << (MAVLinkProtocol::instance()->getCurrentVersion() >= 200 ? "V2" : "V1");
 
     connect(MAVLinkProtocol::instance(), &MAVLinkProtocol::messageReceived,        this, &Vehicle::_mavlinkMessageReceived);
     connect(MAVLinkProtocol::instance(), &MAVLinkProtocol::mavlinkMessageStatus,   this, &Vehicle::_mavlinkMessageStatus);
+
 
     connect(this, &Vehicle::flightModeChanged,          this, &Vehicle::_handleFlightModeChanged);
     connect(this, &Vehicle::armedChanged,               this, &Vehicle::_announceArmedChanged);
@@ -251,7 +254,9 @@ void Vehicle::stopTrackingFirmwareVehicleTypeChanges(void)
 
 void Vehicle::_commonInit()
 {
+    // initialize firmware plugin manager
     _firmwarePlugin = FirmwarePluginManager::instance()->firmwarePluginForAutopilot(_firmwareType, _vehicleType);
+
 
     connect(_firmwarePlugin, &FirmwarePlugin::toolIndicatorsChanged, this, &Vehicle::toolIndicatorsChanged);
     connect(_firmwarePlugin, &FirmwarePlugin::modeIndicatorsChanged, this, &Vehicle::modeIndicatorsChanged);
@@ -1561,7 +1566,7 @@ bool Vehicle::joystickEnabled() const
 {
     return _joystickEnabled;
 }
-
+// function set joystick endable
 void Vehicle::setJoystickEnabled(bool enabled)
 {
     if (enabled){
@@ -1600,6 +1605,7 @@ void Vehicle::_activeVehicleChanged(Vehicle *newActiveVehicle)
 // tells the active joystick where to send data
 void Vehicle::_captureJoystick()
 {
+    // create a joystick if it does not exist
     Joystick* joystick = JoystickManager::instance()->activeJoystick();
 
     if(joystick){

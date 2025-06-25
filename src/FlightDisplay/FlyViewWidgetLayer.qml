@@ -222,39 +222,44 @@ Item {
         anchors.bottomMargin: 10
         anchors.right:      parent.right
         spacing:            8
+        Repeater {
+            model: _activeVehicle
+            Row {
+                id:                infoBadgeRow
+                spacing: 8
 
-        Row {
-            spacing: 8
+                InfoBadge {
+                    color: "#f39c12"
+                    // iconSource: "qrc:/icons/clock.png"
+                    title: "Thời gian"
+                    value: _activeVehicle ? _activeVehicle.flightTime.valueString : "00:00:00"
+                }
 
-            InfoBadge {
-                color: "#f39c12"
-                // iconSource: "qrc:/icons/clock.png"
-                title: "Thời gian"
-                value: QGroundControl.multiVehicleManager.activeVehicle.flightTime.value
-            }
+                InfoBadge {
+                    color: "#2980b9"
+                    // iconSource: "qrc:/icons/home.png"
+                    title: "Nhà"
+                    value: _activeVehicle ? _activeVehicle.distanceToHome.rawValue.toFixed(1) + "m" : qsTr("--.--")
+                }
 
-            InfoBadge {
-                color: "#2980b9"
-                // iconSource: "qrc:/icons/home.png"
-                title: "Nhà"
-                value: "202 m"
-            }
+                InfoBadge {
+                    color: "#27ae60"
+                    // iconSource: "qrc:/icons/track.png"
+                    title: "Tổng"
+                    value: _activeVehicle ? _activeVehicle.distanceTraveled.rawValue.toFixed(1) + "m" : "0 m"
+                }
 
-            InfoBadge {
-                color: "#27ae60"
-                // iconSource: "qrc:/icons/track.png"
-                title: "Tổng"
-                value: "221 m"
-            }
-
-            InfoBadge {
-                color: "#7f8c8d"
-                // iconSource: "qrc:/icons/waypoint.png"
-                title: "WP #3"
-                value: "153 m"
+                InfoBadge {
+                    color: "#7f8c8d"
+                    // iconSource: "qrc:/icons/waypoint.png"
+                    title: "WP " + _activeVehicle ? _activeVehicle.currentMissionIndex : "0" 
+                    value: _activeVehicle ? _activeVehicle.distanceToNextWP.rawValue.toFixed(1) + "m" : "0 m"
+                }
             }
         }
     }
+
+    // Repeater 
 
     FlyViewBottomRightRowLayout {
         id:                 bottomRightRowLayout

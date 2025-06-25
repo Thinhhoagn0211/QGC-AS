@@ -11,7 +11,7 @@ Rectangle {
     width: 110
     height: 40
     radius: 20
-    color: "orange" // mặc định
+    color: "orange"
 
     Row {
         anchors.centerIn: parent
@@ -21,20 +21,20 @@ Rectangle {
             id: icon
             width: 16
             height: 16
-            source: "" // sẽ được gán từ bên ngoài
+            source: ""
         }
 
         Column {
             spacing: 2
             Text {
                 id: titleLabel
-                text: "Tiêu đề"
+                text: ""
                 color: "white"
                 font.pixelSize: 11
             }
             Text {
                 id: valueLabel
-                text: "Giá trị"
+                text: ""
                 color: "white"
                 font.pixelSize: 11
             }

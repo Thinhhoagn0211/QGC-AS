@@ -71,25 +71,28 @@ Item {
     readonly property int       _layerUTMSP:                4 // Additional Tab button when UTMSP is enabled
     readonly property string    _armedVehicleUploadPrompt:  qsTr("Vehicle is currently armed. Do you want to upload the mission to the vehicle?")
 
-    function getFlightTimeText() {
-        if (!_activeVehicle) return "--"
-        let fact = _activeVehicle.getFact("flightTime")
-        if (!fact) return "--"
-        let val = fact.enumOrValueString || fact.value
-        return (val !== undefined && val !== null) ? val.toString() : "--"
-    }
-    property string flightTimeText: "--"
+//     function getNextWaypoint() {
+//     let currentIndex = _missionController.currentMissionIndex
+//     let visualItems = _missionController.visualItems
 
-    Timer {
-        interval: 1000
-        running: true
-        repeat: true
-        onTriggered: {
-            flightTimeText = getFlightTimeText()
-        }
-    }
+//     if (currentIndex >= 0 && currentIndex + 1 < visualItems.count) {
+//         // let nextItem = visualItems.get(currentIndex + 1)
+//         console.log("Next waypoint index:", currentIndex)
+//         return null
+//     } else {
+//         console.log("No next waypoint (mission complete or invalid)")
+//         return null
+//     }
+// }
 
-
+//     Timer {
+//         interval: 1000
+//         running: true
+//         repeat: true
+//         onTriggered: {
+//              getNextWaypoint()
+//         }
+//     }
     
     function mapCenter() {
         var coordinate = mapControl.center

@@ -57,7 +57,6 @@ Item {
     property bool utmspActTrigger
 
 
-
     QGCToolInsets {
         id:                     _totalToolInsets
         leftEdgeTopInset:       toolStrip.leftEdgeTopInset
@@ -183,15 +182,16 @@ Item {
 
         Rectangle {
             id: vehicleMessageRect
+            anchors.top: backgroundRect.bottom
             anchors.topMargin: 20
             width: 300
-            height: 200
+            height: Math.min(vehicleMessageList.height + 20, 200)
             color: Qt.rgba(0, 0, 0, 0.5)
             radius: 0
 
             VehicleMessageList { 
                 id: vehicleMessageList
-            }
+                }
             }
     }
 
@@ -199,8 +199,6 @@ Item {
     Component {
         id: pageShowTelemetryUAV
         PageShowTelemetryUAV {
-            color: "transparent"
-            anchors.topMargin: 60
             anchors.fill: parent
         }
     }
@@ -210,8 +208,6 @@ Item {
         PageShowPlanFlightUAV {
             mapControl:         _root.mapControl
             planMasterController: _planMasterController
-            color: "transparent"
-            anchors.topMargin: 60
             anchors.fill: parent
         }
     }
@@ -230,36 +226,36 @@ Item {
 
                 InfoBadge {
                     color: "#f39c12"
-                    // iconSource: "qrc:/icons/clock.png"
+                    iconSource: "/res/time.svg"
                     title: "Thời gian"
-                    value: _activeVehicle ? _activeVehicle.flightTime.valueString : "00:00:00"
+                    value: (_activeVehicle && _activeVehicle.flightTime.valueString) ? _activeVehicle.flightTime.valueString : "00:00:00"
                 }
 
                 InfoBadge {
                     color: "#2980b9"
-                    // iconSource: "qrc:/icons/home.png"
+                    iconSource: "/res/home.svg"
                     title: "Nhà"
-                    value: _activeVehicle ? _activeVehicle.distanceToHome.rawValue.toFixed(1) + "m" : qsTr("--.--")
+                    value: (_activeVehicle && _activeVehicle.distanceToHome) ? _activeVehicle.distanceToHome.rawValue.toFixed(1) + "m" : qsTr("--.--")
                 }
 
                 InfoBadge {
                     color: "#27ae60"
-                    // iconSource: "qrc:/icons/track.png"
+                    iconSource: "/res/TotalDistance.svg"
                     title: "Tổng"
-                    value: _activeVehicle ? _activeVehicle.distanceTraveled.rawValue.toFixed(1) + "m" : "0 m"
+                    value: (_activeVehicle && _activeVehicle.flightDistance) ? _activeVehicle.flightDistance.rawValue.toFixed(1) + "m" : "0 m"
                 }
 
                 InfoBadge {
                     color: "#7f8c8d"
-                    // iconSource: "qrc:/icons/waypoint.png"
-                    title: "WP " + _activeVehicle ? _activeVehicle.currentMissionIndex : "0" 
-                    value: _activeVehicle ? _activeVehicle.distanceToNextWP.rawValue.toFixed(1) + "m" : "0 m"
+                    iconSource: "/res/NextWaypoint.svg"
+                    title: "WP #" + (_missionController ? _missionController.currentMissionIndex : "0")
+                    value: (_activeVehicle && _activeVehicle.distanceToNextWP) ? _activeVehicle.distanceToNextWP.rawValue.toFixed(1) + "m" : "0 m"
                 }
+
             }
         }
     }
 
-    // Repeater 
 
     FlyViewBottomRightRowLayout {
         id:                 bottomRightRowLayout

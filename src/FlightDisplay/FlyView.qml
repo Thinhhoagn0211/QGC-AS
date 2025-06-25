@@ -70,29 +70,6 @@ Item {
     readonly property int       _layerRallyPoints:          3
     readonly property int       _layerUTMSP:                4 // Additional Tab button when UTMSP is enabled
     readonly property string    _armedVehicleUploadPrompt:  qsTr("Vehicle is currently armed. Do you want to upload the mission to the vehicle?")
-
-//     function getNextWaypoint() {
-//     let currentIndex = _missionController.currentMissionIndex
-//     let visualItems = _missionController.visualItems
-
-//     if (currentIndex >= 0 && currentIndex + 1 < visualItems.count) {
-//         // let nextItem = visualItems.get(currentIndex + 1)
-//         console.log("Next waypoint index:", currentIndex)
-//         return null
-//     } else {
-//         console.log("No next waypoint (mission complete or invalid)")
-//         return null
-//     }
-// }
-
-//     Timer {
-//         interval: 1000
-//         running: true
-//         repeat: true
-//         onTriggered: {
-//              getNextWaypoint()
-//         }
-//     }
     
     function mapCenter() {
         var coordinate = mapControl.center
@@ -115,16 +92,7 @@ Item {
         planMasterController:       _planController
     }
 
-    // onVisibleChanged: {
-    //     if(visible) {
-    //         mapControl.zoomLevel = QGroundControl.flightMapZoom
-    //         mapControl.center    = QGroundControl.flightMapPosition
-    //         if (!_planController.containsItems) {
-    //             toolStrip.simulateClick(toolStrip.fileButtonIndex)
-    //         }
-    //     }
-    // }
-
+        
     Connections {
         target: _appSettings ? _appSettings.defaultMissionItemAltitude : null
         function onRawValueChanged() {
@@ -498,6 +466,7 @@ Item {
             anchors.leftMargin: 0
             anchors.left:       mapScale.left
             anchors.right:      guidedValueSlider.left
+            anchors.rightMargin: ScreenTools.defaultFontPixelWidth * 50
             anchors.bottom:     parent.bottom
             height:             ScreenTools.defaultFontPixelHeight * 7
             missionController:  _missionController

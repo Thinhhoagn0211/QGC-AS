@@ -261,6 +261,7 @@ FlightMap {
     //     }
     // }
 
+
     Connections {
         target: _activeVehicle
 

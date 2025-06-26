@@ -1447,7 +1447,7 @@
     <message>
       <location filename="../src/FirmwarePlugin/APM/ArduPlaneFirmwarePlugin.h" line="79" />
       <source>Takeoff</source>
-      <translation>Cởi</translation>
+      <translation>Cất cánh</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/APM/ArduPlaneFirmwarePlugin.h" line="80" />
@@ -4568,7 +4568,7 @@ Vui lòng đặt xe của bạn vào nước, nhấp vào nút và chờ đợi.
     <message>
       <location filename="../src/QmlControls/AppMessages.qml" line="208" />
       <source>Clear</source>
-      <translation>Thông thoáng</translation>
+      <translation>Xóa</translation>
     </message>
     <message>
       <location filename="../src/QmlControls/AppMessages.qml" line="231" />
@@ -6700,6 +6700,76 @@ Bấm OK để bắt đầu quá trình tự động điều chỉnh.</translati
   <context>
     <name>FlightModeIndicator</name>
     <message>
+      <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="30" />
+      <source>Manual</source>
+      <translation>Điều khiển thủ công</translation>
+    </message>
+    <message>
+      <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="31" />
+      <source>Altitude</source>
+      <translation>Độ cao</translation>
+    </message>
+    <message>
+      <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="32" />
+      <source>Acro</source>
+      <translation>Nhào lộn</translation>
+    </message>
+    <message>
+      <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="33" />
+      <source>Stabilized</source>
+      <translation>Ổn định</translation>
+    </message>
+    <message>
+      <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="34" />
+      <source>AltHold</source>
+      <translation>Giữ độ cao</translation>
+    </message>
+    <message>
+      <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="35" />
+      <source>Position</source>
+      <translation>Giữ vị trí</translation>
+    </message>
+    <message>
+      <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="36" />
+      <source>Offboard</source>
+      <translation>Điều khiển ngoài</translation>
+    </message>
+    <message>
+      <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="37" />
+      <source>Hold</source>
+      <translation>Giữ</translation>
+    </message>
+    <message>
+      <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="38" />
+      <source>Mission</source>
+      <translation>Nhiệm vụ</translation>
+    </message>
+    <message>
+      <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="39" />
+      <source>Return</source>
+      <translation>Trở về</translation>
+    </message>
+    <message>
+      <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="40" />
+      <source>Safe Recovery</source>
+      <translation>Khôi phục</translation>
+    </message>
+    <message>
+      <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="41" />
+      <source>Position Slow</source>
+      <translation>Giữ vị trí chậm</translation>
+    </message>
+    <message>
+      <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="42" />
+      <source>Follow Target</source>
+      <translation>Theo dõi mục tiêu</translation>
+    </message>
+    <message>
+      <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="43" />
+      <source>Precision Landing</source>
+      <translation>Hạ cánh chính xác</translation>
+    </message>
+    <message>
       <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="50" />
       <source>N/A</source>
       <comment>No data to display</comment>
@@ -7297,7 +7367,7 @@ Bấm OK để bắt đầu quá trình tự động điều chỉnh.</translati
     <message>
       <location filename="../src/UI/toolbar/GPSIndicatorPage.qml" line="166" />
       <source>Save</source>
-      <translation>Cứu</translation>
+      <translation>Lưu</translation>
     </message>
     <message>
       <location filename="../src/UI/toolbar/GPSIndicatorPage.qml" line="166" />
@@ -7330,7 +7400,7 @@ Bấm OK để bắt đầu quá trình tự động điều chỉnh.</translati
     <message>
       <location filename="../src/UI/preferences/GeneralSettings.qml" line="60" />
       <source>Mute all audio output</source>
-      <translation>Tắt tiếng tất cả đầu ra âm thanh</translation>
+      <translation>Tắt âm thanh</translation>
     </message>
     <message>
       <location filename="../src/UI/preferences/GeneralSettings.qml" line="76" />
@@ -7881,97 +7951,122 @@ Bấm OK để bắt đầu quá trình tự động điều chỉnh.</translati
   <context>
     <name>GuidedActionsController</name>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="34" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="35" />
       <source>EMERGENCY STOP</source>
       <translation>Điểm dừng khẩn cấp</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="35" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="36" />
       <source>Arm</source>
       <translation>Cánh tay</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="36" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="37" />
       <source>Arm (MV)</source>
       <translation>ARM (MV)</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="38" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="39" />
       <source>Disarm</source>
       <translation>Giải giáp</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="39" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="40" />
       <source>Disarm (MV)</source>
       <translation>Giải giáp (MV)</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="40" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="41" />
       <source>Return</source>
-      <translation>Trở lại</translation>
+      <translation>Trở về</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="41" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="42" />
       <source>Takeoff</source>
-      <translation>Cởi</translation>
+      <translation>Cất cánh</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="44" />
+      <source>Zoom In</source>
+      <translation>Phóng to</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="45" />
+      <source>Zoom Out</source>
+      <translation>Thu nhỏ</translation>
     </message>
     <message>
       <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="43" />
+      <source>Connect</source>
+      <translation>Kết nối</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="47" />
+      <source>Settings</source>
+      <translation>Cài đặt</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="46" />
+      <source>Plan</source>
+      <translation>Lên kế hoạch</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="49" />
       <source>Land</source>
       <translation>Đất</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="44" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="50" />
       <source>Start Mission</source>
       <translation>Bắt đầu nhiệm vụ</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="45" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="51" />
       <source>Start Mission (MV)</source>
       <translation>Bắt đầu Nhiệm vụ (MV)</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="46" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="52" />
       <source>Continue Mission</source>
       <translation>Tiếp tục nhiệm vụ</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="47" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="53" />
       <source>Resume FAILED</source>
       <translation>Sơ yếu lý lịch không thành công</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="48" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="54" />
       <source>Pause</source>
       <translation>Tạm dừng</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="49" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="55" />
       <source>Pause (MV)</source>
       <translation>Tạm dừng (MV)</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="50" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="56" />
       <source>Change Altitude</source>
       <translation>Thay đổi độ cao</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="53" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="60" />
       <source>Orbit</source>
       <translation>Quỹ đạo</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="54" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="61" />
       <source>Land Abort</source>
       <translation>Bỏ đất</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="55" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="62" />
       <source>Set Waypoint</source>
       <translation>Đặt điểm tham chiếu</translation>
     </message>
     <message>
-      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="56" />
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="63" />
       <source>Go To Location</source>
       <translation>Đi đến vị trí</translation>
     </message>
@@ -8935,7 +9030,7 @@ Bấm OK để bắt đầu quá trình tự động điều chỉnh.</translati
     <message>
       <location filename="../src/UI/preferences/LinkSettings.qml" line="41" />
       <source>Zero-Conf</source>
-      <translation>Không-conf</translation>
+      <translation>Zero-conf</translation>
     </message>
     <message>
       <location filename="../src/UI/preferences/LinkSettings.qml" line="41" />
@@ -8965,7 +9060,7 @@ Bấm OK để bắt đầu quá trình tự động điều chỉnh.</translati
     <message>
       <location filename="../src/UI/preferences/LinkSettings.qml" line="75" />
       <source>Serial &lt;none available&gt;</source>
-      <translation>Nối tiếp &lt;không có sẵn&gt;</translation>
+      <translation>Serial &lt;không có sẵn&gt;</translation>
     </message>
     <message>
       <location filename="../src/UI/preferences/LinkSettings.qml" line="91" />
@@ -9716,89 +9811,89 @@ Bấm OK để bắt đầu quá trình tự động điều chỉnh.</translati
     </message>
   </context>
   <context>
-    <name>MainRootWindow</name>
+    <name>MainWindow</name>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="256" />
+      <location filename="../src/UI/MainWindow.qml" line="256" />
       <source>There are still active connections to vehicles. Are you sure you want to exit?</source>
       <translation>Vẫn còn kết nối tích cực với xe.Bạn có chắc là bạn muốn thoát?</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="231" />
+      <location filename="../src/UI/MainWindow.qml" line="231" />
       <source>You have a mission edit in progress which has not been saved/sent. If you close you will lose changes. Are you sure you want to close?</source>
       <translation>Bạn có một bản chỉnh sửa nhiệm vụ trong tiến trình chưa được lưu/gửi.Nếu bạn đóng cửa, bạn sẽ mất thay đổi.Bạn có chắc là bạn muốn đóng?</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="143" />
-      <location filename="../src/UI/MainRootWindow.qml" line="367" />
+      <location filename="../src/UI/MainWindow.qml" line="143" />
+      <location filename="../src/UI/MainWindow.qml" line="367" />
       <source>Analyze Tools</source>
       <translation>Phân tích các công cụ</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="164" />
-      <location filename="../src/UI/MainRootWindow.qml" line="396" />
+      <location filename="../src/UI/MainWindow.qml" line="164" />
+      <location filename="../src/UI/MainWindow.qml" line="396" />
       <source>Application Settings</source>
       <translation>Cài đặt ứng dụng</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="226" />
-      <location filename="../src/UI/MainRootWindow.qml" line="412" />
+      <location filename="../src/UI/MainWindow.qml" line="226" />
+      <location filename="../src/UI/MainWindow.qml" line="412" />
       <source>Close %1</source>
       <translation>Đóng %1</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="244" />
+      <location filename="../src/UI/MainWindow.qml" line="244" />
       <source>You have pending parameter updates to a vehicle. If you close you will lose changes. Are you sure you want to close?</source>
       <translation>Bạn có cập nhật tham số đang chờ xử lý cho một chiếc xe.Nếu bạn đóng cửa, bạn sẽ mất thay đổi.Bạn có chắc là bạn muốn đóng?</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="353" />
+      <location filename="../src/UI/MainWindow.qml" line="353" />
       <source>Plan Flight</source>
       <translation>Kế hoạch chuyến bay</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="519" />
+      <location filename="../src/UI/MainWindow.qml" line="519" />
       <source>Exit</source>
-      <translation>Ra</translation>
+      <translation>Thoát</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="600" />
+      <location filename="../src/UI/MainWindow.qml" line="600" />
       <source>Vehicle Error</source>
       <translation>Lỗi xe</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="624" />
+      <location filename="../src/UI/MainWindow.qml" line="624" />
       <source>Additional errors received</source>
       <translation>Lỗi bổ sung nhận được</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="429" />
+      <location filename="../src/UI/MainWindow.qml" line="429" />
       <source>%1 Version</source>
       <translation>%1 phiên bản</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="147" />
-      <location filename="../src/UI/MainRootWindow.qml" line="382" />
+      <location filename="../src/UI/MainWindow.qml" line="148" />
+      <location filename="../src/UI/MainWindow.qml" line="371" />
       <source>Vehicle Configuration</source>
-      <translation>Cấu hình xe</translation>
+      <translation>Cấu hình thiết bị</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="295" />
+      <location filename="../src/UI/MainWindow.qml" line="295" />
       <source>Debug Touch Areas</source>
       <translation>Gỡ lỗi các khu vực cảm ứng</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="296" />
+      <location filename="../src/UI/MainWindow.qml" line="296" />
       <source>Touch Area display toggled</source>
       <translation>Hiển thị khu vực cảm ứng được bật tắt</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="302" />
-      <location filename="../src/UI/MainRootWindow.qml" line="314" />
+      <location filename="../src/UI/MainWindow.qml" line="302" />
+      <location filename="../src/UI/MainWindow.qml" line="314" />
       <source>Advanced Mode</source>
       <translation>Chế độ nâng cao</translation>
     </message>
     <message>
-      <location filename="../src/UI/MainRootWindow.qml" line="315" />
+      <location filename="../src/UI/MainWindow.qml" line="315" />
       <source>Turn off Advanced Mode?</source>
       <translation>Tắt chế độ nâng cao?</translation>
     </message>
@@ -9897,9 +9992,9 @@ Bấm OK để bắt đầu quá trình tự động điều chỉnh.</translati
       <translation>Cấu hình</translation>
     </message>
     <message>
-      <location filename="../src/UI/toolbar/MainStatusIndicator.qml" line="367" />
+      <location filename="../src/UI/toolbar/MainStatusIndicator.qml" line="369" />
       <source>Vehicle Configuration</source>
-      <translation>Cấu hình xe</translation>
+      <translation>Cấu hình thiết bị</translation>
     </message>
     <message>
       <location filename="../src/UI/toolbar/MainStatusIndicator.qml" line="386" />
@@ -10058,7 +10153,7 @@ Bấm OK để bắt đầu quá trình tự động điều chỉnh.</translati
     <message>
       <location filename="../src/UI/preferences/MapSettings.qml" line="127" />
       <source>Import Map Tiles</source>
-      <translation>Nhập gạch bản đồ</translation>
+      <translation>Nhập bản đồ</translation>
     </message>
     <message>
       <location filename="../src/UI/preferences/MapSettings.qml" line="128" />
@@ -10068,22 +10163,22 @@ Bấm OK để bắt đầu quá trình tự động điều chỉnh.</translati
     <message>
       <location filename="../src/UI/preferences/MapSettings.qml" line="138" />
       <source>Export Map Tiles</source>
-      <translation>Xuất gạch bản đồ</translation>
+      <translation>Xuất bản đồ</translation>
     </message>
     <message>
       <location filename="../src/UI/preferences/MapSettings.qml" line="139" />
       <source>Export</source>
-      <translation>Xuất khẩu</translation>
+      <translation>Xuất</translation>
     </message>
     <message>
       <location filename="../src/UI/preferences/MapSettings.qml" line="151" />
       <source>Exporting</source>
-      <translation>Xuất khẩu</translation>
+      <translation>Xuất</translation>
     </message>
     <message>
       <location filename="../src/UI/preferences/MapSettings.qml" line="151" />
       <source>Importing</source>
-      <translation>Nhập khẩu</translation>
+      <translation>Nhập</translation>
     </message>
     <message>
       <location filename="../src/UI/preferences/MapSettings.qml" line="165" />
@@ -11079,7 +11174,7 @@ Is this really what you want?</source>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="43" />
       <source>Takeoff</source>
-      <translation>Cởi</translation>
+      <translation>Cất cánh</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="44" />
@@ -11094,7 +11189,7 @@ Is this really what you want?</source>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="46" />
       <source>Return</source>
-      <translation>Trở lại</translation>
+      <translation>Trở về</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="47" />
@@ -13105,7 +13200,7 @@ Nhấp vào 'OK' để tải lên kế hoạch.</translation>
     <message>
       <location filename="../src/PlanView/PlanView.qml" line="587" />
       <source>Takeoff</source>
-      <translation>Cởi</translation>
+      <translation>Cất cánh</translation>
     </message>
     <message>
       <location filename="../src/PlanView/PlanView.qml" line="599" />
@@ -13120,7 +13215,7 @@ Nhấp vào 'OK' để tải lên kế hoạch.</translation>
     <message>
       <location filename="../src/PlanView/PlanView.qml" line="636" />
       <source>Return</source>
-      <translation>Trở lại</translation>
+      <translation>Trở về</translation>
     </message>
     <message>
       <location filename="../src/PlanView/PlanView.qml" line="638" />
@@ -13242,7 +13337,7 @@ Nhấp vào 'OK' để tải lên kế hoạch.</translation>
     <message>
       <location filename="../src/PlanView/PlanView.qml" line="1092" />
       <source>Save As...</source>
-      <translation>Tiết kiệm như ...</translation>
+      <translation>Lưu vào ...</translation>
     </message>
     <message>
       <location filename="../src/PlanView/PlanView.qml" line="1104" />
@@ -13305,7 +13400,7 @@ Nhấp vào 'OK' để tải lên kế hoạch.</translation>
     <message>
       <location filename="../src/UI/toolbar/PlanViewToolBar.qml" line="58" />
       <source>Exit Plan</source>
-      <translation>Kế hoạch thoát</translation>
+      <translation>Thoát</translation>
     </message>
     <message>
       <location filename="../src/UI/toolbar/PlanViewToolBar.qml" line="131" />
@@ -16278,17 +16373,17 @@ Xoay_none chỉ ra các điểm thành phần theo hướng bay.</translation>
     <message>
       <location filename="../src/UI/SettingsPagesModel.qml" line="24" />
       <source>Fly View</source>
-      <translation>Bay View</translation>
+      <translation>Fly View</translation>
     </message>
     <message>
       <location filename="../src/UI/SettingsPagesModel.qml" line="31" />
       <source>Plan View</source>
-      <translation>Kế hoạch xem</translation>
+      <translation>Plan View</translation>
     </message>
     <message>
       <location filename="../src/UI/SettingsPagesModel.qml" line="38" />
       <source>Video</source>
-      <translation>Băng hình</translation>
+      <translation>Ghi hình</translation>
     </message>
     <message>
       <location filename="../src/UI/SettingsPagesModel.qml" line="45" />
@@ -16485,7 +16580,7 @@ Xoay_none chỉ ra các điểm thành phần theo hướng bay.</translation>
     <message>
       <location filename="../src/PlanView/SimpleItemEditor.qml" line="77" />
       <source>Takeoff</source>
-      <translation>Cởi</translation>
+      <translation>Cất cánh</translation>
     </message>
     <message>
       <location filename="../src/PlanView/SimpleItemEditor.qml" line="78" />
@@ -16553,7 +16648,7 @@ Xoay_none chỉ ra các điểm thành phần theo hướng bay.</translation>
     <message>
       <location filename="../src/MissionManager/SimpleMissionItem.cc" line="386" />
       <source>Takeoff</source>
-      <translation>Cởi</translation>
+      <translation>Cất cánh</translation>
     </message>
     <message>
       <location filename="../src/MissionManager/SimpleMissionItem.cc" line="388" />
@@ -16940,7 +17035,7 @@ Xoay_none chỉ ra các điểm thành phần theo hướng bay.</translation>
     <message>
       <location filename="../src/MAVLink/SysStatusSensorInfo.cc" line="110" />
       <source>Disabled</source>
-      <translation>Tàn tật</translation>
+      <translation>Tắt</translation>
     </message>
   </context>
   <context>
@@ -17770,7 +17865,7 @@ Xoay_none chỉ ra các điểm thành phần theo hướng bay.</translation>
       <location filename="../src/Settings/UnitsSettings.cc" line="25" />
       <location filename="../src/Settings/UnitsSettings.cc" line="56" />
       <source>Feet</source>
-      <translation>Bàn chân</translation>
+      <translation>Feet</translation>
     </message>
     <message>
       <location filename="../src/Settings/UnitsSettings.cc" line="25" />
@@ -17826,7 +17921,7 @@ Xoay_none chỉ ra các điểm thành phần theo hướng bay.</translation>
     <message>
       <location filename="../src/Settings/UnitsSettings.cc" line="122" />
       <source>Knots</source>
-      <translation>Nút thắt</translation>
+      <translation>Knots</translation>
     </message>
     <message>
       <location filename="../src/Settings/UnitsSettings.cc" line="131" />
@@ -18276,6 +18371,14 @@ Xoay_none chỉ ra các điểm thành phần theo hướng bay.</translation>
       <location filename="../src/MAVLink/QGCMAVLink.cc" line="217" />
       <source>Unknown</source>
       <translation>Không xác định</translation>
+    </message>
+  </context>
+  <context>
+    <name>StandardModes</name>
+    <message>
+      <location filename="../src/Vehicle/StandardModes.cc" line="50" />
+      <source>Orbit</source>
+      <translation>Quỹ đạo</translation>
     </message>
   </context>
   <context>

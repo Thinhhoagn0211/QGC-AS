@@ -66,6 +66,7 @@
         <file alias="GripperRelease.svg">resources/GripperRelease.svg</file>
         <file alias="GripperGrab.svg">resources/GripperGrab.svg</file>
         <file alias="skyranger.ico">resources/icons/skyranger.ico</file>
+        <file alias="LogoSkyranger.svg">resources/icons/LogoSkyranger.svg</file>
         <file alias="home.svg">resources/home.svg</file>
         <file alias="time.svg">resources/time.svg</file>
         <file alias="TotalDistance.svg">resources/TotalDistance.svg</file>

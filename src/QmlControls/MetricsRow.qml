@@ -3,10 +3,10 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
 Row {
-    spacing: 10
+    spacing: 5
 
     Text {
-        text: label + ":"
+        text: label
         color: "white"
         font.pixelSize: 14
         width: 140
@@ -14,7 +14,7 @@ Row {
     }
 
     Text {
-        text: value
+        text: ": " + value
         color: "white"
         font.pixelSize: 14
     }

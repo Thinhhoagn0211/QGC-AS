@@ -52,7 +52,7 @@
         <extracomment>.QGC.MetaData.Facts[maxTilesForDownload].shortDesc, </extracomment>
         <location filename="../src/Settings/OfflineMaps.SettingsGroup.json" />
         <source>Maximum number of tiles for download.</source>
-        <translation>Số lượng gạch tối đa để tải xuống.</translation>
+        <translation>Số lượng tiles tối đa để tải xuống.</translation>
     </message>
 </context>
 <context>
@@ -85,7 +85,7 @@
         <extracomment>.QGC.MetaData.Facts[lockNoseUpCompass].shortDesc, </extracomment>
         <location filename="../src/Settings/FlyView.SettingsGroup.json" />
         <source>Lock Compass Nose-Up</source>
-        <translation>Khóa la bàn mũi lên</translation>
+        <translation>La bàn hướng lên trên</translation>
     </message>
     <message>
         <extracomment>.QGC.MetaData.Facts[keepMapCenteredOnVehicle].shortDesc, </extracomment>
@@ -97,7 +97,7 @@
         <extracomment>.QGC.MetaData.Facts[showSimpleCameraControl].shortDesc, </extracomment>
         <location filename="../src/Settings/FlyView.SettingsGroup.json" />
         <source>Show controls for camera triggering using MAV_CMD_DO_DIGICAM_CONTROL.</source>
-        <translation>Hiển thị các điều khiển để kích hoạt camera bằng MAV_CMD_DO_DIGICAM_CONTROL.</translation>
+        <translation>Hiển thị các điều khiển để kích hoạt camera bằng command MAV_CMD_DO_DIGICAM_CONTROL.</translation>
     </message>
     <message>
         <extracomment>.QGC.MetaData.Facts[showObstacleDistanceOverlay].shortDesc, </extracomment>
@@ -109,13 +109,13 @@
         <extracomment>.QGC.MetaData.Facts[maxGoToLocationDistance].shortDesc, </extracomment>
         <location filename="../src/Settings/FlyView.SettingsGroup.json" />
         <source>Maximum distance allowed for Go To Location.</source>
-        <translation>Khoảng cách tối đa cho phép đi đến vị trí.</translation>
+        <translation>Khoảng cách tối đa đi đến vị trí.</translation>
     </message>
     <message>
         <extracomment>.QGC.MetaData.Facts[updateHomePosition].shortDesc, </extracomment>
         <location filename="../src/Settings/FlyView.SettingsGroup.json" />
         <source>Send updated GCS' home position to autopilot in case of change of the home position</source>
-        <translation>Gửi vị trí nhà của GCS được cập nhật đến Autopilot trong trường hợp thay đổi vị trí nhà</translation>
+        <translation>Gửi vị trí ban đầu đã cập nhật của GCS tới chế độ lái tự động trong trường hợp vị trí ban đầu thay đổi</translation>
     </message>
     <message>
         <extracomment>.QGC.MetaData.Facts[instrumentQmlFile].shortDesc, </extracomment>
@@ -136,7 +136,7 @@
         <extracomment>.QGC.MetaData.Facts[offlineEditingFirmwareClass].shortDesc, </extracomment>
         <location filename="../src/Settings/App.SettingsGroup.json" />
         <source>Offline editing firmware class</source>
-        <translation>Lớp phần sụn chỉnh sửa ngoại tuyến</translation>
+        <translation>Lớp phần mềm chỉnh sửa ngoại tuyến</translation>
     </message>
     <message>
         <extracomment>.QGC.MetaData.Facts[offlineEditingFirmwareClass].enumStrings, </extracomment>
@@ -148,7 +148,7 @@
         <extracomment>.QGC.MetaData.Facts[offlineEditingVehicleClass].shortDesc, </extracomment>
         <location filename="../src/Settings/App.SettingsGroup.json" />
         <source>Offline editing vehicle class</source>
-        <translation>Lớp xe chỉnh sửa ngoại tuyến</translation>
+        <translation>Chỉnh sửa thiết bị ngoại tuyến</translation>
     </message>
     <message>
         <extracomment>.QGC.MetaData.Facts[offlineEditingVehicleClass].enumStrings, </extracomment>
@@ -346,7 +346,7 @@
         <extracomment>.QGC.MetaData.Facts[indoorPalette].enumStrings, </extracomment>
         <location filename="../src/Settings/App.SettingsGroup.json" />
         <source>Indoor,Outdoor</source>
-        <translation>Trong nhà, ngoài trời</translation>
+        <translation>Trong nhà, Ngoài trời</translation>
     </message>
     <message>
         <extracomment>.QGC.MetaData.Facts[savePath].shortDesc, </extracomment>
@@ -454,7 +454,7 @@
         <extracomment>.QGC.MetaData.Facts[followTarget].enumStrings, </extracomment>
         <location filename="../src/Settings/App.SettingsGroup.json" />
         <source>Never,Always,When in Follow Me Flight Mode</source>
-        <translation>Không bao giờ, luôn luôn, khi ở trong chế độ bay theo tôi</translation>
+        <translation>Không bao giờ, Luôn luôn, Khi ở trong chế độ bay Follow me</translation>
     </message>
     <message>
         <extracomment>.QGC.MetaData.Facts[qLocaleLanguage].shortDesc, </extracomment>

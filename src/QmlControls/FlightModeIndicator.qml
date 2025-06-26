@@ -24,6 +24,29 @@ RowLayout {
     property bool allowEditMode:    true
     property bool editMode:         false
 
+
+    function translateFlightMode(mode) {
+        switch(mode) {
+            case "Manual": return qsTr("Manual")
+            case "Altitude": return qsTr("Altitude")
+            case "Acro": return qsTr("Acro")
+            case "Stabilized": return qsTr("Stabilized")
+            case "AltHold": return qsTr("AltHold")
+            case "Position": return qsTr("Position")
+            case "Offboard": return qsTr("Offboard")
+            case "Hold": return qsTr("Hold")
+            case "Mission": return qsTr("Mission")
+            case "Return": return qsTr("Return")
+            case "Safe Recovery": return qsTr("Safe Recovery")
+            case "Position Slow": return qsTr("Position Slow")
+            case "Follow Target": return qsTr("Follow Target")
+            case "Precision Landing": return qsTr("Precision Landing")
+            // Thêm các mode khác nếu cần
+            default: return mode
+        }
+    }
+
+
     RowLayout {
         Layout.fillWidth: true
 
@@ -130,7 +153,7 @@ RowLayout {
 
                     QGCButton {
                         id:                 modeButton
-                        text:               modelData
+                        text:               translateFlightMode(modelData)
                         Layout.fillWidth:   true
 
                         onClicked: {

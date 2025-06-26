@@ -1,15 +1,19 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Pre-build step",
-            "type": "shell",
-            "command": "/opt/homebrew/bin/cmake --build /Users/hoangbaothinh/Desktop/Working/QGC-AS/build --config Debug --target all --",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build-qgroundcontrol",
+      "type": "process",
+      "command": "cmake",
+      "args": [
+        "--build",
+        "${workspaceFolder}/build/Desktop_Qt_6_8_3_MSVC2022_64bit-Debug"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
 }

@@ -150,7 +150,7 @@ QGCApplication::QGCApplication(int &argc, char *argv[], bool unitTesting, bool s
     setOrganizationDomain(QGC_ORG_DOMAIN);
     setApplicationVersion(QString(QGC_APP_VERSION_STR));
 #ifdef Q_OS_LINUX
-    setWindowIcon(QIcon(":/res/skyranger.ico"));
+    setWindowIcon(QIcon(":/res/LogoSkyranger.svg"));
 #endif
 
     // Set settings format

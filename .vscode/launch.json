@@ -5,17 +5,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "QGC-AS",
-            "type": "cppdbg",
+            "name": "QGroundControl Debug",
+            "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Debug/QGroundControl.app/Contents/MacOS/QGroundControl",
+            "program": "${workspaceFolder}/build/Desktop_Qt_6_8_3_MSVC2022_64bit-Debug/Debug/QGroundControl.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "lldb",
-            "preLaunchTask": "Pre-build step"
+            "environment": [
+                {
+                    "name": "PATH",
+                    "value": "C:/Qt/6.8.3/msvc2022_64/bin;${env:PATH}"
+                }
+            ],
+            "console": "internalConsole",
+            "preLaunchTask": "CMake: build",
+            "visualizerFile": "c:\\Users\\admin\\AppData\\Roaming\\Code\\User\\workspaceStorage\\e9878eff565bbc58bc0f6e7bd2e2540c\\tonka3000.qtvsctools\\qt.natvis.xml"
         }
     ]
 }

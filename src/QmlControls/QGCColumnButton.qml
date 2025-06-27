@@ -7,17 +7,19 @@ import QGroundControl.ScreenTools
 
 QGCButton {
     id:             control     //This is a button rework from DonLakeFlyer's QGCButton that allows to contain a text and an Icon with a column look and the same capabilites
+    property alias wrapMode:            textLabel.wrapMode
+    property alias horizontalAlignment: textLabel.horizontalAlignment
+    property alias backgroundColor:     backRect.color
+    property alias textColor:           textLabel.color
 
     background: Rectangle {
         id:             backRect
-        width:          control.width
+        width:          textLabel.implicitWidth * 1.1
         height:         control.height
         radius:         backRadius
         border.width:   showBorder ? 1 : 0
         border.color:   qgcPal.buttonText
-        color:          _showHighlight ?
-                            qgcPal.buttonHighlight :
-                            (primary ? qgcPal.primaryButton : qgcPal.button)
+        color:          control.backgroundColor
     }
 
     contentItem: Item {

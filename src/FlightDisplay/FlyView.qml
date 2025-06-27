@@ -91,7 +91,13 @@ Item {
         usePlannedHomePosition:     true
         planMasterController:       _planController
     }
-
+    
+    onVisibleChanged: {
+        if(visible) {
+            mapControl.zoomLevel = QGroundControl.flightMapZoom
+            mapControl.center    = QGroundControl.flightMapPosition
+        }
+    }
         
     Connections {
         target: _appSettings ? _appSettings.defaultMissionItemAltitude : null

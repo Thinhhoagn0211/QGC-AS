@@ -6864,6 +6864,19 @@ Bấm OK để bắt đầu quá trình tự động điều chỉnh.</translati
     </message>
   </context>
   <context>
+  <name>FlyView</name>
+  <message>
+      <location filename="../src/FlightDisplay/FlyView.qml" line="317" />
+      <source>Clear</source>
+      <translation>Xóa</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyView.qml" line="318" />
+      <source>Are you sure you want to remove all mission items and clear the mission from the vehicle?</source>
+      <translation>Bạn có chắc chắn muốn xóa tất cả các mục nhiệm vụ và xóa nhiệm vụ khỏi thiết bị không?</translation>
+    </message>
+  </context>
+  <context>
     <name>FlyViewAdditionalActionsButton</name>
     <message>
       <location filename="../src/FlightDisplay/FlyViewAdditionalActionsButton.qml" line="21" />
@@ -13271,7 +13284,7 @@ Nhấp vào 'OK' để tải lên kế hoạch.</translation>
       <translation>Thông thoáng</translation>
     </message>
     <message>
-      <location filename="../src/PlanView/PlanView.qml" line="900" />
+      <location filename="../src/PlanView/PlanView.qml" line="905" />
       <source>Are you sure you want to remove all mission items and clear the mission from the vehicle?</source>
       <translation>Bạn có chắc là bạn muốn loại bỏ tất cả các mặt hàng nhiệm vụ và xóa nhiệm vụ khỏi chiếc xe?</translation>
     </message>

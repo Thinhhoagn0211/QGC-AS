@@ -3424,7 +3424,7 @@
         <extracomment>.mavCmdInfo[MAV_CMD_NAV_TAKEOFF].friendlyName, </extracomment>
         <location filename="../src/MissionManager/MavCmdInfoCommon.json" />
         <source>Takeoff</source>
-        <translation>Cởi</translation>
+        <translation>Cất cánh</translation>
     </message>
     <message>
         <extracomment>.mavCmdInfo[MAV_CMD_NAV_TAKEOFF].description, </extracomment>

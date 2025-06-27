@@ -673,7 +673,7 @@ Item {
             break
         case actionConnect:
             // let overallStatusComponent = overallStatusOfflineIndicatorPage
-            mainWindow.showIndicatorDrawer(overallStatusOfflineIndicatorPage, actionData)
+            mainWindow.showIndicatorDrawer(overallStatusOfflineIndicatorPage, null)
             break;
         case actionPlan:
             // _activeVehicle.startPlan()

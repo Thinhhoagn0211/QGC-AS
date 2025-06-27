@@ -17,12 +17,24 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 20
 
-        Column {
+        ColumnLayout {
             spacing: 20
+            // anchors.horizontalCenter: parent.horizontalCenter
 
-            Row {
+            QGCButton {
+                text: qsTr("Bắt đầu bay - Chế độ tự động")
+                backgroundColor: "green"
+                onClicked: {
+                    if (_activeVehicle) {
+                        _guidedController.confirmAction(_guidedController.actionSetFlightMode, "TakeOff")
+                        _guidedController.confirmAction(_guidedController.actionSetFlightMode, "Mission")
+                    }
+                }
+            }
+
+            RowLayout {
                 id: quickActionsRow
-                anchors.horizontalCenter: parent.horizontalCenter
+                
                 spacing: 10
 
                 QGCButton {
@@ -44,10 +56,9 @@ Item {
                 }
             }
 
-            Column {
+            ColumnLayout {
                 id: metricsColumn
                 spacing: 8
-                anchors.horizontalCenter: parent.horizontalCenter
                 visible: _activeVehicle !== undefined
 
                 MetricsRow { label: "Số lượng GPS"; value: _activeVehicle ? _activeVehicle.gps.count.valueString : qsTr("N/A") }
@@ -57,11 +68,11 @@ Item {
                 MetricsRow { label: "Tốc độ mặt đất"; value: _activeVehicle ? _activeVehicle.groundSpeed.rawValue.toFixed(1) + " m/s" : qsTr("--.--") }
                 MetricsRow { label: "Tốc độ gió"; value: _activeVehicle ? _activeVehicle.windSpeed.value + " m/s" : qsTr("--.--") }                
                 MetricsRow { label: "Độ cao tương đối"; value: _activeVehicle ? _activeVehicle.altitudeRelative.value.toFixed(1) + "m" : qsTr("--.--") }
-                MetricsRow { label: "Dung lượng pin"; value: _activeVehicle.batteries.get(0).percentRemaining.rawValue.toFixed(1) + "%" }
-                MetricsRow { label: "Thời gian còn lại"; value: _activeVehicle.batteries.get(0).timeRemaining.rawValue ? 
+                MetricsRow { label: "Dung lượng pin"; value: (_activeVehicle && _activeVehicle.batteries) ? _activeVehicle.batteries.get(0).percentRemaining.rawValue.toFixed(1) + "%" : qsTr("N/A") }
+                MetricsRow { label: "Thời gian còn lại"; value: (_activeVehicle && _activeVehicle.batteries) ? 
                     _activeVehicle.batteries.get(0).timeRemaining.rawValue.toFixed(1) + " phút" : qsTr("N/A") }
-                MetricsRow { label: "Điện áp máy bay"; value: _activeVehicle.batteries.get(0).voltage.value + " V" }
-                MetricsRow { label: "Dòng xả"; value: _activeVehicle.batteries.get(0).current.value + " A" }
+                MetricsRow { label: "Điện áp máy bay"; value: (_activeVehicle && _activeVehicle.batteries) ? _activeVehicle.batteries.get(0).voltage.value + " V" : qsTr("N/A") }
+                MetricsRow { label: "Dòng xả";  value: (_activeVehicle && _activeVehicle.batteries) ? _activeVehicle.batteries.get(0).current.value + " A" : qsTr("N/A") }
 
             }
         }

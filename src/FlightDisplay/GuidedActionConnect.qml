@@ -13,6 +13,6 @@ GuidedToolStripAction {
     text:       _guidedController.connectTitle
     iconSource: "/res/connect.svg"
     visible:    true
-    actionData: connectButton
+    // actionData: connectButton
     actionID:   _guidedController.actionConnect
 }

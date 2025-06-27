@@ -101,6 +101,7 @@ Item {
             height: 600
             color: Qt.rgba(0, 0, 0, 0.5)
             radius: 0
+            visible: _activeVehicle 
 
             // Container cho 2 button đặt ngang
             RowLayout {
@@ -188,6 +189,7 @@ Item {
             height: Math.min(vehicleMessageList.height + 20, 200)
             color: Qt.rgba(0, 0, 0, 0.5)
             radius: 0
+            visible: _activeVehicle
 
             VehicleMessageList { 
                 id: vehicleMessageList
@@ -215,8 +217,9 @@ Item {
     Column {
         id:                 infoBadgeContainer
         anchors.bottom: bottomRightRowLayout.top
-        anchors.bottomMargin: 10
+        anchors.bottomMargin: 20
         anchors.right:      parent.right
+        visible:            _activeVehicle 
         spacing:            8
         Repeater {
             model: _activeVehicle
@@ -263,6 +266,7 @@ Item {
         anchors.bottom:     parent.bottom
         anchors.right:      parent.right
         spacing:            _layoutSpacing
+        visible:            _activeVehicle 
 
         property real bottomEdgeRightInset:     height + _layoutMargin
         property real bottomEdgeCenterInset:    bottomEdgeRightInset

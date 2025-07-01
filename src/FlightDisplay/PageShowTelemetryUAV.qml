@@ -39,7 +39,7 @@ Item {
                     backgroundColor: "darkblue"
                     onClicked: {
                         _guidedController.closeAll()
-                        _guidedController.confirmAction(_guidedController.actionSetFlightMode, "Safe Recovery")
+                        _guidedController.confirmAction(_guidedController.actionSetFlightMode, "Return")
                     }
                 }
 

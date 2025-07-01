@@ -48,6 +48,9 @@ Button {
             dropPanel.hide()
             if (!toolStripAction.dropPanelComponent) {
                 toolStripAction.triggered(this)
+                if (toolStripAction.objectName === "connectAction") {
+                    mainWindow.showToolbarDrawer(overallStatusOfflineIndicatorPage, this)
+                }
             } else if (checked) {
                 var panelEdgeTopPoint = mapToItem(_root, width, 0)
                 dropPanel.show(panelEdgeTopPoint, toolStripAction.dropPanelComponent, this)
@@ -57,6 +60,12 @@ Button {
         } else if (checkable) {
             checked = !checked
         }
+    }
+
+    Component {
+        id: overallStatusOfflineIndicatorPage
+
+        MainStatusIndicatorOfflinePage { }
     }
 
     QGCPalette { id: qgcPal; colorGroupEnabled: control.enabled }

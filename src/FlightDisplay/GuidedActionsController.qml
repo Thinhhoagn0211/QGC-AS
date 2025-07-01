@@ -380,11 +380,6 @@ Item {
         function onResumeMissionUploadFail() { confirmAction(actionResumeMissionUploadFail) }
     }
 
-    Component {
-        id: overallStatusOfflineIndicatorPage
-
-        MainStatusIndicatorOfflinePage { }
-    }
 
     Connections {
         target:                             mainWindow
@@ -652,6 +647,7 @@ Item {
         var selectedVehicles;
         switch (actionCode) {
         case actionRTL:
+            console.log("executeAction actionRTL", optionChecked)
             _activeVehicle.guidedModeRTL(optionChecked)
             break
         case actionLand:
@@ -673,7 +669,7 @@ Item {
             break
         case actionConnect:
             // let overallStatusComponent = overallStatusOfflineIndicatorPage
-            mainWindow.showIndicatorDrawer(overallStatusOfflineIndicatorPage, null)
+            // mainWindow.showIndicatorDrawer(overallStatusOfflineIndicatorPage, null)
             break;
         case actionPlan:
             // _activeVehicle.startPlan()

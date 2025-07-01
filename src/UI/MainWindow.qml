@@ -649,8 +649,18 @@ ApplicationWindow {
         indicatorDrawer.open()
     }
 
+    function showToolbarDrawer(drawerComponent, toolbarItem) {
+        toolbarDrawer.sourceComponent = drawerComponent
+        toolbarDrawer.toolbarItem = toolbarItem
+        toolbarDrawer.open()
+    }
+
     function closeIndicatorDrawer() {
         indicatorDrawer.close()
+    }
+
+    function closeToolbarDrawer() {
+        toolbarDrawer.close()
     }
 
     Popup {
@@ -681,6 +691,8 @@ ApplicationWindow {
                 return _margins
             }
         }
+
+        
 
         onOpened: {
             _expanded                               = false;
@@ -744,6 +756,113 @@ ApplicationWindow {
                     target:     indicatorDrawerLoader.item
                     property:   "drawer"
                     value:      indicatorDrawer
+                }
+            }
+        }
+    }
+
+
+    Popup {
+        id:             toolbarDrawer
+        x:              calcXPosition()
+        y:              calcYPosition()
+        leftInset:      0
+        rightInset:     0
+        topInset:       0
+        bottomInset:    0
+        padding:        _margins * 2
+        visible:        false
+        modal:          true
+        focus:          true
+        closePolicy:    Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        property var sourceComponent
+        property var toolbarItem
+
+        property bool _expanded:    false
+        property real _margins:     ScreenTools.defaultFontPixelHeight / 4
+
+        function calcXPosition() {
+            if (toolbarItem) {
+                return toolbarItem.mapToItem(mainWindow.contentItem, toolbarItem.width, 0).x + toolbarItem.padding + _margins
+            } else {
+                return _margins
+            }
+        }
+
+        function calcYPosition() {
+            if (toolbarItem) {
+                var yCenter = toolbarItem.mapToItem(mainWindow.contentItem, 0, toolbarItem.height / 2).y
+                return Math.max(_margins, Math.min(yCenter - (contentItem.implicitHeight / 2), mainWindow.contentItem.height - contentItem.implicitHeight - _margins - (toolbarItem.padding * 2) - (ScreenTools.defaultFontPixelHeight / 2)))
+            } else {
+                return _margins
+            }
+        }
+
+        
+
+        onOpened: {
+            _expanded                               = false;
+            toolbarDrawerLoader.sourceComponent   = toolbarDrawer.sourceComponent
+        }
+        onClosed: {
+            _expanded                               = false
+            toolbarItem                           = undefined
+            toolbarDrawerLoader.sourceComponent   = undefined
+        }
+
+        background: Item {
+            Rectangle {
+                id:             backgroundToolbarRect
+                anchors.fill:   parent
+                color:          QGroundControl.globalPalette.window
+                radius:         toolbarDrawer._margins
+                opacity:        0.85
+            }
+
+            Rectangle {
+                anchors.horizontalCenter:   backgroundToolbarRect.right
+                anchors.verticalCenter:     backgroundToolbarRect.top
+                width:                      ScreenTools.largeFontPixelHeight
+                height:                     width
+                radius:                     width / 2
+                color:                      QGroundControl.globalPalette.button
+                border.color:               QGroundControl.globalPalette.buttonText
+                visible:                    toolbarDrawerLoader.item && toolbarDrawerLoader.item.showExpand && !toolbarDrawer._expanded
+
+                QGCLabel {
+                    anchors.centerIn:   parent
+                    text:               ">"
+                    color:              QGroundControl.globalPalette.buttonText
+                }
+
+                QGCMouseArea {
+                    fillItem: parent
+                    onClicked: toolbarDrawer._expanded = true
+                }
+            }
+        }
+
+        contentItem: QGCFlickable {
+            id:             toolbarDrawerLoaderFlickable
+            implicitWidth:  Math.min(mainWindow.contentItem.width - (2 * toolbarDrawer._margins) - (toolbarDrawer.padding * 2), toolbarDrawerLoader.width)
+            implicitHeight: Math.min(mainWindow.contentItem.height - ScreenTools.toolbarHeight - (2 * toolbarDrawer._margins) - (toolbarDrawer.padding * 2), toolbarDrawerLoader.height)
+            contentWidth:   toolbarDrawerLoader.width
+            contentHeight:  toolbarDrawerLoader.height
+
+            Loader {
+                id: toolbarDrawerLoader
+
+                Binding {
+                    target:     toolbarDrawerLoader.item
+                    property:   "expanded"
+                    value:      toolbarDrawer._expanded
+                }
+
+                Binding {
+                    target:     toolbarDrawerLoader.item
+                    property:   "drawer"
+                    value:      toolbarDrawer
                 }
             }
         }

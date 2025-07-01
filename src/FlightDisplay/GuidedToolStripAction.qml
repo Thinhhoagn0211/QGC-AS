@@ -14,7 +14,7 @@ ToolStripAction {
     property string message
     property string actionData
     property var _guidedController: globals.guidedControllerFlyView
-
+    property string objectName
 
 
     onTriggered: {

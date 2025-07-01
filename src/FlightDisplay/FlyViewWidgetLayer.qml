@@ -98,12 +98,11 @@ Item {
         Rectangle {
             id: backgroundRect
             width: 300
-            height: 600
+            height: 550
             color: Qt.rgba(0, 0, 0, 0.5)
             radius: 0
-            visible: _activeVehicle 
+            visible: _activeVehicle
 
-            // Container cho 2 button đặt ngang
             RowLayout {
                 id: buttonRow
                 anchors.top: parent.top
@@ -115,7 +114,7 @@ Item {
                 
                 QGCButton {
                     id: topRightPanelButton
-                    text: qsTr("Chức năng")
+                    text: qsTr("Function")
                     backgroundColor:  selectedButton === 1 ? "#a2a200" : "gray"
                     textColor: "white"
                     primary: {
@@ -139,7 +138,7 @@ Item {
 
                 QGCButton {
                     id: topRightPanelCloseButton
-                    text: qsTr("Kế Hoạch Bay")
+                    text: qsTr("Plan flight")
                     backgroundColor:  selectedButton === 2 ? "#a2a200" : "gray"
                     textColor: "white"
                     primary: {
@@ -173,8 +172,9 @@ Item {
 
             Loader {
             id: pageLoader
-            anchors.fill: parent
-            anchors.topMargin: 60
+            anchors.top: divider.bottom
+            anchors.topMargin: 10
+            anchors.horizontalCenter: parent.horizontalCenter
             sourceComponent: pageShowTelemetryUAV 
         }
 
@@ -201,7 +201,6 @@ Item {
     Component {
         id: pageShowTelemetryUAV
         PageShowTelemetryUAV {
-            anchors.fill: parent
         }
     }
 
@@ -210,7 +209,6 @@ Item {
         PageShowPlanFlightUAV {
             mapControl:         _root.mapControl
             planMasterController: _planMasterController
-            anchors.fill: parent
         }
     }
 
@@ -230,21 +228,21 @@ Item {
                 InfoBadge {
                     color: "#f39c12"
                     iconSource: "/res/time.svg"
-                    title: "Thời gian"
+                    title: qsTr("Time Elapsed")
                     value: (_activeVehicle && _activeVehicle.flightTime.valueString) ? _activeVehicle.flightTime.valueString : "00:00:00"
                 }
 
                 InfoBadge {
                     color: "#2980b9"
                     iconSource: "/res/home.svg"
-                    title: "Nhà"
+                    title: qsTr("Home Distance")
                     value: (_activeVehicle && _activeVehicle.distanceToHome) ? _activeVehicle.distanceToHome.rawValue.toFixed(1) + "m" : qsTr("--.--")
                 }
 
                 InfoBadge {
                     color: "#27ae60"
                     iconSource: "/res/TotalDistance.svg"
-                    title: "Tổng"
+                    title: qsTr("Total Distance")
                     value: (_activeVehicle && _activeVehicle.flightDistance) ? _activeVehicle.flightDistance.rawValue.toFixed(1) + "m" : "0 m"
                 }
 

@@ -5274,6 +5274,170 @@ Bấm OK để bắt đầu quá trình tự động điều chỉnh.</translati
     </message>
   </context>
   <context>
+    <name>PageShowPlanFlightUAV</name>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowPlanFlightUAV.qml" line="162" />
+      <source>Upload</source>
+      <translation>Tải lên</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowPlanFlightUAV.qml" line="162" />
+      <source>Open file</source>
+      <translation>Mở file</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowPlanFlightUAV.qml" line="162" />
+      <source>Save</source>
+      <translation>Lưu file</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowPlanFlightUAV.qml" line="162" />
+      <source>Download</source>
+      <translation>Tải xuống</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowPlanFlightUAV.qml" line="162" />
+      <source>Delete</source>
+      <translation>Xóa</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowPlanFlightUAV.qml" line="162" />
+      <source>General settings:</source>
+      <translation>Cài đặt chung:</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowPlanFlightUAV.qml" line="162" />
+      <source>Takeoff altitude:</source>
+      <translation>Độ cao cất cánh:</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowPlanFlightUAV.qml" line="162" />
+      <source>Enter takeoff altitude</source>
+      <translation>Nhập độ cao cất cánh</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowPlanFlightUAV.qml" line="162" />
+      <source>Landing altitude:</source>
+      <translation>Độ cao hạ cánh</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowPlanFlightUAV.qml" line="162" />
+      <source>Enter landing altitude</source>
+      <translation>Nhập độ cao hạ cánh</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowPlanFlightUAV.qml" line="162" />
+      <source>Create takeoff point</source>
+      <translation>Tạo thêm điểm cất cánh</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowPlanFlightUAV.qml" line="162" />
+      <source>Create landing point</source>
+      <translation>Tạo thêm điểm hạ cánh</translation>
+    </message>
+  </context>
+  <context>
+    <name>PageShowTelemetryUAV</name>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowTelemetryUAV.qml" line="162" />
+      <source>Start flying - Automatic mode</source>
+      <translation>Bắt đầu bay - Chế độ tự động</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowTelemetryUAV.qml" line="162" />
+      <source>Return to home</source>
+      <translation>Trở về nhà</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowTelemetryUAV.qml" line="162" />
+      <source>Land</source>
+      <translation>Hạ cánh khẩn cấp</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowTelemetryUAV.qml" line="162" />
+      <source>GPS numbers</source>
+      <translation>Số lượng GPS</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowTelemetryUAV.qml" line="62" />
+      <source>Latitude</source>
+      <translation>Latitude</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowTelemetryUAV.qml" line="63" />
+      <source>Longitude</source>
+      <translation>Longitude</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowTelemetryUAV.qml" line="64" />
+      <source>Vehicle speed</source>
+      <translation>Tốc độ máy bay</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowTelemetryUAV.qml" line="65" />
+      <source>Ground speed</source>
+      <translation>Tốc độ mặt đất</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowTelemetryUAV.qml" line="66" />
+      <source>Wind speed</source>
+      <translation>Tốc độ gió</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowTelemetryUAV.qml" line="67" />
+      <source>Relative height</source>
+      <translation>Độ cao tương đối</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowTelemetryUAV.qml" line="68" />
+      <source>Battery capacity</source>
+      <translation>Dung lượng pin</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowTelemetryUAV.qml" line="69" />
+      <source>Time remaining</source>
+      <translation>Thời gian còn lại</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowTelemetryUAV.qml" line="70" />
+      <source>Voltage</source>
+      <translation>Điện áp máy bay</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/PageShowTelemetryUAV.qml" line="71" />
+      <source>Current</source>
+      <translation>Dòng</translation>
+    </message>
+  </context>
+  <context>
+    <name>FlyViewWidgetLayer</name>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewWidgetLayer.qml" line="36" />
+      <source>Function</source>
+      <translation>Tính năng</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewWidgetLayer.qml" line="36" />
+      <source>Plan flight</source>
+      <translation>Kế hoạch bay</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewWidgetLayer.qml" line="36" />
+      <source>Time Elapsed</source>
+      <translation>Thời gian</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewWidgetLayer.qml" line="36" />
+      <source>Home Distance</source>
+      <translation>Nhà</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewWidgetLayer.qml" line="36" />
+      <source>Total Distance</source>
+      <translation>Tổng</translation>
+    </message>
+    </context>
+  <context>
     <name>CenterMapDropButton</name>
     <message>
       <location filename="../src/FlightMap/Widgets/CenterMapDropButton.qml" line="162" />

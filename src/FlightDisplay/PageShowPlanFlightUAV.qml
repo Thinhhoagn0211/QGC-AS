@@ -20,7 +20,6 @@ import QGroundControl.UTMSP
 
 Item {
     id: _root
-    anchors.fill: parent
 
     property var mapControl
     property var _mapControl:            mapControl
@@ -31,8 +30,6 @@ Item {
         width: childrenRect.width
         height: childrenRect.height
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: 20
 
 
         ColumnLayout {
@@ -41,19 +38,19 @@ Item {
             RowLayout {
                 spacing: 10
 
-                QGCColumnButton {
+                QGCButtonMission {
                     id: uploadButton
-                    text: qsTr("Tải lên")
+                    text: qsTr("Upload")
                     pointSize:         ScreenTools.smallFontPointSize
                     implicitWidth: ScreenTools.implicitButtonWidth
                     implicitHeight: ScreenTools.implicitButtonHeight
                     backgroundColor: "green"
                     onClicked: {
-                        // if (planMasterController._utmspEnabled) {
-                        //     QGroundControl.utmspManager.utmspVehicle.triggerActivationStatusBar(true);
-                        //     UTMSPStateStorage.removeFlightPlanState = true
-                        //     UTMSPStateStorage.indicatorDisplayStatus = true
-                        // }
+                        if (planMasterController._utmspEnabled) {
+                            QGroundControl.utmspManager.utmspVehicle.triggerActivationStatusBar(true);
+                            UTMSPStateStorage.removeFlightPlanState = true
+                            UTMSPStateStorage.indicatorDisplayStatus = true
+                        }
                         planMasterController.upload();
                     }
                     PropertyAnimation on opacity {
@@ -67,9 +64,9 @@ Item {
                     }
                 }
 
-                QGCColumnButton {
+                QGCButtonMission {
                     id: openFileButton
-                    text: qsTr("Mở file")
+                    text: qsTr("Open file")
                     visible: true
                     pointSize:         ScreenTools.smallFontPointSize
                     implicitWidth: ScreenTools.implicitButtonWidth
@@ -87,9 +84,9 @@ Item {
                     }
                 }
 
-                QGCColumnButton {
+                QGCButtonMission {
                     id: saveFileButton
-                    text: qsTr("Lưu file")
+                    text: qsTr("Save")
                     pointSize:         ScreenTools.smallFontPointSize
                     implicitWidth: ScreenTools.implicitButtonWidth
                     implicitHeight: ScreenTools.implicitButtonHeight
@@ -100,9 +97,9 @@ Item {
                     }
                 }
 
-                QGCColumnButton {
+                QGCButtonMission {
                     id: downloadButton
-                    text: qsTr("Tải xuống")
+                    text: qsTr("Download")
                     pointSize:         ScreenTools.smallFontPointSize
                     implicitWidth: ScreenTools.implicitButtonWidth
                     implicitHeight: ScreenTools.implicitButtonHeight
@@ -113,9 +110,9 @@ Item {
                     }
                 }
 
-                QGCColumnButton {
+                QGCButtonMission {
                     id: deleteButton
-                    text: qsTr("Xóa")
+                    text: qsTr("Delete")
                     pointSize:         ScreenTools.smallFontPointSize
                     implicitWidth: ScreenTools.implicitButtonWidth
                     implicitHeight: ScreenTools.implicitButtonHeight
@@ -143,7 +140,7 @@ Item {
                     spacing: 5
 
                     Text {
-                        text: qsTr("Cài đặt chung:")
+                        text: qsTr("General settings:")
                         font.bold: true
                         font.pointSize: ScreenTools.defaultFontPointSize * 1.2
                         color: "white"
@@ -159,14 +156,14 @@ Item {
 
                         // Row 1
                         Text {
-                            text: qsTr("Độ cao cất cánh:")
+                            text: qsTr("Takeoff altitude:")
                             font.pixelSize: ScreenTools.defaultFontPointSize * 1.2
                             color: "white"
                         }
 
                         QGCTextField {
                             id: takeoffAltitudeField
-                            placeholderText: qsTr("Nhập độ cao cất cánh")
+                            placeholderText: qsTr("Enter takeoff altitude")
                             width: 150
                             text: "100.0"
                             color: "transparent"
@@ -175,14 +172,14 @@ Item {
 
                         // Row 2
                         Text {
-                            text: qsTr("Độ cao hạ cánh:")
+                            text: qsTr("Landing altitude:")
                             font.pixelSize: ScreenTools.defaultFontPointSize * 1.2
                             color: "white"
                         }
 
                         QGCTextField {
                             id: landingAltitudeField
-                            placeholderText: qsTr("Nhập độ cao hạ cánh")
+                            placeholderText: qsTr("Enter landing altitude")
                             width: 150
                             color: "transparent"
                             // textColor: "white"
@@ -192,12 +189,12 @@ Item {
 
                     QGCCheckBox {
                         id: takeoffCheckBox
-                        text: qsTr("Tạo thêm điểm cất cánh")
+                        text: qsTr("Create takeoff point")
                     }
 
                     QGCCheckBox {
                         id: landingCheckBox
-                        text: qsTr("Tạo thêm điểm hạ cánh")
+                        text: qsTr("Create landing point")
                     }
                 }   
             }

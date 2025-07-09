@@ -26,14 +26,16 @@ Item {
     property real   stickPositionX:         _centerXY
     property real   stickPositionY:         !yAxisReCenter ? height : height / 2
     property bool   alredyCreated:          false
-    
+    signal stickMoved()
     QGCMapPalette { id: mapPal }
 
     onStickPositionXChanged:            calculateXAxis()
     onStickPositionYChanged:            calculateYAxis()
     onYAxisPositiveRangeOnlyChanged:    calculateYAxis()
     onYAxisReCenterChanged:             yAxisReCentered()     
-    
+    onXAxisChanged: stickMoved()
+    onYAxisChanged: stickMoved()
+
     function yAxisReCentered() {
         if( yAxisReCenter ) {
             yAxis = yAxisPositiveRangeOnly ? 0.5 : 0
@@ -260,4 +262,5 @@ Item {
         onPressed:              touchPoints => _joyRoot.thumbDown(touchPoints)
         onReleased:             _joyRoot.reCenter()
     }
+
 }

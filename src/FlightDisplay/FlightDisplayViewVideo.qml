@@ -29,6 +29,8 @@ Item {
     property double _ar:                QGroundControl.videoManager.gstreamerEnabled
                                             ? QGroundControl.videoManager.videoSize.width / QGroundControl.videoManager.videoSize.height
                                             : QGroundControl.videoManager.aspectRatio
+    // property var    parentToolInsets
+    // property var    totalToolInsets:        _totalToolInsets
     property bool   _showGrid:          QGroundControl.settingsManager.videoSettings.gridLines.rawValue
     property var    _dynamicCameras:    globals.activeVehicle ? globals.activeVehicle.cameraManager : null
     property bool   _connected:         globals.activeVehicle ? !globals.activeVehicle.communicationLost : false
@@ -172,6 +174,7 @@ Item {
 
             property bool videoDisabled: QGroundControl.settingsManager.videoSettings.videoSource.rawValue === QGroundControl.settingsManager.videoSettings.disabledVideoSource
         }
+
 
         //-- Thermal Image
         Item {

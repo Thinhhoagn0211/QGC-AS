@@ -301,6 +301,7 @@ Item {
         utmspSliderTrigger:         utmspActTrigger
     }
 
+    
     //-- Virtual Joystick
     Loader {
         id:                         virtualJoystickMultiTouch

@@ -40,7 +40,7 @@ Rectangle {
     property bool   _photoCaptureSingleIdle:    _camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_IDLE
     property bool   _photoCaptureIntervalIdle:  _camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_INTERVAL_IDLE
     property bool   _photoCaptureIdle:          _photoCaptureSingleIdle || _photoCaptureIntervalIdle
-
+    property var gimbalController:           _activeVehicle.gimbalController
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
     DeadMouseArea { anchors.fill: parent }
@@ -55,7 +55,7 @@ Rectangle {
         ColumnLayout {
             Layout.fillHeight:  true
             spacing:            _margins
-            visible:            _camera.hasZoom
+            visible:            true
 
             QGCLabel {
                 Layout.alignment:   Qt.AlignHCenter
@@ -64,14 +64,22 @@ Rectangle {
             }
 
             QGCSlider {
+                id: control
                 Layout.alignment:   Qt.AlignHCenter
                 Layout.fillHeight:  true
                 orientation:        Qt.Vertical
                 to:                 100
                 from:               0
-                value:              _camera.zoomLevel
-                live:               true
-                onValueChanged:     _camera.zoomLevel = value
+                live:               false
+                value:              gimbalController.zoomLevel
+
+                onPressedChanged: {
+                    if (!pressed) {
+                        gimbalController.zoomLevel = value
+                        console.log("Zoom level set to: " + value);
+                    }
+                }
+
             }
         }
         

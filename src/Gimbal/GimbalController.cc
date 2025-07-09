@@ -69,7 +69,7 @@ void GimbalController::_mavlinkMessageReceived(const mavlink_message_t &message)
         _handleGimbalManagerStatus(message);
         break;
     case MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS:
-        _handleGimbalDeviceAttitudeStatus(message);
+           _handleGimbalDeviceAttitudeStatus(message);
         break;
     default:
         break;
@@ -418,6 +418,28 @@ void GimbalController::gimbalYawStop()
 
     activeGimbal()->setYawRate(0.0f);
     sendRate();
+}
+
+void GimbalController::setZoomLevel(qreal level)
+{
+    // Clamp between 0–100
+    level = std::clamp(level, 0.0, 100.0);
+
+    if (qFuzzyCompare(_zoomLevel, level))
+        return; // No change
+
+    _zoomLevel = level;
+    emit zoomLevelChanged();
+
+    if (_vehicle) {
+        _vehicle->sendMavCommand(
+            100,                             // Target component
+            MAV_CMD_SET_CAMERA_ZOOM,         // Command ID
+            false,                            // ShowError
+            ZOOM_TYPE_RANGE,                 // Zoom type
+            static_cast<float>(level),
+            0, 0, 0, 0, 0);                  // Unused params
+    }
 }
 
 void GimbalController::centerGimbal()

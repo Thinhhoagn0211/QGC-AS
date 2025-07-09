@@ -57,6 +57,20 @@ Item {
     property bool utmspActTrigger
 
 
+    FlyViewTopRightColumnLayout {
+        id:                 topRightColumnLayout
+        anchors.margins:    _layoutMargin
+        anchors.top:        parent.top
+        anchors.bottom:     bottomRightRowLayout.top
+        anchors.right:      parent.right
+        spacing:            _layoutSpacing
+        visible:           !topRightPanel.visible
+
+        property real topEdgeRightInset:    childrenRect.height + _layoutMargin
+        property real rightEdgeTopInset:    width + _layoutMargin
+        property real rightEdgeCenterInset: rightEdgeTopInset
+    }
+
     QGCToolInsets {
         id:                     _totalToolInsets
         leftEdgeTopInset:       toolStrip.leftEdgeTopInset

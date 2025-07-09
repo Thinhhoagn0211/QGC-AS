@@ -68,6 +68,7 @@ qt_add_qml_module(FlightDisplayModule
         TerrainProgress.qml
         VehicleWarnings.qml
         VirtualJoystick.qml
+        VirtualCameraJoystick.qml
         PageShowTelemetryUAV.qml
         PageShowPlanFlightUAV.qml
         InfoBadge.qml

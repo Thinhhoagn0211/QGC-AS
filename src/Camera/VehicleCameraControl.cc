@@ -530,9 +530,10 @@ VehicleCameraControl::setZoomLevel(qreal level)
             _vehicle->sendMavCommand(
                 _compID,                                // Target component
                 MAV_CMD_SET_CAMERA_ZOOM,                // Command id
-                false,                                  // ShowError
+                true,                                  // ShowError
                 ZOOM_TYPE_RANGE,                        // Zoom type
-                static_cast<float>(level));             // Level
+                static_cast<float>(level),
+            0,0,0,0,0);             // Level
         }
     }
 }

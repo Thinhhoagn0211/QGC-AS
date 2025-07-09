@@ -75,7 +75,7 @@ public:
     qreal               focalLength                 () override { return qQNaN(); }
     QSizeF              sensorSize                  () override { return QSizeF(qQNaN(), qQNaN()); }
     QSize               resolution                  () override { return QSize(0, 0); }
-    bool                hasZoom                     () override { return false; }
+    bool                hasZoom                     () override { return true; }
     bool                hasFocus                    () override { return false; }
     bool                hasTracking                 () override { return false; }
     int                 compID                      () override { return 0; }

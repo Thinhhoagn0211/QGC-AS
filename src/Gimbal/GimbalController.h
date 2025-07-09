@@ -26,6 +26,7 @@ class GimbalController : public QObject
     Q_MOC_INCLUDE("QmlObjectListModel.h")
     Q_PROPERTY(Gimbal *activeGimbal READ activeGimbal WRITE setActiveGimbal NOTIFY activeGimbalChanged)
     Q_PROPERTY(QmlObjectListModel *gimbals READ gimbals CONSTANT)
+    Q_PROPERTY(qreal                zoomLevel               READ zoomLevel              WRITE  setZoomLevel         NOTIFY zoomLevelChanged)
 
 public:
     GimbalController(Vehicle *vehicle);
@@ -33,8 +34,10 @@ public:
 
     Gimbal *activeGimbal() const { return _activeGimbal; }
     QmlObjectListModel *gimbals() const { return _gimbals; }
-
+    
     void setActiveGimbal(Gimbal *gimbal);
+    qreal zoomLevel() const { return _zoomLevel; }
+    void setZoomLevel(qreal level);
 
     void sendPitchYawFlags(uint32_t flags);
     Q_INVOKABLE void gimbalOnScreenControl(float panpct, float tiltpct, bool clickAndPoint, bool clickAndDrag, bool rateControl, bool retract = false, bool neutral = false, bool yawlock = false);
@@ -49,6 +52,7 @@ public:
 signals:
     void activeGimbalChanged();
     void showAcquireGimbalControlPopup(); // This triggers a popup in QML asking the user for aproval to take control
+    void zoomLevelChanged();
 
 public slots:
     // These slots are conected with joysticks for button control
@@ -92,6 +96,7 @@ private:
         uint8_t deviceId = 0;
     };
 
+    qreal _zoomLevel = 0.0;
     void _requestGimbalInformation(uint8_t compid);
     void _handleHeartbeat(const mavlink_message_t &message);
     void _handleGimbalManagerInformation(const mavlink_message_t &message);

@@ -46,6 +46,8 @@ qt_add_qml_module(FlightDisplayModule
         GuidedActionPlan.qml
         GuidedActionZoomIn.qml
         GuidedActionZoomOut.qml
+        GuidedActionGimbal.qml
+        GuidedActionPhotoVideo.qml
         MultiRotorChecklist.qml
         MultiVehicleList.qml
         ObstacleDistanceOverlay.qml
@@ -68,7 +70,6 @@ qt_add_qml_module(FlightDisplayModule
         TerrainProgress.qml
         VehicleWarnings.qml
         VirtualJoystick.qml
-        VirtualCameraJoystick.qml
         PageShowTelemetryUAV.qml
         PageShowPlanFlightUAV.qml
         InfoBadge.qml

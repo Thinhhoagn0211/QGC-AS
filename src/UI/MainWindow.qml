@@ -655,12 +655,22 @@ ApplicationWindow {
         toolbarDrawer.open()
     }
 
+    function showToolbarCameraDrawer(drawerComponent, toolbarItem) {
+        toolbarCameraDrawer.sourceComponent = drawerComponent
+        toolbarCameraDrawer.toolbarItem = toolbarItem
+        toolbarCameraDrawer.open()
+    }
+
     function closeIndicatorDrawer() {
         indicatorDrawer.close()
     }
 
     function closeToolbarDrawer() {
         toolbarDrawer.close()
+    }
+
+    function closeToolbarCameraDrawer() {
+        toolbarCameraDrawer.close()
     }
 
     Popup {
@@ -772,7 +782,7 @@ ApplicationWindow {
         bottomInset:    0
         padding:        _margins * 2
         visible:        false
-        modal:          true
+        modal:          false
         focus:          true
         closePolicy:    Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
@@ -863,6 +873,112 @@ ApplicationWindow {
                     target:     toolbarDrawerLoader.item
                     property:   "drawer"
                     value:      toolbarDrawer
+                }
+            }
+        }
+    }
+
+    Popup {
+        id:             toolbarCameraDrawer
+        x:              calcXPosition()
+        y:              calcYPosition()
+        leftInset:      0
+        rightInset:     0
+        topInset:       0
+        bottomInset:    0
+        padding:        _margins * 2
+        visible:        false
+        modal:          false
+        focus:          true
+        closePolicy:    Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        property var sourceComponent
+        property var toolbarItem
+
+        property bool _expanded:    false
+        property real _margins:     ScreenTools.defaultFontPixelHeight / 4
+
+        function calcXPosition() {
+            if (toolbarItem) {
+                return toolbarItem.mapToItem(mainWindow.contentItem, toolbarItem.width, 0).x + toolbarItem.padding + _margins
+            } else {
+                return _margins
+            }
+        }
+
+        function calcYPosition() {
+            if (toolbarItem) {
+                var yCenter = toolbarItem.mapToItem(mainWindow.contentItem, 0, toolbarItem.height / 2).y
+                return Math.max(_margins, Math.min(yCenter - (contentItem.implicitHeight / 2), mainWindow.contentItem.height - contentItem.implicitHeight - _margins - (toolbarItem.padding * 2) - (ScreenTools.defaultFontPixelHeight / 2)))
+            } else {
+                return _margins
+            }
+        }
+
+        
+
+        onOpened: {
+            _expanded                               = false;
+            toolbarCameraDrawerLoader.sourceComponent   = toolbarCameraDrawer.sourceComponent
+        }
+        onClosed: {
+            _expanded                               = false
+            toolbarItem                           = undefined
+            toolbarCameraDrawerLoader.sourceComponent   = undefined
+        }
+
+        background: Item {
+            Rectangle {
+                id:             backgroundToolbarCameraRect
+                anchors.fill:   parent
+                color:          QGroundControl.globalPalette.window
+                radius:         toolbarCameraDrawer._margins
+                opacity:        0.85
+            }
+
+            Rectangle {
+                anchors.horizontalCenter:   backgroundToolbarCameraRect.right
+                anchors.verticalCenter:     backgroundToolbarCameraRect.top
+                width:                      ScreenTools.largeFontPixelHeight
+                height:                     width
+                radius:                     width / 2
+                color:                      QGroundControl.globalPalette.button
+                border.color:               QGroundControl.globalPalette.buttonText
+                visible:                    toolbarCameraDrawerLoader.item && toolbarCameraDrawerLoader.item.showExpand && !toolbarCameraDrawer._expanded
+
+                QGCLabel {
+                    anchors.centerIn:   parent
+                    text:               ">"
+                    color:              QGroundControl.globalPalette.buttonText
+                }
+
+                QGCMouseArea {
+                    fillItem: parent
+                    onClicked: toolbarCameraDrawer._expanded = true
+                }
+            }
+        }
+
+        contentItem: QGCFlickable {
+            id:             toolbarCameraDrawerLoaderFlickable
+            implicitWidth:  Math.min(mainWindow.contentItem.width - (2 * toolbarCameraDrawer._margins) - (toolbarCameraDrawer.padding * 2), toolbarCameraDrawerLoader.width)
+            implicitHeight: Math.min(mainWindow.contentItem.height - ScreenTools.toolbarHeight - (2 * toolbarCameraDrawer._margins) - (toolbarCameraDrawer.padding * 2), toolbarCameraDrawerLoader.height)
+            contentWidth:   toolbarCameraDrawerLoader.width
+            contentHeight:  toolbarCameraDrawerLoader.height
+
+            Loader {
+                id: toolbarCameraDrawerLoader
+
+                Binding {
+                    target:     toolbarCameraDrawerLoader.item
+                    property:   "expanded"
+                    value:      toolbarCameraDrawer._expanded
+                }
+
+                Binding {
+                    target:     toolbarCameraDrawerLoader.item
+                    property:   "drawer"
+                    value:      toolbarCameraDrawer
                 }
             }
         }

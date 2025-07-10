@@ -24,12 +24,15 @@ Item {
     id: virtualJoysticks
 
     property var   _activeVehicle:            QGroundControl.multiVehicleManager.activeVehicle
+    property var  gimbalController:             _activeVehicle ? _activeVehicle.gimbalController : undefined
+    property bool gimbalAvailable: gimbalController != null && gimbalController !== undefined
     property bool  _initialConnectComplete:   _activeVehicle ? _activeVehicle.initialConnectComplete : false
     property real  leftYAxisValue:            autoCenterThrottle ? height / 2 : height
     property var   calibration:               false
     property var   uiTotalWidth
     property var   uiRealX
-        
+    property bool _virtualJoystickEnabled: QGroundControl.settingsManager.appSettings.virtualJoystick.rawValue
+
     Timer {
         interval:   40  // 25Hz, same as real joystick rate
         running:    QGroundControl.settingsManager.appSettings.virtualJoystick.value
@@ -43,6 +46,27 @@ Item {
         }
     }
 
+    Timer {
+        id: gimbalJoystickTimer
+        interval: 40
+        repeat: true
+        // running: true
+        onTriggered: {
+            if (gimbalController) {
+                let x = gimbalStick.xAxis  
+                let y = gimbalStick.yAxis 
+
+                if (Math.abs(x) < 0.01){
+                    gimbalJoystickTimer.stop()
+                    // gimbalController.gimbalOnScreenControl(0, 0, false, true, true)
+                    return;
+                }
+
+                gimbalController.gimbalOnScreenControl(x,y, false, true, true)
+            }
+        }
+    }
+    
     onHeightChanged:        { keepYAxisWhileChanged() }
     onWidthChanged:         { keepXAxisWhileChanged() }
     onCalibrationChanged:   { calibration ? calibrateJoysticks() : undefined }
@@ -65,6 +89,7 @@ Item {
         if( virtualJoysticks.visible ) {
             leftStick.reCenter()
             rightStick.reCenter()
+            gimbalStick.reCenter()
         }
     }
 
@@ -76,8 +101,25 @@ Item {
         anchors.bottom:         parent.bottom
         width:                  parent.height
         height:                 parent.height
+        visible:                _virtualJoystickEnabled
         yAxisPositiveRangeOnly: _activeVehicle && !_activeVehicle.rover && !leftHandedMode
         yAxisReCenter:          autoCenterThrottle
+    }
+
+    // gimbal joystick is left margin to right stick
+    JoystickThumbPad {
+        id:                     gimbalStick
+        anchors.leftMargin:     xPositionDelta
+        anchors.bottomMargin:   -yPositionDelta
+        anchors.right:          rightStick.left
+        anchors.rightMargin: parent.height + ScreenTools.defaultFontPixelWidth * 1.5
+        anchors.bottom:         parent.bottom
+        width:                  parent.height
+        height:                 parent.height
+        visible:                true
+        yAxisPositiveRangeOnly: false
+        yAxisReCenter:          true
+        onStickMoved: handleStickActivity()
     }
 
     JoystickThumbPad {
@@ -89,6 +131,21 @@ Item {
         width:                  parent.height
         height:                 parent.height
         yAxisPositiveRangeOnly: _activeVehicle && !_activeVehicle.rover && leftHandedMode
+        visible:                _virtualJoystickEnabled
         yAxisReCenter:          true
+    }
+
+    function handleStickActivity() {
+        let x = gimbalStick.xAxis
+
+        if (Math.abs(x) > 0.01) {
+            if (!gimbalJoystickTimer.running)
+                gimbalJoystickTimer.start()
+        } else {
+            gimbalJoystickTimer.stop()
+            if (gimbalController) {
+                // gimbalController.gimbalOnScreenControl(0, 0, false, true, true)
+            }
+        }
     }
 }

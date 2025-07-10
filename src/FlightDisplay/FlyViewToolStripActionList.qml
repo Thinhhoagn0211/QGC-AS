@@ -46,6 +46,8 @@ ToolStripActionList {
         },
         PreFlightCheckListShowAction { onTriggered: displayPreFlightChecklist() },
         GuidedActionConnect { },
+        GuidedActionGimbal { },
+        GuidedActionPhotoVideo { },
         GuidedActionTakeoff { },
         GuidedActionLand { },
         GuidedActionRTL { },

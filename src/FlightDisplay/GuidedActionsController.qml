@@ -67,7 +67,8 @@ Item {
     readonly property string setEstimatorOriginTitle:       qsTr("Set Estimator origin")
     readonly property string setFlightMode:                 qsTr("Set Flight Mode")
     readonly property string changeHeadingTitle:            qsTr("Change Heading")
-    
+    readonly property string gimbalTitle:                    qsTr("Gimbal")
+    readonly property string photoVideoTitle:               qsTr("Camera")
 
     readonly property string armMessage:                        qsTr("Arm the vehicle.")
     readonly property string mvArmMessage:                      qsTr("Arm selected vehicles.")
@@ -139,7 +140,8 @@ Item {
     readonly property int actionZoomIn:                     36
     readonly property int actionZoomOut:                    37
     readonly property int actionConnect:             38
-
+    readonly property int actionGimbal:                     39
+    readonly property int actionPhotoVideo:                 40
 
 
     readonly property int customActionStart:                10000 // Custom actions ids should start here so that they don't collide with the built in actions
@@ -629,6 +631,8 @@ Item {
             confirmDialog.title = changeHeadingTitle
             confirmDialog.message = changeHeadingMessage
             break
+        case actionGimbal:
+            break; // Gimbal actions are handled in the GimbalController.qml
         default:
             if (!customController.customConfirmAction(actionCode, actionData, mapIndicator, confirmDialog)) {
                 console.warn("Unknown actionCode", actionCode)
@@ -799,6 +803,8 @@ Item {
         case actionChangeHeading:
             _activeVehicle.guidedModeChangeHeading(actionData)
             break
+        case actionGimbal:
+            break;
         default:
             if (!customController.customExecuteAction(actionCode, actionData, sliderOutputValue, optionChecked)) {
                 console.warn(qsTr("Internal error: unknown actionCode"), actionCode)

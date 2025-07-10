@@ -12,6 +12,9 @@ import QtQuick.Controls
 
 import QGroundControl.ScreenTools
 import QGroundControl.Palette
+import QGroundControl.Toolbar
+import QGroundControl.Controls
+import QGroundControl.FlightMap
 
 Button {
     id:             control
@@ -50,6 +53,10 @@ Button {
                 toolStripAction.triggered(this)
                 if (toolStripAction.objectName === "connectAction") {
                     mainWindow.showToolbarDrawer(overallStatusOfflineIndicatorPage, this)
+                } else if (toolStripAction.objectName === "actionGimbal") {
+                    mainWindow.showToolbarDrawer(dropGimbalIndicatorPage, this)
+                } else if (toolStripAction.objectName === "actionPhotoVideo") {
+                    mainWindow.showToolbarCameraDrawer(photoVideoControlComponent, this)
                 }
             } else if (checked) {
                 var panelEdgeTopPoint = mapToItem(_root, width, 0)
@@ -67,6 +74,20 @@ Button {
 
         MainStatusIndicatorOfflinePage { }
     }
+
+    Component {
+        id: dropGimbalIndicatorPage
+        
+        GimbalIndicatorPage {}
+    }
+
+    Component {
+        id: photoVideoControlComponent
+
+        PhotoVideoControl {}
+    }
+
+    
 
     QGCPalette { id: qgcPal; colorGroupEnabled: control.enabled }
 

@@ -486,7 +486,7 @@ void GimbalController::gimbalOnScreenControl(float panPct, float tiltPct, bool c
 
         const float panDesired = panIncDesired + _activeGimbal->bodyYaw()->rawValue().toFloat();
         const float tiltDesired = tiltIncDesired + _activeGimbal->absolutePitch()->rawValue().toFloat();
-
+        
         if (_activeGimbal->yawLock()) {
             sendPitchAbsoluteYaw(tiltDesired, panDesired + _vehicle->heading()->rawValue().toFloat(), false);
         } else {
@@ -502,7 +502,7 @@ void GimbalController::sendPitchBodyYaw(float pitch, float yaw, bool showError)
     }
 
     _rateSenderTimer.stop();
-    _activeGimbal->setAbsolutePitch(0.0f);
+    // _activeGimbal->setAbsolutePitch(0.0f);
     _activeGimbal->setYawRate(0.0f);
 
     // qCDebug(GimbalControllerLog) << "sendPitch: " << pitch << " BodyYaw: " << yaw;

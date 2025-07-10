@@ -45,46 +45,6 @@ Item {
         }
     }
 
-    Loader {
-        id:                         virtualCameraJoystickMultiTouch
-        z:                          QGroundControl.zOrderTopMost + 1
-        anchors.centerIn:           parent
-        height:                     Math.min(parent.height * 0.25, ScreenTools.defaultFontPixelWidth * 16)
-        visible:                    true
-        source:                     "qrc:/qml/QGroundControl/FlightDisplay/VirtualCameraJoystick.qml"
-        active:                    true
-        
-        property real bottomEdgeLeftInset:     parent.height-y
-        property bool autoCenterThrottle:      QGroundControl.settingsManager.appSettings.virtualJoystickAutoCenterThrottle.rawValue
-        property bool leftHandedMode:          QGroundControl.settingsManager.appSettings.virtualJoystickLeftHandedMode.rawValue
-        property bool _virtualJoystickEnabled: QGroundControl.settingsManager.appSettings.virtualJoystick.rawValue
-        property real bottomEdgeRightInset:    parent.height-y
-        property var  _pipViewMargin:          _pipView.visible ? ScreenTools.defaultFontPixelHeight * 2 :
-                                            parent.height + ScreenTools.defaultFontPixelHeight * 1.5
-
-        property var  bottomLoaderMargin:      _pipViewMargin >= parent.height / 2 ? parent.height / 2 : _pipViewMargin
-
-        // Width is difficult to access directly hence this hack which may not work in all circumstances
-        property real leftEdgeBottomInset:  visible ? bottomEdgeLeftInset + width/18 - ScreenTools.defaultFontPixelHeight*2 : 0
-        property real rightEdgeBottomInset: visible ? bottomEdgeRightInset + width/18 - ScreenTools.defaultFontPixelHeight*2 : 0
-        property real rootWidth:            _root.width
-        property var  itemX:                virtualCameraJoystickMultiTouch.x   // real X on screen
-
-        onRootWidthChanged: virtualCameraJoystickMultiTouch.status == Loader.Ready && visible ? virtualCameraJoystickMultiTouch.item.uiTotalWidth = rootWidth : undefined
-        onItemXChanged:     virtualCameraJoystickMultiTouch.status == Loader.Ready && visible ? virtualCameraJoystickMultiTouch.item.uiRealX = itemX : undefined
-
-        //Loader status logic
-        onLoaded: {
-            if (virtualCameraJoystickMultiTouch.visible) {
-                virtualCameraJoystickMultiTouch.item.calibration = true
-                virtualCameraJoystickMultiTouch.item.uiTotalWidth = rootWidth
-                virtualCameraJoystickMultiTouch.item.uiRealX = itemX
-            } else {
-                virtualCameraJoystickMultiTouch.item.calibration = false
-            }
-        }
-    }
-    
     Timer {
         id:           videoStartDelay
         interval:     2000;

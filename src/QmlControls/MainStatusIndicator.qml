@@ -140,10 +140,10 @@ RowLayout {
             }
         }
 
-        QGCMouseArea {
-            anchors.fill:   parent
-            onClicked:      dropMainStatusIndicator()
-        }
+            QGCMouseArea {
+                anchors.fill:   parent
+                onClicked:      dropMainStatusIndicator()
+            }
     }
 
     QGCLabel {

@@ -104,7 +104,7 @@ Item {
         id:                 topRightPanelBackground
         anchors.margins:    _layoutMargin
         anchors.top:        parent.top
-        anchors.bottom:     bottomRightRowLayout.top
+        anchors.bottom:     topRightPanel.top
         anchors.right:      parent.right
         spacing:            _layoutSpacing
         visible:            !topRightPanel.visible
@@ -117,98 +117,78 @@ Item {
             radius: 0
             visible: _activeVehicle
 
-            RowLayout {
-                id: buttonRow
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.margins: _layoutMargin
-                spacing: 10
+            ScrollView {
+                id: scrollArea
+                anchors.fill: parent
+                contentWidth: parent.width
+                clip: true
 
-                
-                QGCButton {
-                    id: topRightPanelButton
-                    text: qsTr("Function")
-                    backgroundColor:  selectedButton === 1 ? "#a2a200" : "gray"
-                    textColor: "white"
-                    primary: {
-                        selectedButton === 1 ? true : false
+                Column {
+                    width: parent.width
+
+                    RowLayout {
+                        id: buttonRow
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.margins: _layoutMargin
+                        spacing: 10
+
+                        QGCButton {
+                            id: topRightPanelButton
+                            text: qsTr("Function")
+                            backgroundColor: selectedButton === 1 ? "#a2a200" : "gray"
+                            textColor: "white"
+                            primary: selectedButton === 1
+                            visible: !topRightPanel.visible
+                            onClicked: {
+                                globals.selectedView = 0
+                                selectedButton = 1
+                                pageLoader.sourceComponent = pageShowTelemetryUAV
+                                planMasterController.flyView = true
+                                mapControl.planView = false
+                            }
+                            anchors.leftMargin: 20
+                        }
+
+                        Item { width: 1; Layout.fillWidth: true }
+
+                        QGCButton {
+                            id: topRightPanelCloseButton
+                            text: qsTr("Plan flight")
+                            backgroundColor: selectedButton === 2 ? "#a2a200" : "gray"
+                            textColor: "white"
+                            primary: selectedButton === 2
+                            visible: !topRightPanel.visible
+                            onClicked: {
+                                globals.selectedView = 1
+                                selectedButton = 2
+                                pageLoader.sourceComponent = pageShowPlanFlightUAV
+                                planMasterController.flyView = false
+                                mapControl.planView = true
+                                insertTakeItemAfterCurrent()
+                            }
+                            anchors.rightMargin: 20
+                        }
                     }
-                    visible: !topRightPanel.visible
-                    onClicked: {
-                        globals.selectedView = 0
-                        selectedButton = 1
-                        pageLoader.sourceComponent = pageShowTelemetryUAV
-                        planMasterController.flyView = true
-                        mapControl.planView = false
-                        // removeAllItems()
-                        
+
+                    Rectangle {
+                        id: divider
+                        width: 200
+                        height: 1
+                        color: "white"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.topMargin: 20
                     }
-                    anchors.left: buttonRow.left
-                    anchors.leftMargin: 20
+
+                    Loader {
+                        id: pageLoader
+                        anchors.topMargin: 10
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        sourceComponent: pageShowTelemetryUAV
+                    }
                 }
-
-                Item { width: 1; Layout.fillWidth: true }
-
-                QGCButton {
-                    id: topRightPanelCloseButton
-                    text: qsTr("Plan flight")
-                    backgroundColor:  selectedButton === 2 ? "#a2a200" : "gray"
-                    textColor: "white"
-                    primary: {
-                        selectedButton === 2 ? true : false
-                    }
-                    visible: !topRightPanel.visible
-                    onClicked: {
-                        globals.selectedView = 1
-                        selectedButton = 2
-                        pageLoader.sourceComponent = pageShowPlanFlightUAV
-                        planMasterController.flyView = false
-                        mapControl.planView = true
-                        // removeAllItems()
-                        insertTakeItemAfterCurrent()
-                    }
-                    anchors.right: buttonRow.right
-                    anchors.rightMargin: 20
-                }
-            
             }
-
-            Rectangle {
-                id: divider
-                anchors.top: buttonRow.bottom
-                anchors.topMargin: 20
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: 200
-                height: 1
-                color: "white"
-            }
-
-            Loader {
-            id: pageLoader
-            anchors.top: divider.bottom
-            anchors.topMargin: 10
-            anchors.horizontalCenter: parent.horizontalCenter
-            sourceComponent: pageShowTelemetryUAV 
         }
-
-
-        }
-
-        Rectangle {
-            id: vehicleMessageRect
-            anchors.top: backgroundRect.bottom
-            anchors.topMargin: 20
-            width: 300
-            height: Math.min(vehicleMessageList.height + 20, 200)
-            color: Qt.rgba(0, 0, 0, 0.5)
-            radius: 0
-            visible: _activeVehicle
-
-            VehicleMessageList { 
-                id: vehicleMessageList
-                }
-            }
     }
 
     
@@ -230,7 +210,7 @@ Item {
         id:                 infoBadgeContainer
         anchors.bottom: bottomRightRowLayout.top
         anchors.bottomMargin: 20
-        anchors.right:      parent.right
+        anchors.right:      bottomRightRowLayout.right
         visible:            _activeVehicle 
         spacing:            8
         Repeater {
@@ -272,7 +252,7 @@ Item {
     }
 
 
-    FlyViewBottomRightRowLayout {
+    FlyViewInstrumentPanel {
         id:                 bottomRightRowLayout
         anchors.margins:    _layoutMargin
         anchors.bottom:     parent.bottom
@@ -300,42 +280,6 @@ Item {
         guidedValueSlider:          _guidedValueSlider
         utmspSliderTrigger:         utmspActTrigger
     }
-
-
-    // Loader {
-    //     id:                         virtualCameraJoystickMultiTouch
-    //     z:                          QGroundControl.zOrderTopMost + 1
-    //     anchors.right:              virtualJoystickMultiTouch.left
-    //     anchors.rightMargin:        anchors.leftMargin
-    //     height:                     Math.min(parent.height * 0.25, ScreenTools.defaultFontPixelWidth * 16)
-    //     visible:                    true
-    //     anchors.bottom:             parent.bottom
-    //     anchors.bottomMargin:       bottomLoaderMargin
-    //     anchors.left:               parent.left
-    //     anchors.leftMargin:         ( y > toolStrip.y + toolStrip.height ? toolStrip.width / 2 : toolStrip.width * 1.05 + toolStrip.x)
-    //     source:                     "qrc:/qml/QGroundControl/FlightDisplay/VirtualCameraJoystick.qml"
-    //     active:                    true
-
-    //     property real bottomEdgeLeftInset:     parent.height-y
-    //     property bool autoCenterThrottle:      QGroundControl.settingsManager.appSettings.virtualJoystickAutoCenterThrottle.rawValue
-    //     property bool leftHandedMode:          QGroundControl.settingsManager.appSettings.virtualJoystickLeftHandedMode.rawValue
-    //     property bool _virtualJoystickEnabled: QGroundControl.settingsManager.appSettings.virtualJoystick.rawValue
-    //     property real bottomEdgeRightInset:    parent.height-y
-    //     property var  _pipViewMargin:          _pipView.visible ? ScreenTools.defaultFontPixelHeight * 2 :
-    //                                         parent.height + ScreenTools.defaultFontPixelHeight * 1.5
-
-    //     property var  bottomLoaderMargin:      _pipViewMargin >= parent.height / 2 ? parent.height / 2 : _pipViewMargin
-
-    //     // Width is difficult to access directly hence this hack which may not work in all circumstances
-    //     property real leftEdgeBottomInset:  visible ? bottomEdgeLeftInset + width/18 - ScreenTools.defaultFontPixelHeight*2 : 0
-    //     property real rightEdgeBottomInset: visible ? bottomEdgeRightInset + width/18 - ScreenTools.defaultFontPixelHeight*2 : 0
-    //     property real rootWidth:            _root.width
-    //     property var  itemX:                virtualCameraJoystickMultiTouch.x   // real X on screen
-
-    //     onRootWidthChanged: virtualCameraJoystickMultiTouch.status == Loader.Ready && visible ? virtualCameraJoystickMultiTouch.item.uiTotalWidth = rootWidth : undefined
-    //     onItemXChanged:     virtualCameraJoystickMultiTouch.status == Loader.Ready && visible ? virtualCameraJoystickMultiTouch.item.uiRealX = itemX : undefined
-
-    // }
     
     
     //-- Virtual Joystick
@@ -388,7 +332,7 @@ Item {
         anchors.leftMargin:     _toolsMargin + parentToolInsets.leftEdgeCenterInset
         anchors.topMargin:      _toolsMargin + parentToolInsets.topEdgeLeftInset
         anchors.left:           parent.left
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.top:            parent.top
         z:                      QGroundControl.zOrderWidgets
         maxHeight:              parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
         visible:                !QGroundControl.videoManager.fullScreen
@@ -414,6 +358,18 @@ Item {
         z:                  QGroundControl.zOrderTopMost
     }
 
+    MapScale {
+        id:                 mapScale
+        anchors.margins:    _toolsMargin
+        anchors.left:       toolStrip.right
+        anchors.top:        parent.top
+        mapControl:         _mapControl
+        buttonsOnLeft:      true
+        visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && !isViewer3DOpen && mapControl.pipState.state === mapControl.pipState.fullState
+
+        property real topEdgeCenterInset: visible ? y + height : 0
+    }
+    
     Loader {
         id: preFlightChecklistLoader
         sourceComponent: preFlightChecklistPopup
@@ -423,9 +379,6 @@ Item {
     Component {
         id: preFlightChecklistPopup
         FlyViewPreFlightChecklistPopup {
-            width: 600
-            height: 400
-            anchors.centerIn: parent
         }
     }
 }

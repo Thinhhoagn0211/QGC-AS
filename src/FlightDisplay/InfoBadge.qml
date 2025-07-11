@@ -1,17 +1,25 @@
 // InfoBadge.qml
 import QtQuick
 import QtQuick.Controls
-
+import QGroundControl.ScreenTools
 Rectangle {
     id: badge
     property alias iconSource: icon.source
     property alias title: titleLabel.text
     property alias value: valueLabel.text
 
-    width: 110
-    height: 40
-    radius: 20
+    width: Math.min(_defaultWidth, _maxWidth)
+    height: _outerRadius * 2
+    radius: _outerRadius * 0.75
     color: "orange"
+
+
+    property real   _defaultWidth:      mainWindow.width * 0.05
+    property real   _maxWidth:          ScreenTools.defaultFontPixelHeight * 5
+    property real   _innerRadius:       (width - (_topBottomMargin * 3)) / 4
+    property real   _outerRadius:       _innerRadius + _topBottomMargin
+    property real   _spacing:           ScreenTools.defaultFontPixelHeight * 0.33
+    property real   _topBottomMargin:   (width * 0.05) / 2
 
     Row {
         anchors.centerIn: parent
@@ -19,8 +27,8 @@ Rectangle {
 
         Image {
             id: icon
-            width: 24
-            height: 24
+            width: ScreenTools.defaultFontPixelHeight 
+            height: ScreenTools.defaultFontPixelHeight 
             source: ""
         }
 
@@ -30,13 +38,13 @@ Rectangle {
                 id: titleLabel
                 text: ""
                 color: "white"
-                font.pixelSize: 11
+                font.pixelSize: ScreenTools.defaultFontPixelHeight * 0.5
             }
             Text {
                 id: valueLabel
                 text: ""
                 color: "white"
-                font.pixelSize: 11
+                font.pixelSize: ScreenTools.defaultFontPixelHeight * 0.5
             }
         }
     }

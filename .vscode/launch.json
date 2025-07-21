@@ -6,21 +6,21 @@
     "configurations": [
         {
             "name": "QGroundControl Debug",
-            "type": "cppvsdbg",
+            "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Desktop_Qt_6_8_3_MSVC2022_64bit-Debug/Debug/QGroundControl.exe",
+            "program": "${workspaceFolder}/build/QGC_AS-debug/Debug/QGroundControl",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [
                 {
                     "name": "PATH",
-                    "value": "C:/Qt/6.8.3/msvc2022_64/bin;${env:PATH}"
+                    "value": "/home/sw/Qt/6.8.3/msvc2022_64/bin;${env:PATH}"
                 }
             ],
             "console": "internalConsole",
             "preLaunchTask": "CMake: build",
-            "visualizerFile": "c:\\Users\\admin\\AppData\\Roaming\\Code\\User\\workspaceStorage\\e9878eff565bbc58bc0f6e7bd2e2540c\\tonka3000.qtvsctools\\qt.natvis.xml"
+            "visualizerFile": "c:\\Users\\admin\\AppData\\Roaming\\Code\\User\\workspaceStorage\\38ffc5025323fb47b5c03e3baba8eb14\\tonka3000.qtvsctools\\qt.natvis.xml"
         }
     ]
 }

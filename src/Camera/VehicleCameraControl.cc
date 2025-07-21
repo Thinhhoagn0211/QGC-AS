@@ -1773,6 +1773,7 @@ void
 VehicleCameraControl::_requestStreamInfo(uint8_t streamID)
 {
     qCDebug(CameraControlLog) << "Requesting video stream info for:" << streamID;
+    printf("Requesting video stream info for: %d", streamID);
     // By default, try to use new REQUEST_MESSAGE command instead of
     // deprecated MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION.
     if (_videoStreamStatusRetries++ % 2 == 0) {

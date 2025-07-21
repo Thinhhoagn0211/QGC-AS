@@ -1,22 +1,19 @@
 from pymavlink import mavutil
 
-# Connect to the camera's MAVLink port
-master = mavutil.mavlink_connection('/dev/ttyACM1', baud=115200)
-master.wait_heartbeat()
-print("✅ Connected to system %d component %d" % (master.target_system, master.target_component))
-
-MAV_CMD_REQUEST_MESSAGE = 512
-CAMERA_SETTINGS = 267
-
+# Connect via UDP send-only
+master = mavutil.mavlink_connection('udpout:192.168.1.29:14445')
+# master.wait_heartbeat()
+# Send command without waiting for heartbeat
 master.mav.command_long_send(
-    master.target_system,
-    master.target_component,
-    512,  # MAV_CMD_REQUEST_MESSAGE
-    0,
-    260,  # CAMERA_SETTINGS
-    0, 0, 0, 0, 0, 0
+    master.target_system,  # Target system ID
+    master.target_component,  # Target component ID
+    10126,  # MAV_CMD_SET_CAMERA_SOURCE
+    0,      # Confirmation
+    0,      # main_source
+    0,      # sub_source
+    16, 0, 0, 0, 0
 )
 
-msg = master.recv_match(type='CAMERA_SETTINGS', blocking=True, timeout=5)
-if msg:
-    print(f"Zoom Level: {msg.zoomLevel}")
+print("✅ MAV_CMD_SET_CAMERA_SOURCE sent (no heartbeat check)")
+
+

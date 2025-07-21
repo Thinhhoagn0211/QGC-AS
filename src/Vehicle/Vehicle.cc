@@ -58,6 +58,7 @@
 #include "GimbalController.h"
 #include "MavlinkSettings.h"
 #include "APM.h"
+#include "RaspherriController.h"
 
 #ifdef QGC_UTM_ADAPTER
 #include "UTMSPVehicle.h"
@@ -368,6 +369,8 @@ void Vehicle::_commonInit()
     _loadJoystickSettings();
 
     _gimbalController = new GimbalController(this);
+
+    _raspherriController = new RaspherriController(this);
 
     // Create camera manager instance
     _cameraManager = _firmwarePlugin->createCameraManager(this);

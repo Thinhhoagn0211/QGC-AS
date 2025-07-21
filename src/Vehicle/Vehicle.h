@@ -75,6 +75,7 @@ class TrajectoryPoints;
 class VehicleBatteryFactGroup;
 class VehicleObjectAvoidance;
 class GimbalController;
+class RaspherriController;
 #ifdef QGC_UTM_ADAPTER
 class UTMSPVehicle;
 #endif
@@ -214,6 +215,7 @@ public:
     Q_PROPERTY(quint64              mavlinkLossCount            READ mavlinkLossCount                                               NOTIFY mavlinkStatusChanged)
     Q_PROPERTY(float                mavlinkLossPercent          READ mavlinkLossPercent                                             NOTIFY mavlinkStatusChanged)
     Q_PROPERTY(GimbalController*    gimbalController            READ gimbalController                                               CONSTANT)
+    Q_PROPERTY(RaspherriController*     raspherriController         READ raspherriController                                            CONSTANT)
     Q_PROPERTY(bool                 hasGripper                  READ hasGripper                                                     CONSTANT)
     Q_PROPERTY(bool                 isROIEnabled                READ isROIEnabled                                                   NOTIFY isROIEnabledChanged)
     Q_PROPERTY(CheckList            checkListState              READ checkListState             WRITE setCheckListState             NOTIFY checkListStateChanged)
@@ -797,6 +799,9 @@ public:
     /// Delete gimbal controller, handy for RequestMessageTest.cc, otherwise gimbal controller message requests will mess with this test
     void deleteGimbalController();
 
+    /// delete raspherri connector
+    void deleteRaspherriController();
+
     /// Delete camera manager, just for testing
     void deleteCameraManager();
 
@@ -818,6 +823,7 @@ public:
     HealthAndArmingCheckReport* healthAndArmingCheckReport() { return &_healthAndArmingCheckReport; }
 
     GimbalController* gimbalController  () { return _gimbalController; }
+    RaspherriController* raspherriController() { return _raspherriController; }
 
 public slots:
     void setVtolInFwdFlight                 (bool vtolInFwdFlight);
@@ -1072,6 +1078,7 @@ private:
     VehicleObjectAvoidance*         _objectAvoidance                = nullptr;
     Autotune*                       _autotune                       = nullptr;
     GimbalController*               _gimbalController               = nullptr;
+    RaspherriController*            _raspherriController            = nullptr;
 
 #ifdef QGC_UTM_ADAPTER
     UTMSPVehicle*                    _utmspVehicle                    = nullptr;

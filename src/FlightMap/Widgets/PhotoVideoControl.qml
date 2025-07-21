@@ -39,6 +39,7 @@ Item {
     property bool   _photoCaptureIntervalIdle:  _camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_INTERVAL_IDLE
     property bool   _photoCaptureIdle:          _photoCaptureSingleIdle || _photoCaptureIntervalIdle
     property var gimbalController:           _activeVehicle.gimbalController
+    property var raspherriController:    _activeVehicle.raspherriController
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
     DeadMouseArea { anchors.fill: parent }
@@ -69,11 +70,11 @@ Item {
                 to:                 100
                 from:               0
                 live:               false
-                value:              gimbalController.zoomLevel
+                value:              raspherriController.zoomLevel
 
                 onPressedChanged: {
                     if (!pressed) {
-                        gimbalController.zoomLevel = value
+                        raspherriController.zoomLevel = value
                         console.log("Zoom level set to: " + value);
                     }
                 }

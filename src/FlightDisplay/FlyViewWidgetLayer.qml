@@ -117,78 +117,84 @@ Item {
             radius: 0
             visible: _activeVehicle
 
-            ScrollView {
-                id: scrollArea
-                anchors.fill: parent
-                contentWidth: parent.width
-                clip: true
+            RowLayout {
+                id: buttonRow
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.margins: _layoutMargin
+                spacing: 10
 
-                Column {
-                    width: parent.width
-
-                    RowLayout {
-                        id: buttonRow
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.margins: _layoutMargin
-                        spacing: 10
-
-                        QGCButton {
-                            id: topRightPanelButton
-                            text: qsTr("Function")
-                            backgroundColor: selectedButton === 1 ? "#a2a200" : "gray"
-                            textColor: "white"
-                            primary: selectedButton === 1
-                            visible: !topRightPanel.visible
-                            onClicked: {
-                                globals.selectedView = 0
-                                selectedButton = 1
-                                pageLoader.sourceComponent = pageShowTelemetryUAV
-                                planMasterController.flyView = true
-                                mapControl.planView = false
-                            }
-                            anchors.leftMargin: 20
-                        }
-
-                        Item { width: 1; Layout.fillWidth: true }
-
-                        QGCButton {
-                            id: topRightPanelCloseButton
-                            text: qsTr("Plan flight")
-                            backgroundColor: selectedButton === 2 ? "#a2a200" : "gray"
-                            textColor: "white"
-                            primary: selectedButton === 2
-                            visible: !topRightPanel.visible
-                            onClicked: {
-                                globals.selectedView = 1
-                                selectedButton = 2
-                                pageLoader.sourceComponent = pageShowPlanFlightUAV
-                                planMasterController.flyView = false
-                                mapControl.planView = true
-                                insertTakeItemAfterCurrent()
-                            }
-                            anchors.rightMargin: 20
-                        }
+                
+                QGCButton {
+                    id: topRightPanelButton
+                    text: qsTr("Function")
+                    backgroundColor:  selectedButton === 1 ? "#a2a200" : "gray"
+                    textColor: "white"
+                    primary: {
+                        selectedButton === 1 ? true : false
                     }
-
-                    Rectangle {
-                        id: divider
-                        width: 200
-                        height: 1
-                        color: "white"
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.topMargin: 20
+                    visible: !topRightPanel.visible
+                    onClicked: {
+                        globals.selectedView = 0
+                        selectedButton = 1
+                        pageLoader.sourceComponent = pageShowTelemetryUAV
+                        planMasterController.flyView = true
+                        mapControl.planView = false
+                        // removeAllItems()
+                        
                     }
-
-                    Loader {
-                        id: pageLoader
-                        anchors.topMargin: 10
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        sourceComponent: pageShowTelemetryUAV
-                    }
+                    anchors.left: buttonRow.left
+                    anchors.leftMargin: 20
                 }
+
+                Item { width: 1; Layout.fillWidth: true }
+
+                QGCButton {
+                    id: topRightPanelCloseButton
+                    text: qsTr("Plan flight")
+                    backgroundColor:  selectedButton === 2 ? "#a2a200" : "gray"
+                    textColor: "white"
+                    primary: {
+                        selectedButton === 2 ? true : false
+                    }
+                    visible: !topRightPanel.visible
+                    onClicked: {
+                        globals.selectedView = 1
+                        selectedButton = 2
+                        pageLoader.sourceComponent = pageShowPlanFlightUAV
+                        planMasterController.flyView = false
+                        mapControl.planView = true
+                        // removeAllItems()
+                        insertTakeItemAfterCurrent()
+                    }
+                    anchors.right: buttonRow.right
+                    anchors.rightMargin: 20
+                }
+            
             }
+
+            Rectangle {
+                id: divider
+                anchors.top: buttonRow.bottom
+                anchors.topMargin: 20
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: 200
+                height: 1
+                color: "white"
+            }
+
+            Loader {
+            id: pageLoader
+            anchors.top: divider.bottom
+            anchors.topMargin: 10
+            anchors.horizontalCenter: parent.horizontalCenter
+            sourceComponent: pageShowTelemetryUAV 
         }
+
+
+        }
+
     }
 
     

@@ -16,6 +16,7 @@
 Q_DECLARE_LOGGING_CATEGORY(GimbalLog)
 
 class GimbalController;
+class RaspherriController;
 
 class Gimbal : public FactGroup
 {
@@ -34,9 +35,10 @@ class Gimbal : public FactGroup
     Q_PROPERTY(bool     gimbalOthersHaveControl READ gimbalOthersHaveControl    NOTIFY gimbalOthersHaveControlChanged)
 
     friend class GimbalController;
-
+    friend class RaspherriController;
 public:
     Gimbal(GimbalController *parent);
+    Gimbal(RaspherriController *parent);
     Gimbal(const Gimbal &other);
     const Gimbal &operator=(const Gimbal &other);
     ~Gimbal();

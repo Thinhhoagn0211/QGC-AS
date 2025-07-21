@@ -7,7 +7,7 @@
       "command": "cmake",
       "args": [
         "--build",
-        "${workspaceFolder}/build/Desktop_Qt_6_8_3_MSVC2022_64bit-Debug"
+        "${workspaceFolder}/build/QGC_AS-debug",
       ],
       "group": {
         "kind": "build",

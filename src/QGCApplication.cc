@@ -69,6 +69,7 @@
 #include "Vehicle.h"
 #include "VehicleComponent.h"
 #include "VideoManager.h"
+#include "RaspherriController.h"
 
 #ifndef QGC_DISABLE_MAVLINK_INSPECTOR
 #include "MAVLinkInspectorController.h"
@@ -268,7 +269,6 @@ void QGCApplication::init()
 {
     // manager initialization order is important
     SettingsManager::instance()->init();
-
     LinkManager::registerQmlTypes();
     ParameterManager::registerQmlTypes();
     QGroundControlQmlGlobal::registerQmlTypes();
@@ -286,7 +286,7 @@ void QGCApplication::init()
 #endif
 
     qmlRegisterUncreatableType<GimbalController>("QGroundControl.Vehicle", 1, 0, "GimbalController", "Reference only");
-
+    qmlRegisterUncreatableType<RaspherriController>("QGroundControl.Vehicle", 1, 0, "RaspherriController", "Reference only");
 #ifndef QGC_DISABLE_MAVLINK_INSPECTOR
     qmlRegisterUncreatableType<MAVLinkChartController>("QGroundControl", 1, 0, "MAVLinkChart", "Reference only");
     qmlRegisterType<MAVLinkInspectorController>("QGroundControl.Controllers", 1, 0, "MAVLinkInspectorController");
@@ -327,6 +327,8 @@ void QGCApplication::init()
     } else if (!_runningUnitTests) {
         _initForNormalAppBoot();
     }
+
+
 }
 
 void QGCApplication::_initVideo()

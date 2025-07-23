@@ -59,7 +59,7 @@
 #include "MavlinkSettings.h"
 #include "APM.h"
 #include "RaspherriController.h"
-
+#include <iostream>
 #ifdef QGC_UTM_ADAPTER
 #include "UTMSPVehicle.h"
 #include "UTMSPManager.h"
@@ -474,11 +474,18 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         qCDebug(VehicleLog) << "_mavlinkMessageReceived Link already running Mavlink v2. Setting _maxProtoVersion" << _maxProtoVersion;
     }
 
+    if (message.msgid == MAVLINK_MSG_ID_COMMAND_LONG) {
+        std::cout << "Received msgid: " << static_cast<int>(message.msgid) << std::endl;
+    }
+    
     if (message.sysid != _id && message.sysid != 0) {
         // We allow RADIO_STATUS messages which come from a link the vehicle is using to pass through and be handled
-        if (!(message.msgid == MAVLINK_MSG_ID_RADIO_STATUS && _vehicleLinkManager->containsLink(link))) {
-            return;
-        }
+        if (!(
+            (message.msgid == MAVLINK_MSG_ID_RADIO_STATUS && _vehicleLinkManager->containsLink(link)) ||
+            (message.msgid == MAVLINK_MSG_ID_COMMAND_LONG)
+        )) {
+        return;
+    }
     }
 
     // We give the link manager first whack since it it reponsible for adding new links

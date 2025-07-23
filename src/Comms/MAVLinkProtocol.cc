@@ -126,7 +126,7 @@ void MAVLinkProtocol::receiveBytes(LinkInterface *link, const QByteArray &data)
             _forwardSupport(message);
         }
         _logData(link, message);
-
+        
         if (!_updateStatus(link, linkPtr, mavlinkChannel, message)) {
             break;
         }

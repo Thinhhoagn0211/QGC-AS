@@ -9,7 +9,7 @@
 #include "QmlObjectListModel.h"
 #include "SettingsManager.h"
 #include "Vehicle.h"
-
+#include <iostream>
 Q_LOGGING_CATEGORY(RaspherriControllerLog, "RaspherriController")
 
 RaspherriController::RaspherriController(Vehicle *vehicle)
@@ -34,7 +34,14 @@ void RaspherriController::_mavlinkMessageReceived(const mavlink_message_t &messa
     if (!_vehicle->parameterManager()->parametersReady()) {
         return;
     }
+    if (message.msgid == MAVLINK_MSG_ID_COMMAND_LONG) {
+            mavlink_command_long_t cmd;
+            mavlink_msg_command_long_decode(&message, &cmd);  
 
+            std::cout << "Received msgid: " << static_cast<int>(message.msgid)
+                    << ", command: " << cmd.command << std::endl;
+    }
+    
     switch (message.msgid) {
     case MAVLINK_MSG_ID_HEARTBEAT:
         _handleHeartbeat(message);
@@ -47,6 +54,11 @@ void RaspherriController::_mavlinkMessageReceived(const mavlink_message_t &messa
         break;
     case MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS:
            _handleGimbalDeviceAttitudeStatus(message);
+        break;
+    case 10001:
+        // This is a custom message, not part of the MAVLink standard
+        // Handle it as needed, for example, to set zoom level or other custom actions
+        qCDebug(RaspherriControllerLog) << "Received custom message with ID 10001";
         break;
     default:
         break;

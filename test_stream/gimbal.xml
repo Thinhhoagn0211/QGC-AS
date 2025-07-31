@@ -1,0 +1,697 @@
+<?xml version="1.0"?>
+<mavlink>
+  <version>2</version>
+
+  <messages>
+
+    <!-- Commands -->
+    <message id="10001" name="REQUEST_FIRMWARE_VERSION">
+      <description>Request gimbal firmware version</description>
+      <field type="uint8_t" name="dummy">Ignored, placeholder only</field>
+    </message>
+
+    <message id="10002" name="REQUEST_GIMBAL_HARDWARE_ID">
+      <description>Request gimbal hardware ID</description>
+      <field type="uint8_t" name="dummy">Ignored, placeholder only</field>
+    </message>
+
+    <message id="10004" name="AUTO_FOCUS">
+      <description>Request auto focus</description>
+      <field type="uint8_t" name="auto_focus">1 to enable, 0 to disable</field>
+      <field type="uint16_t" name="touch_x">Touch X coordinate in pixels</field>
+      <field type="uint16_t" name="touch_y">Touch Y coordinate in pixels</field>
+    </message>
+
+    <message id="10005" name="MANUAL_ZOOM_WITH_AUTOFOCUS">
+      <description>Manual Zoom with Autofocus</description>
+      <field type="int8_t" name="zoom">1: Zoom in, 0: Stop, -1: Zoom out</field>
+    </message>
+
+    <message id="10006" name="MANUAL_FOCUS">
+      <description>Manual Focus</description>
+      <field type="int8_t" name="focus">1: Far, 0: Stop, -1: Near</field>
+    </message>
+
+    <message id="10007" name="GIMBAL_ROTATION_CONTROL">
+      <description>Gimbal Rotation Control</description>
+      <field type="int8_t" name="turn_yaw">Yaw: -100 to 100</field>
+      <field type="int8_t" name="turn_pitch">Pitch: -100 to 100</field>
+    </message>
+
+    <message id="10008" name="ONE_KEY_CENTERING">
+      <description>One-Key Centering</description>
+      <field type="uint8_t" name="center_pos">1: One-key center, 2: Downward, etc.</field>
+    </message>
+
+    <message id="10010" name="REQUEST_CAMERA_SYSTEM_INFORMATION">
+      <description>Request Camera System Information</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10011" name="FUNCTION_FEEDBACK_RESPONSE">
+      <description>Function Feedback Response</description>
+      <field type="uint8_t" name="info_type">0: Photo OK, 1: Fail, 2: HDR on, ...</field>
+    </message>
+
+    <message id="10012" name="CAPTURE_PHOTO_RECORD_VIDEO">
+      <description>Capture Photo / Record Video</description>
+      <field type="uint8_t" name="func_type">0: Photo, 2: Start Rec, 3–10: Various Modes</field>
+    </message>
+
+    <message id="10013" name="REQUEST_GIMBAL_ATTITUDE_DATA">
+      <description>Request Gimbal Attitude Data</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10014" name="SET_GIMBAL_ATTITUDE_ANGLES">
+      <description>Set Gimbal Attitude Angles</description>
+      <field type="int16_t" name="yaw">Target yaw * 10</field>
+      <field type="int16_t" name="pitch">Target pitch * 10</field>
+    </message>
+
+    <message id="10015" name="ABSOLUTE_ZOOM_AUTO_FOCUS">
+      <description>Absolute Zoom with Auto Focus</description>
+      <field type="uint8_t" name="absolute_movement_int">Integer zoom part</field>
+      <field type="uint8_t" name="absolute_movement_float">Decimal zoom part</field>
+    </message>
+
+    <message id="10016" name="REQUEST_VIDEO_STITCHING_MODE">
+      <description>Request video stitching mode</description>
+      <field type="uint8_t" name="dummy">Ignored</field>
+    </message>
+
+    <message id="10017" name="SET_VIDEO_STITCHING_MODE">
+      <description>Set video stitching mode</description>
+      <field type="uint8_t" name="vdisp_mode">Video display mode</field>
+    </message>
+
+    <message id="10018" name="GET_TEMPERATURE_AT_SELECTED_POINT">
+      <description>Get temperature at selected point</description>
+        <field type="uint16_t" name="x">X coordinate</field>
+        <field type="uint16_t" name="y">Y coordinate</field>
+        <field type="uint8_t" name="get_temp_flag">Temperature retrieval flag</field>
+      </message>
+
+    <message id="10019" name="LOCAL_TEMPERATURE_MEASUREMENT">
+      <description>Local temperature measurement</description>
+      <field type="uint16_t" name="startx">X coordinate</field>
+      <field type="uint16_t" name="starty">Y coordinate</field>
+      <field type="uint16_t" name="endx">End X coordinate</field>
+      <field type="uint16_t" name="endy">End Y coordinate</field>
+      <field type="uint8_t" name="get_temp_flag">1: Success, 0: Fail</field>
+    </message>
+
+    <message id="10020" name="GLOBAL_TEMPERATURE_MEASUREMENT">
+      <description>Request Global Temperature Measurement</description>
+      <field type="uint8_t" name="get_temp_flag">Reserved</field>
+    </message>
+
+    <message id="10021" name="REQUEST_LASER_DISTANCE_MEASUREMENT">
+      <description>Request Laser Distance Measurement</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10022" name="REQUEST_CURRENT_SUPPORTED_ZOOM_RANGE">
+      <description>Request current supported zoom range</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10023" name="REQUEST_LASER_DISTANCE_TARGET_LONGITUDE_LATITUDE">
+      <description>Request laser distance target longitude and latitude</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10024" name="REQUEST_CURRENT_ZOOM_MAGNIFICATION">
+      <description>Request current zoom magnification</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10025" name="REQUEST_CURRENT_GIMBAL_MODE">
+      <description>Request current gimbal mode</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10026" name="REQUEST_CURRENT_THERMAL_IMAGE_PSEUDOCOLOR">
+      <description>Request current thermal image pseudocolor</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10027" name="SET_CURRENT_THERMAL_IMAGE_PSEUDOCOLOR">
+      <description>Request current thermal image region</description>
+      <field type="uint8_t" name="pseudo_color"> 0 = White Hot, 1 = Black Hot, 2 = Ironbow, 3 = Rainbow</field>
+    </message>
+
+    <message id="10028" name="REQUEST_CAMERA_ENCODING_PARAMETERS">
+      <description>Request camera encoding parameters</description>
+      <field type="uint8_t" name="req_stream_type"> 0: Request all, 1: Request video, 2: Request photo</field>
+    </message>
+
+    <message id="10029" name="SET_CAMERA_ENCODING_PARAMETERS">
+      <description>Set camera encoding parameters</description>
+      <field type="uint8_t" name="stream_type"> 0: Video, 1: Photo</field>
+      <field type="uint8_t" name="encoding_type"> 0: H.264, 1: H.265</field>
+      <field type="uint16_t" name="resolution_width">Resolution width</field>
+      <field type="uint16_t" name="resolution_height">Resolution height</field>
+      <field type="uint16_t" name="bitrate">Bitrate in bps</field>
+      <field type="uint8_t" name="reserve">Reserved</field>
+    </message>
+
+    <message id="10030" name="SEND_AIRCRAFT_ATTITUDE_DATA_TO_GIMBAL">
+      <description>Send aircraft attitude data to gimbal</description>
+      <field type="uint32_t" name="time_boot_ms">Time since boot (ms)</field>
+      <field type="float" name="roll">Roll angle (rad)</field>
+      <field type="float" name="pitch">Pitch angle (rad)</field>
+      <field type="float" name="yaw">Yaw angle (rad)</field>
+      <field type="float" name="roll_speed">Roll speed (rad/s)</field>
+      <field type="float" name="pitch_speed">Pitch speed (rad/s)</field>
+      <field type="float" name="yaw_speed">Yaw speed (rad/s)</field>
+    </message>
+
+    <message id="10032" name="REQUEST_FLIGHT_CONTROLLER_TO_SEND_DATA_STREAM_TO_GIMBAL">
+      <description>Request flight controller to send data stream to gimbal</description>
+      <field type="uint8_t" name="data_type">data type</field>
+      <field type="uint8_t" name="data_freq">stream rate</field>
+    </message> 
+
+    <message id="10033" name="REQUEST_GIMBAL_TO_SEND_DATA_STREAM">
+      <description>Request gimbal to send data stream </description>
+      <field type="uint8_t" name="data_type">data type</field>
+      <field type="uint8_t" name="data_freq">stream rate</field>
+    </message>
+
+    <message id="10099" name="REQUEST_GIMBAL_TO_SEND_LASER_RANGE_DATA_STREAM">
+      <description>Request gimbal to send data stream </description>
+      <field type="uint8_t" name="data_type">data type</field>
+    </message>
+
+    <message id="10034" name="REQUEST_GIMBAL_MAGNETIC_ENCODER_ANGLE">
+      <description>Request gimbal magnetic encoder angle</description>
+      <field type="uint16_t" name="yaw_angle">yaw angle</field>
+      <field type="uint16_t" name="pitch_angle">pitch angle</field>
+      <field type="uint16_t" name="roll_angle">roll angle</field>
+    </message>
+
+    <message id="10035" name="REQUEST_GIMBAL_CONTROL_MODE">
+      <description>Request gimbal control mode data</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10036" name="REQUEST_WEAK_CONTROL_THRESHOLDS">
+      <description>Request weak control thresholds</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10037" name="REQUEST_GIMBAL_MOTOR_VOLTAGE_DATA">
+      <description>Request Gimbal Motor Voltage Data (Old format)</description>
+      <field type="int16_t" name="weak_control_limit_value">Weak_control_limit_value</field>
+      <field type="int16_t" name="voltage_threshold"> Voltage threshold</field>
+      <field type="int16_t" name="angular_error_threshold"> Angular error threshold</field>
+    </message>
+
+
+    <message id="10048" name="SET_UTC_TIME">
+      <description>Set UTC Time</description>
+      <field type="uint64_t" name="timestamp">UNIX epoch time (μs)</field>
+    </message> 
+
+    <message id="10049" name="REQUEST_SYSTEM_INFO">
+      <description>Request Gimbal System Information</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10050" name="SET_LASER_STATE">
+      <description>Set Laser Ranging State</description>
+      <field type="uint8_t" name="laser_state">1: Enable, 0: Disable</field>
+    </message>
+
+    <message id="10051" name="REQUEST_THERMAL_OUTPUT_MODE">
+      <description>Request thermal imaging output mode</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10052" name="SET_THERMAL_OUTPUT_MODE">
+      <description>Set thermal imaging output mode</description>
+      <field type="uint8_t" name="mode">0: 30fps, 1: 25fps + Temp Frame</field>
+    </message>
+
+    <message id="10062" name="SEND_RAW_GPS_TO_GIMBAL">
+      <description>Send raw GPS data to gimbal</description>
+      <field type="uint32_t" name="time_boot_ms">Time since boot (ms)</field>
+      <field type="int32_t" name="lat">Latitude (degE7)</field>
+      <field type="int32_t" name="lon">Longitude (degE7)</field>
+      <field type="int32_t" name="alt">Altitude MSL (cm)</field>
+      <field type="int32_t" name="alt_ellipsoid">Altitude above WGS84 (cm)</field>
+      <field type="int32_t" name="vn">Velocity X (mm/s)</field>
+      <field type="int32_t" name="ve">Velocity Y (mm/s)</field>
+      <field type="int32_t" name="vd">Velocity Z (mm/s)</field>
+    </message>
+
+    <message id="10068" name="SET_THERMAL_THRESHOLDS">
+      <description>Set thermal imaging threshold regions</description>
+      <field type="uint8_t[3]" name="thresh2_color">RGB color of threshold region 2</field>
+      <field type="uint8_t" name="thresh3_switch">0: hide, 1: display</field>
+      <field type="int16_t[2]" name="thresh3_temp">Min/Max temps (divide by 10)</field>
+      <field type="uint8_t[3]" name="thresh3_color">RGB color of threshold region 3</field>
+    </message>
+
+    <message id="10070" name="REQUEST_IR_THRESHOLD_PRECISION">
+      <description>Request IR threshold precision</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10071" name="SET_IR_THRESHOLD_PRECISION">
+      <description>Set IR threshold precision</description>
+      <field type="uint8_t" name="precision">1: max, 2: mid, 3: min</field>
+    </message>
+
+    <message id="10072" name="FORMAT_SD_CARD">
+      <description>Format SD card</description>
+      <field type="uint8_t" name="format_sta">0: Fail, 1: Success</field>
+    </message>
+
+    <message id="10073" name="GET_PICTURE_NAME_TYPE">
+      <description>Get picture/file naming type</description>
+      <field type="uint8_t" name="file_type">0: picture, 1: temp, 2: video</field>
+    </message>
+
+    <message id="10074" name="SET_PICTURE_NAME_TYPE">
+      <description>Set picture/file naming type</description>
+      <field type="uint8_t" name="file_type">File type</field>
+      <field type="uint8_t" name="file_name_type">0: reserve, 1: index, 2: timestamp</field>
+    </message>
+
+    <message id="10075" name="GET_HDMI_OSD_STATUS">
+      <description>Get HDMI OSD display status</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10076" name="SET_HDMI_OSD_STATUS">
+      <description>Set HDMI OSD display status</description>
+      <field type="uint8_t" name="osd_sta">0: Off, 1: On</field>
+    </message>  
+
+    <message id="10077" name="GET_AI_MODE_STATUS">
+      <description>Get AI mode status</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10078" name="GET_AI_COORDINATE_STREAM_STATUS">
+      <description>Get AI coordinate stream status</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10079" name="UPDATE_THERMAL_SHUTTER">
+      <description>Manually update thermal shutter</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="10081" name="SET_AI_COORDINATE_STREAM_STATUS">
+      <description>Set AI tracking coordinate stream status</description>
+      <field type="uint8_t" name="track_action">0: Disable, 1: Enable</field>
+    </message>
+
+    <message id="100112" name="REQUEST_WEAK_CONTROL_MODE">
+      <description>Request weak control mode</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="100113" name="SET_WEAK_CONTROL_MODE">
+      <description>Set weak control mode</description>
+      <field type="uint8_t" name="weak_mode_state">1: Enable, 0: Disable</field>
+    </message>
+
+    <message id="100128" name="GIMBAL_CAMERA_SOFT_REBOOT">
+      <description>Gimbal camera soft reboot</description>
+      <field type="uint8_t" name="camera_reboot">0: No action, 1: Reboot</field>
+      <field type="uint8_t" name="gimbal_reset">0: No action, 1: Reboot</field>
+    </message>
+
+    <message id="100129" name="GET_GIMBAL_CAMERA_IP">
+      <description>Get gimbal camera IP address</description>
+      <field type="uint8_t" name="dummy">Reserved</field>
+    </message>
+
+    <message id="100130" name="SET_GIMBAL_CAMERA_IP">
+      <description>Set gimbal camera IP config</description>
+      <field type="uint32_t" name="ip">IP Address</field>
+      <field type="uint32_t" name="mask">Subnet Mask</field>
+      <field type="uint32_t" name="gateway">Gateway</field>
+    </message>
+
+    <!-- Response Messages -->
+    <message id="20001" name="RESPONSE_REQUEST_FIRMWARE_VERSION">
+      <description>Response to request firmware version</description>
+      <field type="uint32_t" name="camera_firmware_ver">Camera firmware version</field>
+      <field type="uint32_t" name="gimbal_firmware_ver">Gimbal firmware version</field>
+      <field type="uint32_t" name="zoom_firmware_ver">Zoom firmware version</field>
+    </message>
+
+    <message id="20002" name="RESPONSE_REQUEST_GIMBAL_HARDWARE_ID">
+      <description>Response to request gimbal hardware ID</description>
+      <field type="uint32_t" name="hardware_id">Gimbal hardware ID</field>
+    </message>
+
+    <message id="20004" name="RESPONSE_AUTO_FOCUS">
+      <description>Response to auto focus</description>
+      <field type="uint8_t" name="sta">1: Success, 0: Error</field>
+    </message>
+
+    <message id="20005" name="RESPONSE_MANUAL_ZOOM_WITH_AUTOFOCUS">
+      <description>Response for Manual Zoom with Autofocus</description>
+      <field type="uint16_t" name="zoom_multiple">Zoom level (10x = 100)</field>
+    </message>
+
+    <message id="20006" name="RESPONSE_MANUAL_FOCUS">
+      <description>Response for Manual Focus</description>
+      <field type="uint8_t" name="sta">1: Success, 0: Error</field>
+    </message>
+
+    <message id="20007" name="RESPONSE_GIMBAL_ROTATION_CONTROL">
+      <description>Response for Gimbal Rotation</description>
+      <field type="uint8_t" name="sta">1: Success, 0: Error</field>
+    </message>
+
+    <message id="20008" name="RESPONSE_ONE_KEY_CENTERING">
+      <description>Response for One-Key Centering</description>
+      <field type="uint8_t" name="sta">1: Success, 0: Error</field>
+    </message>
+
+    <message id="20010" name="RESPONSE_REQUEST_CAMERA_SYSTEM_INFORMATION">
+      <description>Camera system information response</description>
+      <field type="uint8_t" name="reserved1">Reserved</field>
+      <field type="uint8_t" name="hdr_sta">0: Off, 1: On</field>
+      <field type="uint8_t" name="reserved2">Reserved</field>
+      <field type="uint8_t" name="record_sta">0: No record, 1: Rec, 2: No TF, 3: Data loss</field>
+      <field type="uint8_t" name="gimbal_motion_mode">0: Lock, 1: Follow, 2: FPV</field>
+      <field type="uint8_t" name="gimbal_mounting_dir">0: Reserved, 1: Normal, 2: Inverted</field>
+      <field type="uint8_t" name="video_hdmi_or_cvbs">0: HDMI ON, 1: CVBS ON</field>
+      <field type="uint8_t" name="zoom_linkage">0: Off, 1: On</field>
+    </message>
+
+    <message id="20011" name="RESPONSE_FUNCTION_FEEDBACK_RESPONSE">
+      <description>Function feedback response</description>
+      <field type="uint8_t" name="info_type">Info type</field>
+    </message>
+
+
+    <message id="20013" name="RESPONSE_REQUEST_GIMBAL_ATTITUDE_DATA">
+      <description>Gimbal attitude response</description>
+      <field type="int16_t" name="yaw">Yaw * 10</field>
+      <field type="int16_t" name="pitch">Pitch * 10</field>
+      <field type="int16_t" name="roll">Roll * 10</field>
+      <field type="int16_t" name="yaw_velocity">Gyro yaw vel</field>
+      <field type="int16_t" name="pitch_velocity">Gyro pitch vel</field>
+      <field type="int16_t" name="roll_velocity">Gyro roll vel</field>
+    </message>
+
+    <message id="20014" name="RESPONSE_SET_GIMBAL_ATTITUDE_ANGLES">
+      <description>Response for setting attitude angles</description>
+      <field type="int16_t" name="yaw">Actual yaw * 10</field>
+      <field type="int16_t" name="pitch">Actual pitch * 10</field>
+      <field type="int16_t" name="roll">Actual roll * 10</field>
+    </message>
+
+    <message id="20015" name="RESPONSE_ABSOLUTE_ZOOM_AUTO_FOCUS">
+      <description>Response for absolute zoom</description>
+      <field type="uint8_t" name="absolute_movement_ack">1: Success</field>
+    </message>
+
+    <message id="20016" name="RESPONSE_REQUEST_VIDEO_STITCHING_MODE">
+      <description>Response to request stitching mode</description>
+      <field type="uint8_t" name="vdisp_mode">Current stitching mode</field>
+    </message>
+
+    <message id="20017" name="RESPONSE_SET_VIDEO_STITCHING_MODE">
+      <description>Response to set video stitching mode</description>
+      <field type="uint8_t" name="vdisp_mode">Echoed stitching mode</field>
+    </message>
+
+    <message id="20018" name="RESPONSE_GET_TEMPERATURE_AT_SELECTED_POINT">
+      <description>Response: Temperature at selected point</description>
+      <field type="int16_t" name="temperature">Temperature in °C (divide by 10)</field>
+      <field type="int16_t" name="x">X coordinate</field>
+      <field type="int16_t" name="y">Y coordinate</field>
+    </message>
+
+    <message id="20019" name="RESPONSE_LOCAL_TEMPERATURE_MEASUREMENT">
+      <description>Response: Local temperature measurement</description>
+      <field type="int16_t" name="startx">Start X coordinate</field>
+      <field type="int16_t" name="starty">Start Y coordinate</field>
+      <field type="int16_t" name="endx">End X coordinate</field>
+      <field type="int16_t" name="endy">End Y coordinate</field>
+      <field type="int16_t" name="temp_max">
+        Maximum temperature in °C (divide by 10)
+      </field>
+      <field type="int16_t" name="temp_min">
+        Minimum temperature in °C (divide by 10)
+      </field>
+      <field type="int16_t" name="temp_max_x">
+        X coordinate of max temp
+      </field>
+      <field type="int16_t" name="temp_max_y">
+        Y coordinate of max temp
+      </field>
+      <field type="int16_t" name="temp_min_x">
+        X coordinate of min temp
+      </field>
+      <field type="int16_t" name="temp_min_y">
+        Y coordinate of min temp
+      </field>
+    </message>
+
+    <message id="20020" name="RESPONSE_GLOBAL_TEMPERATURE_MEASUREMENT">
+      <description>Response: Global temperature measurement</description>
+      <field type="int16_t" name="temp_max">Global temperature in °C (divide by 10)</field>
+      <field type="int16_t" name="temp_min">Global temperature in °C (divide by 10)</field>
+      <field type="int16_t" name="temp_max_x"> X coordinate of max temp</field>
+      <field type="int16_t" name="temp_max_y">Y coordinate of max temp</field>
+      <field type="int16_t" name="temp_min_x">X coordinate of min temp</field>
+      <field type="int16_t" name="temp_min_y">Y coordinate of min temp</field>
+    </message>
+
+    <message id="20021" name="RESPONSE_REQUEST_LASER_DISTANCE_MEASUREMENT">
+      <description>Response: Laser distance measurement</description>
+      <field type="uint16_t" name="laser_distance">Distance in cm</field>
+    </message>
+
+    <message id="20022" name="RESPONSE_REQUEST_CURRENT_SUPPORTED_ZOOM_RANGE">
+      <description>Response: Current supported zoom range</description>
+      <field type="uint8_t" name="zoom_max_int">Minimum zoom level</field>
+      <field type="uint8_t" name="zoom_max_float">Maximum zoom level</field>
+    </message>
+
+    <message id="20023" name="RESPONSE_REQUEST_LASER_DISTANCE_TARGET_LONGITUDE_LATITUDE">
+      <description>Response: Laser distance target longitude and latitude</description>
+      <field type="int32_t" name="target_lat">Target latitude (degE7)</field>
+      <field type="int32_t" name="target_lon">Target longitude (degE7)</field> 
+    </message>  
+
+    <message id="20024" name="RESPONSE_REQUEST_CURRENT_ZOOM_MAGNIFICATION">
+      <description>Response: Current zoom magnification</description>
+      <field type="uint8_t" name="zoom_int">Integer part of zoom level</field>
+      <field type="uint8_t" name="zoom_float">Decimal part of zoom level</field>
+    </message>
+
+    <message id="20025" name="RESPONSE_REQUEST_CURRENT_GIMBAL_MODE">
+      <description>Response: Current gimbal mode</description>
+      <field type="uint8_t" name="gimbal_mode">0: Lock, 1: Follow, 2: FPV</field>
+    </message>
+
+    <message id="20026" name="RESPONSE_REQUEST_CURRENT_THERMAL_IMAGE_PSEUDOCOLOR">
+      <description>Response: Current thermal image pseudocolor</description>
+      <field type="uint8_t" name="pseudo_color">0: White Hot, 1: Black Hot, 2: Ironbow, 3: Rainbow</field>
+    </message>
+
+    <message id="20028" name="RESPONSE_CAMERA_ENCODING_PARAMETERS">
+      <description>Response: Camera encoding parameters</description>
+      <field type="uint8_t" name="stream_type">0: Video, 1: Photo</field>
+      <field type="uint8_t" name="encoding_type">0: H.264, 1: H.265</field>
+      <field type="uint16_t" name="resolution_width">Resolution width</field>
+      <field type="uint16_t" name="resolution_height">Resolution height</field>
+      <field type="uint16_t" name="bitrate">Bitrate in bps</field>
+      <field type="uint8_t" name="reserve">Reserved</field>
+    </message>
+
+    <message id="20029" name="RESPONSE_SET_CAMERA_ENCODING_PARAMETERS">
+      <description>Response: Set camera encoding parameters</description>
+      <field type="uint8_t" name="stream_type">0: Video, 1: Photo</field>
+      <field type="uint8_t" name="sta">0: H.264, 1: H.265</field>
+    </message>
+
+    <message id="20032" name="RESPONSE_REQUEST_FLIGHT_CONTROLLER_TO_SEND_DATA_STREAM_TO_GIMBAL">
+      <description>Response: Request flight controller to send data stream to gimbal</description>
+      <field type="uint8_t" name="data_type">Data type</field>
+    </message>
+
+    <message id="20033" name="RESPONSE_REQUEST_GIMBAL_TO_SEND_DATA_STREAM">
+      <description>Response: Request gimbal to send data stream</description>
+      <field type="uint8_t" name="data_type">Data type</field>
+    </message>
+
+    <message id="20099" name="RESPONSE_REQUEST_GIMBAL_TO_SEND_LASER_RANGE_DATA_STREAM">
+      <description>Response: Request gimbal to send data stream</description>
+      <field type="uint8_t" name="data_type">Data type</field>
+    </message>
+
+    <message id="20038" name="RESPONSE_ENCODER_ANGLE">
+      <description>Encoder angle response</description>
+      <field type="int16_t" name="yaw_angle">Yaw angle (divide by 10)</field>
+      <field type="int16_t" name="pitch_angle">Pitch angle (divide by 10)</field>
+      <field type="int16_t" name="roll_angle">Roll angle (divide by 10)</field>
+    </message>
+
+    <message id="20039" name="RESPONSE_GIMBAL_CONTROL_MODE">
+      <description>Gimbal Control Mode response</description>
+      <field type="uint8_t" name="control_mode">0: Attitude, 1: Weak, 2: Middle, 3: FPV, 4: Motor Close</field>
+    </message>
+
+    <message id="20040" name="RESPONSE_REQUEST_WEAK_CONTROL_THRESHOLDS">
+      <description>Response: Weak Control Thresholds</description>
+      <field type="int16_t" name="weak_control_limit_value">Range (divide by 10)</field>
+      <field type="int16_t" name="voltage_threshold">Voltage threshold (divide by 10)</field>
+      <field type="int16_t" name="angular_error_threshold">Angular error threshold (divide by 10)</field>
+    </message>
+
+    <message id="20041" name="RESPONSE_GIMBAL_MOTOR_VOLTAGE_1">
+      <description>Response: Gimbal Motor Voltage Data (Old format)</description>
+      <field type="int16_t" name="yaw_motor_voltage">Yaw voltage (divide by 1000)</field>
+      <field type="int16_t" name="pitch_motor_voltage">Pitch voltage (divide by 1000)</field>
+      <field type="int16_t" name="roll_motor_voltage">Roll voltage (divide by 1000)</field>
+      <field type="uint8_t" name="sta">1: Success, 0: Fail</field>
+    </message>
+
+    <message id="20042" name="RESPONSE_GIMBAL_MOTOR_VOLTAGE_2">
+      <description>Response: Gimbal Motor Voltage Data (New format)</description>
+      <field type="int16_t" name="yaw_voltage">Yaw motor voltage (divide by 1000)</field>
+      <field type="int16_t" name="pitch_voltage">Pitch motor voltage (divide by 1000)</field>
+      <field type="int16_t" name="roll_voltage">Roll motor voltage (divide by 1000)</field>
+    </message>
+
+    <message id="20048" name="RESPONSE_SET_UTC_TIME">
+      <description>Set UTC Time Response</description>
+      <field type="int8_t" name="ack">1: Success, 0: Invalid format</field>
+    </message>
+
+    <message id="20049" name="RESPONSE_REQUEST_SYSTEM_INFO">
+      <description>System info response</description>
+      <field type="uint8_t" name="laser_state">1: Laser enabled, 0: Disabled</field>
+    </message>
+
+    <message id="20050" name="RESPONSE_SET_LASER_STATE">
+      <description>Laser setting response</description>
+      <field type="uint8_t" name="sta">1: Success, 0: Fail</field>
+    </message>
+
+
+    <message id="20051" name="RESPONSE_THERMAL_OUTPUT_MODE">
+      <description>Thermal imaging output mode</description>
+      <field type="uint8_t" name="mode">0: 30fps, 1: 25fps + Temp Frame</field>
+    </message>
+
+    <message id="20052" name="RESPONSE_SET_THERMAL_OUTPUT_MODE">
+      <description>Set thermal imaging output mode response</description>
+      <field type="uint8_t" name="mode">Echoed mode</field>
+    </message>
+
+    <message id="20068" name="RESPONSE_SET_THERMAL_THRESHOLDS">
+      <description>ACK for thermal threshold setting</description>
+      <field type="uint8_t" name="ack">1: success, 0: failure</field>
+    </message>
+
+    <message id="20070" name="RESPONSE_IR_THRESHOLD_PRECISION">
+      <description>Response: IR threshold precision</description>
+      <field type="uint8_t" name="precision">1: max, 2: mid, 3: min</field>
+    </message>
+
+    <message id="20071" name="RESPONSE_SET_IR_THRESHOLD_PRECISION">
+      <description>ACK for IR threshold precision set</description>
+      <field type="uint8_t" name="precision">Echoed precision</field>
+    </message>
+
+    <message id="20072" name="RESPONSE_FORMAT_SD_CARD">
+      <description>ACK for SD card format</description>
+      <field type="uint8_t" name="format_sta">0: Fail, 1: Success</field>
+    </message>
+
+    <message id="20073" name="RESPONSE_GET_PICTURE_NAME_TYPE">
+      <description>Response: picture/file naming type</description>
+      <field type="uint8_t" name="file_type">File type</field>
+      <field type="uint8_t" name="file_name_type">0: reserve, 1: index, 2: timestamp</field>
+    </message>
+
+    <message id="20074" name="RESPONSE_SET_PICTURE_NAME_TYPE">
+      <description>ACK for naming type set</description>
+      <field type="uint8_t" name="file_type">File type</field>
+      <field type="uint8_t" name="file_name_type">File name type</field>
+    </message>
+
+    <message id="20075" name="RESPONSE_HDMI_OSD_STATUS">
+      <description>Response: HDMI OSD status</description>
+      <field type="uint8_t" name="osd_sta">0: Off, 1: On</field>
+    </message>
+
+    <message id="20076" name="RESPONSE_SET_HDMI_OSD_STATUS">
+      <description>ACK for HDMI OSD set</description>
+      <field type="uint8_t" name="osd_sta">Echoed status</field>
+    </message>
+
+    <message id="20077" name="RESPONSE_AI_MODE_STATUS">
+      <description>AI mode status</description>
+      <field type="uint8_t" name="sta">0: Not enabled, 1: Enabled</field>
+    </message>
+
+    <message id="20078" name="RESPONSE_AI_COORDINATE_STREAM_STATUS">
+      <description>Coordinate stream status</description>
+      <field type="uint8_t" name="sta">0: Not enabled, 1: Outputting, 2: No AI, 3: No target</field>
+    </message>
+
+    <message id="20079" name="RESPONSE_UPDATE_THERMAL_SHUTTER">
+      <description>ACK for thermal shutter update</description>
+      <field type="uint8_t" name="ack">1: Success</field>
+    </message>
+
+    <message id="20081" name="RESPONSE_SET_AI_COORDINATE_STREAM_STATUS">
+      <description>ACK for AI coordinate stream control</description>
+      <field type="uint8_t" name="sta">0: Off, 1: On</field>
+    </message>
+
+    <message id="20080" name="AI_COORDINATE_STREAM">
+      <description>AI module target tracking data (auto-sent)</description>
+      <field type="uint16_t" name="pos_x">X coordinate</field>
+      <field type="uint16_t" name="pos_y">Y coordinate</field>
+      <field type="uint16_t" name="pos_width">Box width</field>
+      <field type="uint16_t" name="pos_height">Box height</field>
+      <field type="uint8_t" name="target_id">0: Human, 1: Car, etc.</field>
+      <field type="uint8_t" name="track_sta">Tracking status (0-4)</field>
+    </message>
+
+    <message id="200112" name="RESPONSE_WEAK_CONTROL_MODE">
+      <description>Weak mode response</description>
+      <field type="uint8_t" name="weak_mode_state">0: Disabled, 1: Enabled</field>
+    </message>
+
+    <message id="200113" name="RESPONSE_SET_WEAK_CONTROL_MODE">
+      <description>ACK for weak mode set</description>
+      <field type="uint8_t" name="sta">1: Success, 0: Failure</field>
+      <field type="uint8_t" name="weak_mode_state">1: Enabled, 0: Disabled</field>
+    </message>
+
+    <message id="200128" name="RESPONSE_SOFT_REBOOT">
+      <description>ACK for reboot</description>
+      <field type="uint8_t" name="camera_reboot_sta">0: No, 1: Yes</field>
+      <field type="uint8_t" name="gimbal_reset_sta">0: No, 1: Yes</field>
+    </message>
+
+    <message id="200129" name="RESPONSE_CAMERA_IP">
+      <description>Response: IP config</description>
+      <field type="uint32_t" name="ip">IP Address</field>
+      <field type="uint32_t" name="mask">Subnet Mask</field>
+      <field type="uint32_t" name="gateway">Gateway</field>
+    </message>
+
+    <message id="200130" name="RESPONSE_SET_CAMERA_IP">
+      <description>ACK for IP config</description>
+      <field type="uint8_t" name="ack">1: Success</field>
+    </message>
+  </messages>
+</mavlink>

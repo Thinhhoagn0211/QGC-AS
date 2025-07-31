@@ -1,0 +1,425 @@
+network:
+  src_ip: "172.16.11.17"
+  src_port: 14445
+  dst_ip: "172.16.11.70"
+  dst_port: 37260
+  qgc_ip: "172.16.11.17"
+  qgc_port: 14445
+
+commands:
+
+  "REQUEST_GIMBAL_HARDWARE_ID":
+    command: "55 66 01 00 00 00 00 02"
+
+  "GIMBAL_RAW_GPS_DATA":
+    command: "55 66 01 00 00 00 00 3E"
+
+  "REQUEST_VIDEO_STITCHING_MODE":
+    command: "55 66 01 00 00 00 00 10"
+
+  "AUTO_FOCUS":
+    command: "55 66 01 05 00 00 00 04"
+
+
+  "MANUAL_ZOOM_WITH_AUTOFOCUS":
+    command: "55 66 01 01 00 00 00 05"
+
+  "MANUAL_FOCUS":
+    command: "55 66 01 01 00 00 00 06"
+
+  "GIMBAL_ROTATION_CONTROL":
+    command: "55 66 01 02 00 00 00 07"
+
+  "ONE_KEY_CENTERING":
+    command: "55 66 01 01 00 00 00 08"
+  
+  "REQUEST_CAMERA_SYSTEM_INFORMATION":
+    command: "55 66 01 00 00 00 00 0A"
+    
+  "FUNCTION_FEEDBACK_RESPONSE":
+    command: "55 66 01 00 00 00 00 0B"
+
+  "CAPTURE_PHOTO_RECORD_VIDEO":
+    command: "55 66 01 01 00 00 00 0C"
+
+  "REQUEST_GIMBAL_ALTITUDE_DATA":
+    command: "55 66 01 00 00 00 00 0D"
+
+  "SET_GIMBAL_ALTITUDE_ANGLES":
+    command: "55 66 01 04 00 00 00 0E"
+  
+  "ABSOLUTE_ZOOM_AUTO_FOCUS":
+    command: "55 66 01 02 00 00 00 0F"
+    
+  "REQUEST_VIDEO_STITCHING_MODE":
+    command: "55 66 01 00 00 00 00 10"
+
+  "SET_VIDEO_STITCHING_MODE":
+    command: "55 66 01 01 00 00 00 11"
+
+  "GET_TEMPERATURE_AT_SELECTED_POINT":
+    command: "55 66 01 05 00 00 00 12"
+  
+  "LOCAL_TEMPERATURE_MEASUREMENT":
+    command: "55 66 01 09 00 00 00 13"
+
+  "GLOBAL_TEMPERATURE_MEASUREMENT":
+    command: "55 66 01 01 00 00 00 14"
+
+  "REQUEST_LASER_DISTANCE_MEASUREMENT":
+    command: "55 66 01 00 00 00 00 15"
+
+  "REQUEST_CURRENT_SUPPORTED_ZOOM_RANGE":
+    command: "55 66 01 00 00 00 00 16"
+
+  "REQUEST_LASER_DISTANCE_TARGET_LONGITUDE_LATITUDE":
+    command: "55 66 01 00 00 00 00 17"
+
+  "REQUEST_CURRENT_ZOOM_MAGNIFICATION":
+    command: "55 66 01 00 00 00 00 18"
+
+  "REQUEST_CURRENT_GIMBAL_MODE":
+    command: "55 66 01 00 00 00 00 19"
+  
+  "REQUEST_CURRENT_THERMAL_IMAGE_PSEUDOCOLOR":
+    command: "55 66 01 00 00 00 00 1A"
+  
+  "SET_THERMAL_IMAGE_PSEUDOCOLOR":
+    command: "55 66 01 01 00 00 00 1B"
+
+  "REQUEST_CAMERA_ENCODING_PARAMETERS":
+    command: "55 66 01 01 00 00 00 20"
+
+  "SET_CAMERA_ENCODING_PARAMETERS":
+    command: "55 66 01 09 00 00 00 21"
+
+  "SEND_AIRCRAFT_ALTITUDE_DATA_TO_GIMBAL":
+    command: "55 66 01 07 00 00 00 22"
+
+  "REQUEST_FLIGHT_CONTROLLER_TO_SEND_DATA_STREAM_TO_GIMBAL":
+    command: "55 66 01 02 00 00 00 24"
+  
+  "REQUEST_GIMBAL_TO_SEND_DATA_STREAM":
+    command: "55 66 01 02 00 00 00 25"
+  
+  "REQUEST_GIMBAL_MAGNETIC_ENCODER_ANGLE":
+    command: "55 66 01 00 00 00 00 26"
+  
+  "REQUEST_GIMBAL_CONTROL_MODE":
+    command: "55 66 01 00 00 00 00 27"
+
+  "REQUEST_GIMBAL_WEAK_CONTROL_THRESHOLDS":
+    command: "55 66 01 00 00 00 00 28"
+
+  "REQUEST_GIMBAL_MOTOR_VOLTAGE":
+    command: "55 66 01 00 00 00 00 29"
+
+  "SET_UTC_TIME":
+    command: "55 66 01 08 00 00 00 30"
+
+  "REQUEST_SYSTEM_INFO":
+    command: "55 66 01 00 00 00 00 31"
+  
+  "SET_LASER_STATE":
+    command: "55 66 01 01 00 00 00 32"
+
+  
+
+  
+  
+
+  # 10001:
+  #   name: "REQUEST_FIRMWARE_VERSION"
+  #   command: "55 66 01 00 00 00 00 01"
+  #   bytes_output: [4, 4, 4]
+
+  # 10002:
+  #   name: "REQUEST_GIMBAL_HARDWARE_ID"
+  #   command: "55 66 01 00 00 00 00 02"
+  #   bytes_output: [1]
+
+  # 10004:
+  #   name: "SET_AUTO_FOCUS"
+  #   command: "55 66 01 05 00 00 00 04"
+  #   bytes_input: [1, 2, 2]
+  #   bytes_output: [1]
+  
+  # 10005:
+  #   name: "SET_MANUAL_ZOOM_WITH_AUTOFOCUS"
+  #   command: "55 66 01 01 00 00 00 05"
+  #   bytes_input: [1]
+  #   bytes_output: [2]
+
+  # 10006:
+  #   name: "SET_MANUAL_FOCUS"
+  #   command: "55 66 01 01 00 00 00 06"
+  #   bytes_input: [1]
+  #   bytes_output: [1]
+
+  # 10007:
+  #   name: "SET_GIMBAL_ROTATION_CONTROL"
+  #   command: "55 66 01 02 00 00 00 07"
+  #   bytes_input: [1, 1]
+  #   bytes_output: [1]
+
+  # 10008:
+  #   name: "SET_ONE_KEY_CENTERING"
+  #   command: "55 66 01 01 00 00 00 08"
+  #   bytes_input: [1]
+  #   bytes_output: [1]
+  
+  # 10010:
+  #   name: "REQUEST_CAMERA_SYSTEM_INFORMATION"
+  #   command: "55 66 01 00 00 00 00 0A"
+  #   bytes_output: [1,1,1,1,1,1,1]
+
+  # 10011:
+  #   name: "FUNCTION_FEEDBACK_RESPONSE"
+  #   command: "55 66 01 00 00 00 00 0B"
+  #   bytes_output: [1]
+
+  # 10012:
+  #   name: "SET_CAMERA_MODE"
+  #   command: "55 66 01 01 00 00 00 0C"
+  #   bytes_input: [1]
+
+  # 10013:
+  #   name: "REQUEST_GIMBAL_ALTITUDE_DATA"
+  #   command: "55 66 01 00 00 00 00 0D"
+  #   bytes_output: [2, 2, 2, 2, 2, 2]
+
+  # 10014:
+  #   name: "SET_GIMBAL_ALTITUDE_ANGLES"
+  #   command: "55 66 01 04 00 00 00 0E"
+  #   bytes_input: [2, 2]
+  #   bytes_output: [2, 2, 2]
+  
+  # 10015:
+  #   name: "ABSOLUTE_ZOOM_AUTO_FOCUS"
+  #   command: "55 66 01 02 00 00 00 0F"
+  #   bytes_input: [1, 1]
+  #   bytes_output: [1]
+
+  # 10016:
+  #   name: "REQUEST_VIDEO_STITCHING_MODE"
+  #   command: "55 66 01 00 00 00 00 10"
+  #   bytes_output: [1]
+
+  # 10017:
+  #   name: "SET_VIDEO_STITCHING_MODE"
+  #   command: "55 66 01 01 00 00 00 11"
+  #   bytes_input: [1]
+  #   bytes_output: [1]
+  
+  # 10018:
+  #   name: "GET_TEMPERATURE_AT_SELECTED_POINT"
+  #   command: "55 66 01 05 00 00 00 12"
+  #   bytes_input: [2, 2, 1]
+  #   bytes_output: [2, 2, 2]
+
+  # 10019:
+  #   name: "LOCAL_TEMPERATURE_MEASUREMENT"
+  #   command: "55 66 01 09 00 00 00 13"
+  #   bytes_input: [2, 2, 2, 2, 1]
+  #   bytes_output: [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+
+  # 10120: 
+  #   name: "GLOBAL_TEMPERATURE_MEASUREMENT"
+  #   command: "55 66 01 01 00 00 00 14"
+  #   bytes_input: [1]
+  #   bytes_output: [2, 2, 2, 2, 2, 2]
+  
+  # 10121:
+  #   name: "REQUEST_LASER_DISTANCE_MEASUREMENT"
+  #   command: "55 66 01 00 00 00 00 15"
+  #   bytes_output: [2]
+  
+  # 10122:
+  #   name: "REQUEST_CURRENT_SUPPORTED_ZOOM_RANGE"
+  #   command: "55 66 01 00 00 00 00 16"
+  #   bytes_output: [1, 1]
+  
+  # 10123:
+  #   name: "REQUEST_LASER_TARGET_LONGITUDE_LATITUDE"
+  #   command: "55 66 01 00 00 00 00 17"
+  #   bytes_output: [4, 4]
+  
+  # 10124:
+  #   name: "REQUEST_ZOOM_MAGNIFICATION"
+  #   command: "55 66 01 00 00 00 00 18"
+  #   bytes_output: [1, 1]
+
+  # 10125:
+  #   name: "REQUEST_CURRENT_GIMBAL_MODE"
+  #   command: "55 66 01 00 00 00 00 19"
+  #   bytes_output: [1]
+
+  # 10126:
+  #   name: "REQUEST_CURRENT_THERMAL_IMAGING_PSEUDO-COLOR"
+  #   command: "55 66 01 00 00 00 00 1A"
+  #   bytes_output: [1]
+
+  # 10127:
+  #   name: "SET_THERMAL_IMAGING_PSEUDO-COLOR"
+  #   command: "55 66 01 01 00 00 00 1B"
+  #   bytes_input: [1]
+  #   bytes_output: [1]
+
+  # 10132:
+  #   name: "REQUEST_CAMERA_ENCODING_PARAMETERS"
+  #   command: "55 66 01 01 00 00 00 20"
+  #   bytes_input: [1]
+  #   bytes_output: [1, 1, 2, 2, 2, 1]
+
+  # 10133:
+  #   name: "SET_CAMERA_ENCODING_PARAMETERS"
+  #   command: "55 66 01 09 00 00 00 21"
+  #   bytes_input: [1, 1, 2, 2, 2, 1]
+  #   bytes_output: [1, 1]
+
+  # 10134:
+  #   name: "SEND_AIRCRAFT_ALTITUDE_DATA_TO_GIMBAL"
+  #   command: "55 66 01 07 00 00 00 22"
+  
+  # 10136:
+  #   name: "REQUEST_CONTROLLER_SEND_DATA_STREAM_TO_GIMBAL"
+  #   command: "55 66 01 02 00 00 00 24"
+  #   bytes_input: [1, 1]
+  #   bytes_output: [1]
+
+  # 10137:
+  #   name: "REQUEST_GIMBAL_DATA_STREAM"
+  #   command: "55 66 01 02 00 00 00 25"
+  #   bytes_input: [1, 1]  # data_type, data_freq
+  #   bytes_output: [1]    # ACK returns data_type
+
+  # 10138:
+  #   name: "REQUEST_GIMBAL_MAG_ENCODER_ANGLE"
+  #   command: "55 66 01 00 00 00 00 26"
+  #   bytes_output: [2, 2, 2]  # yaw_angle, pitch_angle, roll_angle
+
+  # 10139:
+  #   name: "REQUEST_GIMBAL_CONTROL_MODE"
+  #   command: "55 66 01 00 00 00 00 27"
+  #   bytes_output: [1]  # Control_mode
+
+  # 10140:
+  #   name: "REQUEST_GIMBAL_WEAK_CTRL_THRESHOLDS"
+  #   command: "55 66 01 00 00 00 00 28"
+  #   bytes_output: [2, 2, 2]  # Weak_control_limit_value, Voltage_threshold, Angular_error_threshold
+
+  # 10141:
+  #   name: "REQUEST_GIMBAL_MOTOR_VOLTAGE"
+  #   command: "55 66 01 00 00 00 00 29"
+  #   bytes_output: [2, 2, 2, 1]  # Yaw, Pitch, Roll voltages + ACK status
+
+  # 10142:
+  #   name: "REQUEST_GIMBAL_MOTOR_VOLTAGE_EXTENDED"
+  #   command: "55 66 01 00 00 00 00 2A"
+  #   bytes_output: [2, 2, 2]  # yaw_voltage, pitch_voltage, roll_voltage
+
+  # 10143:
+  #   name: "SET_UTC_TIME"
+  #   command: "55 66 01 08 00 00 00 30"
+  #   bytes_input: [8]  # uint64_t timestamp
+  #   bytes_output: [1]  # ack
+
+  # 10144:
+  #   name: "REQUEST_GIMBAL_SYSTEM_INFORMATION"
+  #   command: "55 66 01 00 00 00 00 31"
+  #   bytes_output: [1]  # laser_state
+
+  # 10145:
+  #   name: "REQUEST_IR_THRESH_PRECISION"
+  #   command: "55 66 01 00 00 00 00 46"
+  #   bytes_output: [1]  # precision
+  
+  # 10146:
+  #   name: "SET_IR_THRESH_PRECISION"
+  #   command: "55 66 01 01 00 00 00 47"
+  #   bytes_input: [1]  # precision
+  #   bytes_output: [1]  # precision (echo)
+
+  # 10147:
+  #   name: "SD_FORMAT"
+  #   command: "55 66 01 01 00 00 00 48"
+  #   bytes_input: [1]  # format_sta
+  #   bytes_output: [1]
+
+  # 10148:
+  #   name: "GET_PIC_NAME_TYPE"
+  #   command: "55 66 01 01 00 00 00 49"
+  #   bytes_input: [1]  # File_type
+  #   bytes_output: [1, 1]  # File_type, File_name_type
+
+  # 10149:
+  #   name: "SET_PIC_NAME_TYPE"
+  #   command: "55 66 01 02 00 00 00 4A"
+  #   bytes_input: [1, 1]  # File_type, File_name_type
+  #   bytes_output: [1, 1]
+
+  # 10150:
+  #   name: "GET_HDMI_OSD_STATUS"
+  #   command: "55 66 01 00 00 00 00 4B"
+  #   bytes_output: [1]  # Osd_sta
+
+  # 10151:
+  #   name: "SET_HDMI_OSD_STATUS"
+  #   command: "55 66 01 01 00 00 00 4C"
+  #   bytes_input: [1]  # Osd_sta
+  #   bytes_output: [1]
+
+  # 10152:
+  #   name: "GET_AI_MODE_STATUS"
+  #   command: "55 66 01 00 00 00 00 4D"
+  #   bytes_output: [1]  # sta
+
+  # 10153:
+  #   name: "GET_AI_COORDINATE_STREAM_STATUS"
+  #   command: "55 66 01 00 00 00 00 4E"
+  #   bytes_output: [1]  # sta
+
+  # 10154:
+  #   name: "MANUAL_UPDATE_THERMAL_SHUTTER"
+  #   command: "55 66 01 00 00 00 00 4F"
+  #   bytes_output: [1]  # ack
+
+  # 10155:
+  #   name: "SET_AI_TRACKING_STREAM_STATUS"
+  #   command: "55 66 01 01 00 00 00 51"
+  #   bytes_input: [1]  # track_action
+  #   bytes_output: [1]  # sta
+
+  # 10156:
+  #   name: "REQUEST_WEAK_MODE"
+  #   command: "55 66 01 00 00 00 00 70"
+  #   bytes_output: [1]  # Weak_mode_state
+
+  # 10157:
+  #   name: "SET_WEAK_MODE"
+  #   command: "55 66 01 01 00 00 00 71"
+  #   bytes_input: [1]  # Weak_mode_state
+  #   bytes_output: [2]  # Sta, Weak_mode_state
+
+  # 10158:
+  #   name: "CAMERA_SOFT_REBOOT"
+  #   command: "55 66 01 02 00 00 00 80"
+  #   bytes_input: [1, 1]  # Camera_reboot, Gimbal_reset
+  #   bytes_output: [1, 1]  # Camera_reboot_sta, Gimbal_reset_sta
+
+  # 10159:
+  #   name: "GET_CAMERA_IP"
+  #   command: "55 66 01 00 00 00 00 81"
+  #   bytes_output: [4, 4, 4]  # IP, Mask, Gateway
+
+  # 10160:
+  #   name: "SET_CAMERA_IP"
+  #   command: "55 66 01 0C 00 00 00 82"
+  #   bytes_input: [4, 4, 4]  # IP, Mask, Gateway
+  #   bytes_output: [1]  # Ack
+
+  # 10162:
+  #   name: "SEND_RAW_GPS_DATA_TO_GIMBAL"
+  #   command: "55 66 01 00 00 00 00 3E"
+  #   bytes_input: [4, 4, 4]  # IP, Mask, Gateway
+  #   bytes_output: [1]

@@ -11,6 +11,11 @@
 
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QTimer>
+#include <iostream>
+#include <cstring>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 
 #include "Gimbal.h"
 #include "MAVLinkLib.h"
@@ -48,6 +53,7 @@ public:
     Q_INVOKABLE void acquireGimbalControl();
     Q_INVOKABLE void releaseGimbalControl();
     Q_INVOKABLE void sendRate();
+    Q_INVOKABLE void requestGimbalFirmwareVersion();
 
 signals:
     void activeGimbalChanged();
@@ -96,7 +102,14 @@ private:
         uint8_t deviceId = 0;
     };
 
+    int _socket = -1;
+    sockaddr_in localAddr{};
+    void _initSocket();
+    void _closeSocket();
+    void _readPendingDatagrams();
+    
     qreal _zoomLevel = 0.0;
+    void _sendMavlinkToGimbalUDP(const mavlink_message_t& message);
     void _requestGimbalInformation(uint8_t compid);
     void _handleHeartbeat(const mavlink_message_t &message);
     void _handleGimbalManagerInformation(const mavlink_message_t &message);

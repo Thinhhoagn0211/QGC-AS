@@ -16,6 +16,18 @@
 #include "SettingsManager.h"
 #include "Vehicle.h"
 
+#include <iostream>
+#include <cstring>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+
+#define TARGET_IP "172.16.11.17"
+#define TARGET_PORT 14445
+#define SYSTEM_ID 1
+#define COMPONENT_ID 1
+
+
 QGC_LOGGING_CATEGORY(GimbalControllerLog, "qgc.gimbal.gimbalcontroller")
 
 GimbalController::GimbalController(Vehicle *vehicle)
@@ -25,8 +37,9 @@ GimbalController::GimbalController(Vehicle *vehicle)
 {
     // qCDebug(GimbalControllerLog) << Q_FUNC_INFO << this;
 
-    (void) connect(_vehicle, &Vehicle::mavlinkMessageReceived, this, &GimbalController::_mavlinkMessageReceived);
-
+    // (void) connect(_vehicle, &Vehicle::mavlinkMessageReceived, this, &GimbalController::_mavlinkMessageReceived);
+    _initSocket();
+    requestGimbalFirmwareVersion();
     _rateSenderTimer.setInterval(500);
     (void) connect(&_rateSenderTimer, &QTimer::timeout, this, &GimbalController::_rateSenderTimeout);
 }
@@ -35,6 +48,91 @@ GimbalController::~GimbalController()
 {
     // qCDebug(GimbalControllerLog) << Q_FUNC_INFO << this;
 }
+void GimbalController::_initSocket()
+{
+    _socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if (_socket < 0) {
+        qCWarning(GimbalControllerLog) << "Failed to create UDP socket";
+        return;
+    }
+
+    // sockaddr_in localAddr{};
+    localAddr.sin_family = AF_INET;
+    localAddr.sin_port = htons(TARGET_PORT);
+    inet_pton(AF_INET, TARGET_IP, &localAddr.sin_addr);
+
+}
+
+void GimbalController::_sendMavlinkToGimbalUDP(const mavlink_message_t& message)
+{
+    uint8_t buffer[300];
+    int len = mavlink_msg_to_send_buffer(buffer, &message);
+
+    ssize_t sent = sendto(_socket, buffer, len, 0, reinterpret_cast<sockaddr*>(&localAddr), sizeof(localAddr));
+    if (sent < 0) {
+        qCWarning(GimbalControllerLog) << "Failed to send MAVLink message to gimbal";
+    } else {
+        qCDebug(GimbalControllerLog) << "Sent MAVLink message to gimbal (" << sent << " bytes)";
+    }
+
+    struct timeval timeout;
+    timeout.tv_sec = 2;
+    timeout.tv_usec = 0;
+    setsockopt(_socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+
+    // Receive response
+    uint8_t recvBuffer[2048];
+    sockaddr_in senderAddr{};
+    socklen_t senderAddrLen = sizeof(senderAddr);
+
+    ssize_t recvLen = recvfrom(_socket, recvBuffer, sizeof(recvBuffer), 0,
+                               reinterpret_cast<sockaddr*>(&senderAddr), &senderAddrLen);
+
+    if (recvLen < 0) {
+        qCWarning(GimbalControllerLog) << "Failed to receive MAVLink response:" << strerror(errno);
+        return;
+    }
+
+    // Parse MAVLink message
+    mavlink_message_t recv_msg;
+    mavlink_status_t status;
+    for (ssize_t i = 0; i < recvLen; ++i) {
+        if (mavlink_parse_char(MAVLINK_COMM_0, recvBuffer[i], &recv_msg, &status)) {
+            qCDebug(GimbalControllerLog) << "Received MAVLink message ID:" << recv_msg.msgid;
+
+            if (recv_msg.msgid == MAVLINK_MSG_ID_RESPONSE_REQUEST_VIDEO_STITCHING_MODE) {
+                // Parse payload if needed
+                qCDebug(GimbalControllerLog) << "Gimbal replied with video stitching mode response.";
+            }
+        }
+    }
+    
+}
+
+void GimbalController::_closeSocket()
+{
+    if (_socket >= 0) {
+        close(_socket);
+        _socket = -1;
+    }
+}
+
+
+void GimbalController::requestGimbalFirmwareVersion()
+{
+    mavlink_message_t msg;
+    mavlink_msg_request_video_stitching_mode_pack(
+        SYSTEM_ID,
+        COMPONENT_ID,
+        &msg,
+        0
+    );
+
+    _sendMavlinkToGimbalUDP(msg);
+
+}
+
+
 
 void GimbalController::setActiveGimbal(Gimbal *gimbal)
 {
@@ -49,6 +147,8 @@ void GimbalController::setActiveGimbal(Gimbal *gimbal)
         emit activeGimbalChanged();
     }
 }
+
+
 
 void GimbalController::_mavlinkMessageReceived(const mavlink_message_t &message)
 {
